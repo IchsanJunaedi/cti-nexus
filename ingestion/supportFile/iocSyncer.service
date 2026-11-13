@@ -1,0 +1,21 @@
+[Unit]
+Description=ScraperNews IOC Sync Daemon
+After=network.target mongod.service
+Wants=mongod.service
+
+[Service]
+Type=simple
+User=root
+WorkingDirectory=/opt/ScraperNews
+ExecStart=/usr/bin/python3 iocSyncer.py
+Restart=always
+RestartSec=5
+StandardOutput=journal
+StandardError=journal
+SyslogIdentifier=ioc_syncer
+
+# Allow current batch to finish before SIGKILL
+TimeoutStopSec=60
+
+[Install]
+WantedBy=multi-user.target

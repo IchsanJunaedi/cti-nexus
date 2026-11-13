@@ -1,0 +1,27 @@
+anydesk
+palo alto networks
+jira
+okta
+outlook
+crowdstrike
+wazuh
+graylog
+zabbix
+suricata
+perimeter81
+fortigate
+fortinet
+ejbca
+thales
+new relic
+mariadb maxscale
+maxscale
+nagios
+nessus
+telegram
+thehive
+microsoft 365
+proofpoint
+velociraptor
+esxi
+harmony sase

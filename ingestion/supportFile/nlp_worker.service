@@ -1,0 +1,21 @@
+[Unit]
+Description=ScraperNewsRevamp NLP Worker
+After=network.target mongod.service
+Wants=mongod.service
+
+[Service]
+Type=simple
+User=YOUR_USER
+WorkingDirectory=/opt/ScraperNewsRevamp
+ExecStart=/usr/bin/python3 nlp_worker.py
+Restart=always
+RestartSec=5
+StandardOutput=journal
+StandardError=journal
+SyslogIdentifier=nlp_worker
+
+# Give the worker time to finish the current job before SIGKILL
+TimeoutStopSec=30
+
+[Install]
+WantedBy=multi-user.target

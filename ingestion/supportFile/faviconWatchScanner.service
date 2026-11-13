@@ -1,0 +1,21 @@
+[Unit]
+Description=ScraperNewsRevamp Brand Watch (favicon/Shodan) Daemon
+After=network.target mongod.service
+Wants=mongod.service
+
+[Service]
+Type=simple
+User=YOUR_USER
+WorkingDirectory=/opt/ScraperNewsRevamp
+ExecStart=/usr/bin/python3 faviconWatchScanner.py
+Restart=always
+RestartSec=5
+StandardOutput=journal
+StandardError=journal
+SyslogIdentifier=faviconwatch_scanner
+
+# Allow current sweep to finish before SIGKILL
+TimeoutStopSec=60
+
+[Install]
+WantedBy=multi-user.target

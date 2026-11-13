@@ -1,0 +1,77 @@
+[
+    {
+        "Ransomware Attacks": [
+            {
+                "title": "China-Linked Espionage Tools Used in Recent Ransomware Attack",
+                "url": "https://www.infosecurity-magazine.com/news/chinese-espionage-tools-ransomware/\n"
+            },
+            {
+                "title": "RansomHub Becomes 2024\u2019s Top Ransomware Group, Hitting 600+ Organizations Globally",
+                "url": "https://thehackernews.com/2025/02/ransomhub-becomes-2024s-top-ransomware.html\n"
+            },
+            {
+                "title": "Chinese Espionage Tools Deployed in RA World Ransomware Attack",
+                "url": "https://www.bleepingcomputer.com/news/security/chinese-espionage-tools-deployed-in-ra-world-ransomware-attack/?&web_view=true\n"
+            }
+        ],
+        "AI and Cybersecurity": [
+            
+        ]
+    },
+    {
+        "Chinese Cyber Activities": [
+            {
+                "title": "China-Linked Espionage Tools Used in Recent Ransomware Attack",
+                "url": "https://www.infosecurity-magazine.com/news/chinese-espionage-tools-ransomware/\n"
+            },
+            {
+                "title": "New Windows Zero-Day Exploited by Chinese APT: Security Firm",
+                "url": "https://www.securityweek.com/new-windows-zero-day-exploited-by-chinese-apt-security-firm/\n"
+            },
+            {
+                "title": "Chinese Espionage Tools Deployed in RA World Ransomware Attack",
+                "url": "https://www.bleepingcomputer.com/news/security/chinese-espionage-tools-deployed-in-ra-world-ransomware-attack/?&web_view=true\n"
+            }
+        ]
+    },
+    {
+        "Cisco Vulnerabilities": [
+            {
+                "title": "RedMike Hackers Exploited 1000+ Cisco Devices to Gain Admin Access",
+                "url": "https://cybersecuritynews.com/salt-typhoon-hackers-exploited-1000-cisco-devices/\n"
+            },
+            {
+                "title": "Salt Typhoon Targeting Old Cisco Vulnerabilities in Fresh Telecom Hacks",
+                "url": "https://www.securityweek.com/salt-typhoon-targeting-old-cisco-vulnerabilities-in-fresh-telecom-hacks/\n"
+            }
+        ]
+    },
+    {
+        "AI and Cybersecurity": [
+            {
+                "title": "DeepSeek AI Fails Multiple Security Tests",
+                "url": "https://www.darkreading.com/cyber-risk/deepseek-fails-multiple-security-tests-business-use?&web_view=true\n"
+            },
+            {
+                "title": "Gemini Advanced Remembers: Google\u2019s AI Gets a Memory Boost",
+                "url": "https://securityonline.info/gemini-advanced-remembers-googles-ai-gets-a-memory-boost/\n"
+            },
+            {
+                "title": "Taiwan using AI to fight disinformation campaigns, former minister says",
+                "url": "https://therecord.media/taiwan-using-ai-to-fight-disinformation"
+            }
+        ]
+    },
+    {
+        "Cyber Defense Legislation": [
+            {
+                "title": "Japan Goes on Offense With New 'Active Cyber Defense' Bill",
+                "url": "https://www.darkreading.com/cybersecurity-operations/japan-offense-new-cyber-defense-bill?&web_view=true\n"
+            },
+            {
+                "title": "UK's AI Safety Institute Rebrands Amid Government Strategy Shift",
+                "url": "https://www.infosecurity-magazine.com/news/uk-ai-safety-institute-rebrands/\n"
+            }
+        ]
+    }
+]

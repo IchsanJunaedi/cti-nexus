@@ -1,0 +1,7 @@
+2024-10-11 15:32:29.981778434 +0700 offset/lab52ThreatOffset.txt
+2024-11-12 16:08:49.779917027 +0700 offset/facruThreatOffset.txt
+2024-08-02 14:08:05.769000000 +0700 offset/fsecureThreatOffset.txt
+2024-09-06 00:03:45.411000000 +0700 offset/munitThreatOffset.txt
+2024-08-08 13:16:02.816000000 +0700 offset/prodraftThreatOffset.txt
+2024-08-26 12:55:22.295000000 +0700 offset/securityintellThreatOffset.txt
+2024-09-19 11:08:51.241000000 +0700 offset/techstack_golang_offset.txt

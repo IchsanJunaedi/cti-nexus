@@ -1,0 +1,17 @@
+Not Found:80:97
+Transportation/Logistics:32:13
+Healthcare:56:37
+Construction:32:14
+Technology:48:61
+Financial Services:52:28
+Agriculture and Food Production:8:14
+Manufacturing:40:52
+Telecommunication:8:6
+Unknown:4:1
+Energy:4:7
+Education:4:20
+Business Services:12:16
+Consumer Services:16:8
+Public Sector:8:30
+Hospitality and Tourism:0:7
+Public Service:0:1

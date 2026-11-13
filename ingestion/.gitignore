@@ -1,0 +1,19 @@
+config/config.yml
+*.pyc
+__pycache__/
+.DS_Store
+supportFile/logFile/
+supportFile/cveQueue/
+o365_token.txt
+notes.txt
+*.pem
+.env
+config/data/
+cvelist_dryrun.log
+.newCveThreat.lock
+offset/
+
+# cvelistV5 feed
+data/
+cvelist_dryrun.log
+.newCveThreat.lock

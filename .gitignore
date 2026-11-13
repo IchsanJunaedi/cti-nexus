@@ -1,9 +1,56 @@
-.env
+# Python environment & cache
 .venv/
+venv/
+ENV/
+env/
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+
+# Environment variables & secrets
+.env
+.env.*
+!.env.template
+config/config.yml
+ingestion/config/config.yml
+*.pem
 key.pem
 cert.pem
-*.pem
-__pycache__/
-*.pyc
+o365_token.txt
+notes.txt
+
+# Platform & Frontend build artifacts
+node_modules/
+platform/intelgraph-src/node_modules/
+platform/intelgraph-src/dist/
+.npm
+.eslintcache
+
+# Crawler state, cache & offsets
+.dccache
+cvelist_dryrun.log
+.newCveThreat.lock
+ingestion/offset/
+offset/
+supportFile/logFile/
+supportFile/cveQueue/
+chromedriver*
+
+# OS & Editor
 .DS_Store
-static/intelgraph*
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+.idea/
+.vscode/
+*.swp
+*.swo
+
+# Temporary & test data
+*.log
+scratch/
+tmp/

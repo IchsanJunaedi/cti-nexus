@@ -1,0 +1,17 @@
+Not Found:65
+Transportation/Logistics:6
+Healthcare:21
+Construction:3
+Technology:38
+Financial Services:12
+Agriculture and Food Production:13
+Manufacturing:35
+Telecommunication:3
+Unknown:0
+Energy:5
+Education:10
+Business Services:11
+Consumer Services:5
+Public Sector:17
+Hospitality and Tourism:4
+Public Service:0

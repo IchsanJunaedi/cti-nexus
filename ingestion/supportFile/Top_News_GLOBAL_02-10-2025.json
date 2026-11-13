@@ -1,0 +1,114 @@
+[
+    {
+        "vulnerabilities": [
+            {
+                "title": "CISA: 3 Ivanti endpoint vulnerabilities exploited in the wild",
+                "url": "https://www.cybersecuritydive.com/news/cisa-3-ivanti-endpoint-vulnerabilities-exploited-in-the-wild/742168/"
+            },
+            {
+                "title": "Detecting and Mitigating the Apache Camel Vulnerability CVE-2025-27636",
+                "url": "https://www.akamai.com/blog/security-research/2025/mar/march-apache-camel-vulnerability-detections-and-mitigations"
+            },
+            {
+                "title": "2025-020: *DRAFT* MS-ISAC CYBERSECURITY ADVISORY - Multiple Vulnerabilities in Google Chrome Could Allow for Arbitrary Code Execution - PATCH: NOW - TLP: CLEAR",
+                "url": "https://www.cisecurity.org/advisory/draft-ms-isac-cybersecurity-advisory---multiple-vulnerabilities-in-google-chrome-could-allow-for-arbitrary-code-execution---patch-now---tlp-clear_2025-020"
+            },
+            {
+                "title": "Patch Tuesday: Critical Code-Execution Bugs in Acrobat and Reader",
+                "url": "https://www.securityweek.com/patch-tuesday-critical-code-execution-bugs-in-acrobat-and-reader/"
+            },
+            {
+                "title": "Microsoft March 2025 Patch Tuesday fixes 7 zero-days, 57 flaws",
+                "url": "https://www.bleepingcomputer.com/news/microsoft/microsoft-march-2025-patch-tuesday-fixes-7-zero-days-57-flaws/"
+            },
+            {
+                "title": "CISA Adds Six Known Exploited Vulnerabilities to Catalog",
+                "url": "https://www.cisa.gov/news-events/alerts/2025/03/11/cisa-adds-six-known-exploited-vulnerabilities-catalog"
+            }
+        ]
+    },
+    {
+        "threat actors": [
+            {
+                "title": "Blind Eagle Hackers Leveraging Google Drive, Dropbox &#038; GitHub To Bypass Security Defenses",
+                "url": "https://cybersecuritynews.com/blind-eagle-hackers-leveraging-google-drive-dropbox-github/"
+            },
+            {
+                "title": "Lazarus Group Bybit Heist: C2 forensics",
+                "url": "https://www.validin.com/blog/bybit_hack_infrastructure_hunt/"
+            },
+            {
+                "title": "Blind Eagle Targets Colombian Government with Malicious .url Files",
+                "url": "https://www.infosecurity-magazine.com/news/blind-eagle-targets-colombian-gov/"
+            },
+            {
+                "title": "Blind Eagle Hacks Colombian Institutions Using NTLM Flaw, RATs and GitHub-Based Attacks",
+                "url": "https://thehackernews.com/2025/03/blind-eagle-hacks-colombian.html"
+            }
+        ]
+    },
+    {
+        "malware": [
+            {
+                "title": "AI Turned As A Powerful Tool For Cybercriminals To Execute Attacks At High Speed",
+                "url": "https://cybersecuritynews.com/ai-turned-as-a-powerful-tool-for-cybercriminals/"
+            }
+        ]
+    },
+    {
+        "data breaches": [
+            {
+                "title": "New York Sues Allstate Over Data Breach and Security Failures",
+                "url": "https://www.infosecurity-magazine.com/news/new-york-sues-allstate-data-breach/"
+            },
+            {
+                "title": "'Uber for nurses' exposes 86k+ medical records, PII in open S3 bucket for months",
+                "url": "https://go.theregister.com/feed/www.theregister.com/2025/03/11/uber_for_nurses_exposes_86k/"
+            },
+            {
+                "title": "Alleged Data Leak Targets French Government Websites",
+                "url": "https://dailydarkweb.net/alleged-data-leak-targets-french-government-websites/"
+            },
+            {
+                "title": "Jaguar Land Rover Allegedly Breached",
+                "url": "https://dailydarkweb.net/jaguar-land-rover-allegedly-breached/"
+            }
+        ]
+    },
+    {
+        "policy/compliance": [
+            {
+                "title": "Trump nominates Plankey to lead CISA",
+                "url": "https://www.cybersecuritydive.com/news/trump-nominates-plankey-to-lead-cisa/742189/"
+            },
+            {
+                "title": "FTC\u2019s $25.5M scam refund treats victims to $34 each",
+                "url": "https://go.theregister.com/feed/www.theregister.com/2025/03/11/ftcs_255m_scam_refund/"
+            },
+            {
+                "title": "Amid personnel turmoil at cyber agencies, a government shutdown could increase potential harm",
+                "url": "https://cyberscoop.com/amid-personnel-turmoil-at-cyber-agencies-a-government-shutdown-could-increase-potential-harm/"
+            },
+            {
+                "title": "Trade groups worry information sharing will worsen without critical infrastructure panel, CISA law renewal",
+                "url": "https://cyberscoop.com/cyber-information-sharing-critical-infrastructure-panel-cisa-law-renewal/"
+            }
+        ]
+    },
+    {
+        "infrastructure attacks": [
+            {
+                "title": "Majority of ransomware claims involved compromise of perimeter security devices",
+                "url": "https://www.cybersecuritydive.com/news/ransomware-compromise-perimeter-devices/742158/"
+            }
+        ]
+    },
+    {
+        "supply chain": [
+            {
+                "title": "UK Government Report Calls for Stronger Open Source Supply Chain Security Practices",
+                "url": "https://www.securityweek.com/uk-government-report-calls-for-stronger-open-source-supply-chain-security-practices/"
+            }
+        ]
+    }
+]

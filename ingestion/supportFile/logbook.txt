@@ -1,0 +1,10 @@
+GLOBAL || GitHub Enterprise Server Vulnerabilities Allows Arbitrary Code Execution || https://cybersecuritynews.com/github-enterprise-server-vulnerabilities/ || 2025-04-21
+APAC || Risky Bulletin: Crypto-thieves abuse Zoom's remote control feature || https://risky.biz/RBNEWS414/ || 2025-04-21
+GLOBAL || ISC Stormcast For Monday, April 21st, 2025 https://isc.sans.edu/podcastdetail/9416, (Mon, Apr 21st) || https://isc.sans.edu/diary/rss/31878 || 2025-04-21
+GLOBAL || Decoding Cryptographic Protocols: The Pillars of Secure Communications || https://www.redpacketsecurity.com/decoding-cryptographic-protocols-the-pillars-of-secure-communications/ || 2025-04-21
+APT || Cybersecurity Incident Response Plan 2025?Utm_Source=Webpage&Utm_Medium=Blog_Homepager&Utm_Campaign=Blog_Promo || https://blog.k7computing.com/cybersecurity-incident-response-plan-2025/?utm_source=Webpage&utm_medium=Blog_Homepager&utm_campaign=Blog_Promo || 2025-04-21
+APAC || Http:Blog.K7Computing.Comcybersecurity For Small Business Msmes?Utm_Source=Webpage&Utm_Medium=Blog_Homepager&Utm_Campaign=Blog_Promo || http://blog.k7computing.com/cybersecurity-for-small-business-msmes/?utm_source=Webpage&utm_medium=Blog_Homepager&utm_campaign=Blog_Promo || 2025-04-21
+GLOBAL || Deceptive Browser Extensions within the Google Store: A Study in AI Slop || https://dti.domaintools.com/deceptive-browser-extensions-google-store-ai-slop/ || 2025-04-23
+APAC || Newly Registered Domains Distributing SpyNote Malware || https://dti.domaintools.com/newly-registered-domains-distributing-spynote-malware/ || 2025-04-23
+GLOBAL || Where to Find Aspiring Hackers || https://dti.domaintools.com/proton66-where-to-find-aspiring-hackers/ || 2025-04-23
+APT || Phishing Campaign Targets Defense and Aerospace Firms Linked to Ukraine Conflict || https://dti.domaintools.com/phishing-campaign-targets-defense-and-aerospace-firms-linked-to-ukraine-conflict/ || 2025-04-23

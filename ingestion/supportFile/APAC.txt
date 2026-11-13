@@ -1,0 +1,30 @@
+Threat Brief: Escalation of Cyber Risk Related to Iran (Updated April 17) || https://unit42.paloaltonetworks.com/iranian-cyberattacks-2026/
+Threat Brief: Escalation of Cyber Risk Related to Iran (Updated April 17) || https://unit42.paloaltonetworks.com/iranian-cyberattacks-2026/
+A Deep Dive Into Attempted Exploitation of CVE-2023-33538 || https://unit42.paloaltonetworks.com/exploitation-of-cve-2023-33538/
+Cracks in the Bedrock: Agent God Mode || https://unit42.paloaltonetworks.com/exploit-of-aws-agentcore-iam-god-mode/
+Cracks in the Bedrock: Escaping the AWS AgentCore Sandbox || https://unit42.paloaltonetworks.com/bypass-of-aws-sandbox-network-isolation-mode/
+Understanding Current Threats to Kubernetes Environments || https://unit42.paloaltonetworks.com/modern-kubernetes-threats/
+Threat Brief: Widespread Impact of the Axios Supply Chain Attack || https://unit42.paloaltonetworks.com/axios-supply-chain-attack/
+Weaponizing the Protectors: TeamPCP’s Multi-Stage Supply Chain Attack on Security Infrastructure || https://unit42.paloaltonetworks.com/teampcp-supply-chain-attacks/
+Double Agents: Exposing Security Blind Spots in GCP Vertex AI || https://unit42.paloaltonetworks.com/double-agents-vertex-ai/
+Converging Interests: Analysis of Threat Clusters Targeting a Southeast Asian Government || https://unit42.paloaltonetworks.com/espionage-campaigns-target-se-asian-government-org/
+May 2026 Threat Trend Report on APT Attacks (South Korea) || https://asec.ahnlab.com/en/94271/
+Hijacked npm and Go Packages Use VS Code Tasks to Deploy Python Infostealer || https://thehackernews.com/2026/06/hijacked-npm-and-go-packages-use-vs.html
+The Gentlemen are knocking: сustom backdoors and evolving tactics || https://securelist.com/the-gentlemen-raas/120447/
+236,000 DCloud Uni-App Sites Used in Crypto Scams, Phishing, and Wallet Drainers || https://thehackernews.com/2026/06/236000-dcloud-uni-app-sites-used-in.html
+From Bing Search to Ransomware: Bumblebee and AdaptixC2 Deliver Akira || https://thedfirreport.com/2026/06/29/from-bing-search-to-ransomware-bumblebee-and-adaptixc2-deliver-akira-3/
+⚡ Weekly Recap: Linux Kernel Flaws, AI Malware Tricks, Turla Backdoor, Infostealers and More || https://thehackernews.com/2026/06/weekly-recap-linux-kernel-flaws-ai.html
+The AI Agent Credential Crisis: From Stealer Log to Source Code || https://socradar.io/blog/ai-agent-credential-stealer-log-source-code/
+Brief Summary: CVE-2026-42055 Heap Buffer Overflow in NGINX HTTP/2 Proxy and gRPC Modules || https://zeropath.com/blog/cve-2026-42055-nginx-http2-heap-buffer-overflow
+NGINX HTTP/3 QPACK Use After Free (CVE-2026-42530): Brief Summary of a Critical Remote Vulnerability || https://zeropath.com/blog/cve-2026-42530-nginx-http3-qpack-use-after-free
+Brief Summary: CVE-2026-49952 — Discuz! X5.0 Authentication Bypass via Cross-Context Cryptographic Key Reuse || https://zeropath.com/blog/cve-2026-49952-discuz-x5-authentication-bypass
+Axios CVE-2026-44486: Proxy Credential Leakage via Redirect Handling in Node.js — Technical Breakdown with PoC and Patch Analysis || https://zeropath.com/blog/cve-2026-44486-axios-proxy-credential-leak
+Axios Fetch Adapter Size Limit Bypass (CVE-2026-44488): Technical Breakdown with PoC and Patch Analysis || https://zeropath.com/blog/cve-2026-44488-axios-fetch-adapter-size-limit-bypass
+Axios CVE-2026-44492: IPv4-Mapped IPv6 NO_PROXY Bypass Enables SSRF with PoC and Patch Analysis || https://zeropath.com/blog/cve-2026-44492-axios-ipv4-mapped-ipv6-ssrf-bypass
+Brief Summary: CVE-2026-47367 Command Injection in Ubiquiti UID Enterprise Agent (CVSS 9.9) || https://zeropath.com/blog/cve-2026-47367-ubiquiti-uid-enterprise-agent-command-injection
+Brief Summary: CVE-2026-47368 Path Traversal in Ubiquiti UniFi OS and Its Role in a Five CVE Bulletin || https://zeropath.com/blog/cve-2026-47368-unifi-os-path-traversal
+Ivanti Sentry CVE-2026-10520: Quick Look at a CVSS 10.0 Unauthenticated Root RCE via OS Command Injection || https://zeropath.com/blog/cve-2026-10520-ivanti-sentry-root-rce
+Brief Summary: CVE-2026-10727 Root Level OS Command Injection in Ivanti EPMM || https://zeropath.com/blog/cve-2026-10727-ivanti-epmm-os-command-injection
+Brief Summary: CVE-2026-40128 — Critical Unauthenticated Path Traversal in SAP NetWeaver AS Java Web Container || https://zeropath.com/blog/cve-2026-40128-sap-netweaver-path-traversal
+VMware Cloud Foundation Operations CVE-2026-41724: Overview of Stored XSS Leading to Admin Privilege Escalation || https://zeropath.com/blog/cve-2026-41724-vmware-cloud-foundation-operations-stored-xss
+SAP NetWeaver ABAP CVE-2026-44748: Brief Summary of a Critical XML Signature Wrapping Vulnerability || https://zeropath.com/blog/cve-2026-44748-sap-netweaver-abap-xml-signature-wrapping

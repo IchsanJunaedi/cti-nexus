@@ -1,0 +1,228 @@
+Threat Brief: Recruiting Scheme Impersonating Palo Alto Networks Talent Acquisition Team || https://unit42.paloaltonetworks.com/phishing-attackers-pose-as-panw-recruiters/
+Who’s Really Shopping? Retail Fraud in the Age of Agentic AI || https://unit42.paloaltonetworks.com/retail-fraud-agentic-ai/
+Analyzing the Current State of AI Use in Malware || https://unit42.paloaltonetworks.com/ai-use-in-malware/
+Navigating Security Tradeoffs of AI Agents || https://unit42.paloaltonetworks.com/navigating-security-tradeoffs-ai-agents/
+DEW #151 - The Security Cognitive Rust Belt, Music Streaming Fraud &amp; the Axios Incident Post-Mortem || https://www.detectionengineering.net/p/dew-151-the-security-cognitive-rust
+BTMOB: A stealthy RAT burrowing deep into Android devices || https://www.welivesecurity.com/en/malware/btmob-stealthy-rat-burrowing-deep-android-devices/
+The Gentleman Ransomware | Defense Evasion TTPs Uncovered | Huntress || https://www.huntress.com/blog/the-gentlemen-ransomware-defense-evasion-ttps
+Attackers Abuse Open RDP Ports to Gain Initial Access Into Business Networks || https://cybersecuritynews.com/attackers-abuse-open-rdp-ports/
+New 0-Click WhatsApp Account Takeover Attack Targeting iOS 16 Users || https://cybersecuritynews.com/0-click-whatsapp-target-ios-16-users/
+AI Chatbot Recommendations Redirect Users to Cryptojacking Malware Sites || https://thehackernews.com/2026/05/ai-chatbot-recommendations-redirect.html
+CVE-2026-20182 || https://www.cisa.gov/news-events/directives/ed-26-03-mitigate-vulnerabilities-cisco-sd-wan-systems || https://www.cisa.gov/news-events/directives/supplemental-direction-ed-26-03-hunt-and-hardening-guidance-cisco-sd-wan-systems || https://sec.cloudapps.cisco.com/security/center/content/CiscoSecurityAdvisory/cisco-sa-sdwan-rpa2-v69WY2SW || https://nvd.nist.gov/vuln/detail/CVE-2026-20182 
+[local] Remote Sunrise Helper for Windows 2026.14 - Unauthenticated File/Directory Listing || https://www.exploit-db.com/exploits/52566
+[local] Remote Sunrise Helper for Windows 2026.14 - Remote Code Execution || https://www.exploit-db.com/exploits/52565
+CVE-2026-42897 || https://msrc.microsoft.com/update-guide/en-US/vulnerability/CVE-2026-42897 || https://learn.microsoft.com/en-us/exchange/plan-and-deploy/post-installation-tasks/security-best-practices/exchange-emergency-mitigation-service || https://nvd.nist.gov/vuln/detail/CVE-2026-42897 
+CVE-2009-1537 || https://learn.microsoft.com/en-us/security-updates/securitybulletins/2009/ms09-028 || https://nvd.nist.gov/vuln/detail/CVE-2009-1537 
+CVE-2009-3459 || https://www.cisa.gov/news-events/alerts/2009/10/13/adobe-reader-and-acrobat-vulnerabilities || https://web.archive.org/web/20120324170253/http://www.adobe.com/support/security/bulletins/apsb09-15.html#:~:text=CVE%2D2009%2D3459).-,NOTE%3A,-There%20are%20reports || https://nvd.nist.gov/vuln/detail/CVE-2009-3459 
+CVE-2010-0806 || https://learn.microsoft.com/en-us/security-updates/securityadvisories/2010/981374 || https://nvd.nist.gov/vuln/detail/CVE-2010-0806 
+CVE-2026-41091 || https://msrc.microsoft.com/update-guide/en-US/vulnerability/CVE-2026-41091 || https://nvd.nist.gov/vuln/detail/CVE-2026-41091 
+CVE-2026-45498 || https://msrc.microsoft.com/update-guide/en-US/vulnerability/CVE-2026-45498 || https://nvd.nist.gov/vuln/detail/CVE-2026-45498 
+[webapps] Cockpit 359 - RCE || https://www.exploit-db.com/exploits/52572
+[webapps] BookStack 25.12.1 - Denial of Service || https://www.exploit-db.com/exploits/52571
+[local] Lenovo LegionSpace 1.7.11.2 - 'DAService' Unquoted Service Path || https://www.exploit-db.com/exploits/52570
+[webapps] solaredge - (CSRF-OOB-Injection) || https://www.exploit-db.com/exploits/52569
+[webapps] FUXA  1.2.9 -  RCE || https://www.exploit-db.com/exploits/52568
+CVE-2026-9082 || https://www.drupal.org/sa-core-2026-004 || https://nvd.nist.gov/vuln/detail/CVE-2026-9082 
+[webapps] Apache HTTP Server 2.4.66 - 'mod_http2' Double-Free Denial of Service || https://www.exploit-db.com/exploits/52577
+[hardware] D-Link DSL2600U - 'rom-0' Admin Password Disclosure || https://www.exploit-db.com/exploits/52576
+[webapps] Wordpress Temporary Login Plugin  1.0.0 - 'temp-login-token' Authentication Bypass to Account Takeover || https://www.exploit-db.com/exploits/52575
+[webapps] cPanel - CRLF Injection || https://www.exploit-db.com/exploits/52574
+[webapps] Casdoor 3.54.1 - Arbitrary File Write via Path Traversal || https://www.exploit-db.com/exploits/52584
+[webapps] scramble - Remote Code Execution || https://www.exploit-db.com/exploits/52582
+CVE-2026-45321 || https://github.com/TanStack/router/security/advisories/GHSA-g7cv-rxg3-hmpx || https://nvd.nist.gov/vuln/detail/CVE-2026-45321 
+[remote] Wing FTP Server 8.1.3 - Authenticated Remote Code Execution || https://www.exploit-db.com/exploits/52589
+[local] ZTE Routers  - Unauthenticated Denial of Service || https://www.exploit-db.com/exploits/52594
+[remote] Microsoft - NTLMv2 Hash Capture || https://www.exploit-db.com/exploits/52601
+[local] ImageMagick - Infinite Loop in the MIFF decoder can lead to CPU exhaustion || https://www.exploit-db.com/exploits/52595
+[webapps] YAMCS yamcs-core  5.12.7 - No Rate Limiting || https://www.exploit-db.com/exploits/52605
+CVE-2025-48595 || https://source.android.com/docs/security/bulletin/2026/2026-06-01 || https://nvd.nist.gov/vuln/detail/CVE-2025-48595 
+CVE-2026-45247 || https://mirasvit.com/package/changelog/?package=mirasvit/module-cache-warmer || https://nvd.nist.gov/vuln/detail/CVE-2026-45247 
+CVE-2026-12569 || https://www.ptc.com/en/support/article/CS473270 || https://www.cisa.gov/news-events/directives/bod-26-04-prioritizing-security-updates-based-risk || https://www.cisa.gov/news-events/directives/bod-26-04-implementation-guidance-prioritizing-security-updates-based-risk || https://nvd.nist.gov/vuln/detail/CVE-2026-12569 
+[webapps] OpenEMR 7.0.2 - Arbitrary File Read || https://www.exploit-db.com/exploits/52610
+[webapps] WordPress Contest Gallery 28.1.4 - Unauthenticated Blind SQL Injection || https://www.exploit-db.com/exploits/52609
+RedAmon AI Tool that Chains Reconnaissance, Exploitation, and Post-exploitation || https://cybersecuritynews.com/redamon-ai-tool/
+A week in security (June 22 &#8211; June 28) || https://www.malwarebytes.com/blog/news/2026/06/a-week-in-security-june-22-june-28
+Millenium RAT Rewritten in C++ Infects 62,000+ Devices Across 160 Countries || https://cybersecuritynews.com/millenium-rat-rewritten-in-c/
+UNC1151 Ghostwriter Hackers Target Belarusian Politician in Gmail Phishing Campaign || https://cybersecuritynews.com/unc1151-ghostwriter-hackers-target-belarusian-politician/
+Hackers Use Rokarolla Banking Trojan to Intercept SMS Codes and Steal Crypto Credentials || https://cybersecuritynews.com/hackers-use-rokarolla-banking-trojan-to-intercept-sms-codes/
+LLM-Generated Mythic Agents Enable Disposable Red-Team Tooling From Prompt to Deployment || https://cybersecuritynews.com/llm-generated-mythic-agents-enable-disposable-red-team-tooling/
+DCloud Uni-App Scam Network Powers RainbowEx-Style Crypto Fraud and WhatsApp Phishing || https://cybersecuritynews.com/dcloud-uni-app-scam-network-powers-rainbowex-style-crypto-fraud/
+US seizes hundreds of FIFA World Cup illegal streaming domains || https://www.bleepingcomputer.com/news/security/us-seizes-hundreds-of-fifa-world-cup-illegal-streaming-domains/
+Webinar: Why business email compromise attacks keep succeeding || https://www.bleepingcomputer.com/news/security/webinar-why-business-email-compromise-attacks-keep-succeeding/
+Gamaredon Expands Ukraine Attacks with New Malware and Cloud Service Abuse || https://thehackernews.com/2026/06/gamaredon-expands-ukraine-attacks-with.html
+ClawHub Skills Expose AI Agents to Remote Control Backdoors and Data Theft Attacks || https://cybersecuritynews.com/clawhub-skills-expose-ai-agents/
+Agentic AI Has an Identity Problem and Attackers Know It || https://www.bleepingcomputer.com/news/security/agentic-ai-has-an-identity-problem-and-attackers-know-it/
+Critical SimpleHelp flaw exploited to deploy new stealer malware || https://www.bleepingcomputer.com/news/security/hackers-exploit-critical-simplehelp-flaw-deploy-new-djinn-infostealer-taskweaver-malware/
+The Bear Necessities: A Look at the Drivers, Dynamics, and Applications of the Pro-Russia Influence Ecosystem || https://cloud.google.com/blog/topics/threat-intelligence/pro-russia-influence-ecosystem/
+Reconnaissance in the Age of AI: Exploring Modern ML Infrastructure || https://www.resecurity.com/blog/article/reconnaissance-in-the-age-of-ai-exploring-modern-ml-infrastructure
+119 Edge extensions promised useful tools, instead downloaded malware || https://www.malwarebytes.com/blog/news/2026/06/119-edge-extensions-promised-useful-tools-instead-downloaded-malware
+U.S. offers $10 million for hackers targeting WhatsApp, Signal users || https://www.bleepingcomputer.com/news/security/us-offers-10-million-for-hackers-targeting-whatsapp-signal-users/
+29th June – Threat Intelligence Report || https://research.checkpoint.com/2026/29th-june-threat-intelligence-report-2/
+CVE-2026-48558 || https://simple-help.com/security/simplehelp-security-update-2026-05 || https://www.cisa.gov/news-events/directives/bod-26-04-prioritizing-security-updates-based-risk || https://www.cisa.gov/news-events/directives/bod-26-04-implementation-guidance-prioritizing-security-updates-based-risk || https://nvd.nist.gov/vuln/detail/CVE-2026-48558 
+CVE-2026-45659 || https://msrc.microsoft.com/update-guide/vulnerability/CVE-2026-45659 || https://www.cisa.gov/news-events/directives/bod-26-04-prioritizing-security-updates-based-risk || https://www.cisa.gov/news-events/directives/bod-26-04-implementation-guidance-prioritizing-security-updates-based-risk || https://nvd.nist.gov/vuln/detail/CVE-2026-45659 
+Kairos Ransomware: Data-Extortion Case Study Involving a U.S. Government Entity | Ransom-ISAC Blog - Ransom-ISAC || https://ransom-isac.org/blog/kairos-ransomware-data-extortion-case-study/
+Cyber Security News Bulletin Weekly – Mythos is Back, WhatsApp Username, Kali Linux 2026.2, +20 Stories || https://cybersecuritynews.com/cyber-security-news-bulletin-weekly/
+[webapps] WordPress Plugin WPZOOM Portfolio 1.4.21 -  Reflected Cross-Site Scripting (XSS) || https://www.exploit-db.com/exploits/52611
+[webapps] Joomla Extension 4.1.4 - PHP Object injection || https://www.exploit-db.com/exploits/52617
+[webapps] Pulpy 0.1.1-Beta - Filesystem Sandbox Bypass || https://www.exploit-db.com/exploits/52616
+[local] MEmu Android Emulator 9.2.7.0 - Local Privilege Escalation || https://www.exploit-db.com/exploits/52615
+[remote] iOS Bluetooth PAN Exploit - Ethernet Gateway without Adapter || https://www.exploit-db.com/exploits/52618
+[webapps] MCPJam Inspector - Remote Code Execution || https://www.exploit-db.com/exploits/52625
+CVE-2026-55255 || https://github.com/langflow-ai/langflow/security/advisories/GHSA-qrpv-q767-xqq2 || https://www.cisa.gov/news-events/directives/bod-26-04-prioritizing-security-updates-based-risk || https://www.cisa.gov/news-events/directives/bod-26-04-implementation-guidance-prioritizing-security-updates-based-risk || https://nvd.nist.gov/vuln/detail/CVE-2026-55255 
+CVE-2026-56290 || https://www.joomlack.fr/en/joomla-extensions/page-builder-ck || https://www.cisa.gov/news-events/directives/bod-26-04-prioritizing-security-updates-based-risk || https://www.cisa.gov/news-events/directives/bod-26-04-implementation-guidance-prioritizing-security-updates-based-risk || https://nvd.nist.gov/vuln/detail/CVE-2026-56290 
+CVE-2026-48282 || https://helpx.adobe.com/security/products/coldfusion/apsb26-68.html || https://www.cisa.gov/news-events/directives/bod-26-04-prioritizing-security-updates-based-risk || https://www.cisa.gov/news-events/directives/bod-26-04-implementation-guidance-prioritizing-security-updates-based-risk || https://nvd.nist.gov/vuln/detail/CVE-2026-48282 
+[webapps] Krayin CRM v2.2.x - Authenticated Remote Code Execution || https://www.exploit-db.com/exploits/52629
+[webapps] Atarim WordPress Plugin  4.2.2 - Sensitive Information Exposure || https://www.exploit-db.com/exploits/52628
+[webapps] Langflow 1.9.0 - RCE || https://www.exploit-db.com/exploits/52627
+[webapps] Joomla Page Builder CK  3.5.10 -  Arbitrary File Upload || https://www.exploit-db.com/exploits/52626
+Everest Ransomware Claims 1 TB Data Theft But Encryptor Shows No Exfiltration Code || https://cybersecuritynews.com/everest-ransomware-claims-1-tb-data-theft/
+20 Remote Code Execution Vulnerabilities Patched in Foxit PDF Reader and Editor || https://cybersecuritynews.com/foxit-pdf-reader-and-editor-vulnerabilities/
+New HalluSquatting Attack Allows Hackers to Poison AI Coding Assistants Into Installing Botnet Malware || https://cybersecuritynews.com/hallusquatting-attack-poison-ai-coding-assistants/
+GitHub Copilot Refuses Harmful Chat Prompts But Writes Them Inside Code Workflows || https://cybersecuritynews.com/github-copilot-refuses-harmful-chat-prompts/
+GoodPersonRAT Uses Fake LetsVPN Installer to Give Attackers Full Remote Control || https://cybersecuritynews.com/goodpersonrat-uses-fake-letsvpn-installer/
+Microsoft fixes RoguePlanet zero-day in Defender || https://www.malwarebytes.com/blog/news/2026/07/microsoft-fixes-rogueplanet-zero-day-in-defender
+Fluffy Wolf tests new toolkit on Russian companies || https://bi.zone/eng/expertise/blog/fluffy-wolf-ispytal-novinki-na-rossiyskikh-kompaniyakh/
+Ransom & Dark Web  Issues Week 2, July 2026 || https://asec.ahnlab.com/en/94406/
+Statistical Report on Malware Targeting Linux SSH Servers in the Second Quarter of 2026 || https://asec.ahnlab.com/en/94396/
+Statistical Report on Malware Targeting Windows Database Servers in the Second Quarter of 2026 || https://asec.ahnlab.com/en/94397/
+Q2 2026 Statistical Report on Malware Targeting Windows Web Servers || https://asec.ahnlab.com/en/94398/
+AI Gateways Offer Attackers the Keys to the Kingdom || https://www.darkreading.com/cyber-risk/ai-gateways-keys-kingdom
+Vishing actors target Entra passkey enrollment || https://www.okta.com/en-au/blog/threat-intelligence/vishing-actors-target-microsoft-entra-passkey-enrollment-/
+UNC6692 Hackers Uses Microsoft Teams Helpdesk Impersonation to Deploy SNOW Malware || https://cybersecuritynews.com/unc6692-hackers-uses-microsoft-teams-helpdesk-impersonation/
+RoguePlanet Zero-Day Fixed in Microsoft Defender || https://socradar.io/blog/rogueplanet-zero-day-fixed-in-microsoft-defender/
+Windows Update Silently Installs LG Monitor App That Pushes McAfee Ads || https://cybersecuritynews.com/windows-update-installs-lg-monitor-app-pushes-mcafee-ads/
+New Forg365 phishing platform uses AI to target Microsoft 365 accounts || https://www.bleepingcomputer.com/news/security/new-forg365-phishing-platform-uses-ai-to-target-microsoft-365-accounts/
+Hackers Abuse Microsoft Entra Passkey Enrollment to Hijack Enterprise Accounts || https://cybersecuritynews.com/hackers-abuse-microsoft-entra-passkey-enrollment/
+HP Linux Printing Software Vulnerability Allows Remote Attackers to Execute Arbitrary Code || https://cybersecuritynews.com/hp-linux-printing-software-vulnerability/
+Hackers Use Fake Paysafe, Skrill, and Neteller Packages to Harvest API Keys and Tokens || https://cybersecuritynews.com/hackers-use-fake-paysafe-skrill-and-neteller-packages/
+Linux Kernel Vulnerability Enables Passwordless Root Through DRM Render Nodes || https://cybersecuritynews.com/linux-kernel-bug-passwordless-root/
+6.9 million driver’s license numbers stolen from AssuranceAmerica || https://www.malwarebytes.com/blog/data-breaches/2026/07/6-9-million-drivers-license-numbers-stolen-from-assuranceamerica
+GigaWiper: Anatomy of a destructive backdoor assembled from multiple malware || https://www.microsoft.com/en-us/security/blog/2026/07/09/gigawiper-anatomy-of-a-destructive-backdoor-assembled-from-multiple-malware/
+CVE-2026-56291 || https://www.balbooa.com/joomla-forms || https://www.cisa.gov/news-events/directives/bod-26-04-prioritizing-security-updates-based-risk || https://www.cisa.gov/news-events/directives/bod-26-04-implementation-guidance-prioritizing-security-updates-based-risk || https://nvd.nist.gov/vuln/detail/CVE-2026-56291 
+CVE-2026-48939 || https://www.icagenda.com/#download || https://www.cisa.gov/news-events/directives/bod-26-04-prioritizing-security-updates-based-risk || https://www.cisa.gov/news-events/directives/bod-26-04-implementation-guidance-prioritizing-security-updates-based-risk || https://nvd.nist.gov/vuln/detail/CVE-2026-48939 
+AI Agents Are Creating a New Class of Employee Risk || https://www.varonis.com/blog/agentic-ai-security-risk
+Rogue Agent: How a Single Code Block Could Hijack Your AI Conversations in Google’s DialogFlow || https://www.varonis.com/blog/rogue-agent-dialogflow-attack
+SearchLeak: How We Turned M365 Copilot Into a One-Click Data Exfiltration Weapon || https://www.varonis.com/blog/searchleak
+Phishing for Lobsters: How We Tricked OpenClaw into Spilling Secrets || https://www.varonis.com/blog/openclaw-phishing
+Brief Summary: CVE-2026-20266 OS Command Injection in Splunk AI Toolkit btool Configuration Helper || https://zeropath.com/blog/cve-2026-20266-splunk-ai-toolkit-os-command-injection
+Envoy Proxy CVE-2026-47774: HTTP/2 Memory Exhaustion via Cookie Header Bypass with PoC and Patch Analysis || https://zeropath.com/blog/cve-2026-47774-envoy-http2-memory-exhaustion
+Brief Summary: CVE-2024-24909 Command Injection RCE in Dell OpenManage Integration with Windows Admin Center || https://zeropath.com/blog/cve-2024-24909-dell-openmanage-wac-command-injection-rce
+Dell VxRail CVE-2024-38487: Brief Summary of a Root Container Escape in the API Gateway || https://zeropath.com/blog/cve-2024-38487-dell-vxrail-container-escape
+Pacemaker CVE-2026-10649: Pre-Auth Integer Overflow in Remote Message Decompression with PoC and Patch Analysis || https://zeropath.com/blog/cve-2026-10649-pacemaker-integer-overflow
+Quick Look: CVE-2026-44932 — Indirect Shell Command Injection via SUSE Wicked DHCP Client || https://zeropath.com/blog/cve-2026-44932-wicked-dhcp-command-injection
+Foxit PDF Reader CVE-2026-12057: Brief Summary of JavaScript Sandbox Bypass Leading to Arbitrary Code Execution || https://zeropath.com/blog/cve-2026-12057-foxit-pdf-javascript-sandbox-bypass
+Multer CVE-2026-5079: Brief Summary of a Single Request DoS via Deeply Nested Field Names || https://zeropath.com/blog/cve-2026-5079-multer-dos-nested-field-names
+WooCommerce PDF Invoice Builder CVE-2026-52704: Overview of a CVSS 10.0 Remote Code Execution Vulnerability || https://zeropath.com/blog/cve-2026-52704-woocommerce-pdf-invoice-builder-rce
+GStreamer WavPack Decoder CVE-2026-53705: Overview of an Integer Overflow Leading to Heap Corruption || https://zeropath.com/blog/cve-2026-53705-gstreamer-wavpack-integer-overflow
+Brief Summary: CVE-2026-54420 LiteSpeed cPanel Plugin Symlink Escalation Bypasses CloudLinux CageFS Isolation || https://zeropath.com/blog/cve-2026-54420-litespeed-cpanel-symlink-escalation
+Yarbo Robot Fleet CVE-2026-10557: Hard-Coded MQTT Credentials Expose 50,000+ Devices to Remote Takeover || https://zeropath.com/blog/cve-2026-10557-yarbo-hardcoded-mqtt-credentials
+Netty CVE-2026-44894: Brief Summary of a QUIC Anti-Amplification Bypass via Default Token Handler || https://zeropath.com/blog/cve-2026-44894-netty-quic-amplification-bypass
+Brief Summary: Netty SNI Handler Pre-Allocation DoS (CVE-2026-45416) Turns Nine Bytes Into 16 MiB of Memory Pressure || https://zeropath.com/blog/cve-2026-45416-netty-sni-handler-memory-preallocation-dos
+Netty CVE-2026-45674: Brief Summary of DNS Cache Poisoning via Bailiwick Bypass in CNAME Resolution || https://zeropath.com/blog/cve-2026-45674-netty-dns-cache-poisoning-bailiwick-bypass
+vm2 Sandbox Escape to Host RCE (CVE-2026-47131): Technical Breakdown with PoC and Patch Analysis || https://zeropath.com/blog/cve-2026-47131-vm2-sandbox-escape-rce
+vm2 Sandbox Escape CVE-2026-47137: Quick Look at a CVSS 10.0 Patch Bypass Enabling Host RCE || https://zeropath.com/blog/cve-2026-47137-vm2-sandbox-escape-patch-bypass
+vm2 Sandbox Escape via Builtin Denylist Bypass: Overview of CVE-2026-47140 (CVSS 10.0) || https://zeropath.com/blog/cve-2026-47140-vm2-sandbox-escape-denylist-bypass
+vm2 Sandbox Breakout via Promise Species Hijack (CVE-2026-47208): Technical Breakdown with PoC and Patch Analysis || https://zeropath.com/blog/cve-2026-47208-vm2-sandbox-breakout-promise-species
+vm2 CVE-2026-47209: Brief Summary of the Bridge Proxy Set Trap Receiver Bypass || https://zeropath.com/blog/cve-2026-47209-vm2-proxy-set-trap-receiver-bypass
+vm2 Sandbox Escape via JSPI Promise Species Bypass (CVE-2026-47210): Technical Breakdown with PoC and Patch Analysis || https://zeropath.com/blog/cve-2026-47210-vm2-jspi-sandbox-escape
+GPTranslate WordPress Plugin CVE-2026-9109: Brief Summary of Unauthenticated Stored XSS via Exposed API Key and REST API || https://zeropath.com/blog/cve-2026-9109-gptranslate-unauthenticated-stored-xss
+WP Ticket Plugin CVE-2026-9848: Brief Summary of an Unauthenticated SQL Injection via WordPress Search || https://zeropath.com/blog/cve-2026-9848-wp-ticket-sql-injection
+Keras CVE-2026-11816: Path Traversal via CWD Validation Bypass in Archive Extraction — Technical Breakdown with PoC || https://zeropath.com/blog/cve-2026-11816-keras-path-traversal-cwd-bypass
+MongoDB Server CVE-2026-11933: Use-After-Free in Server-Side JavaScript BSON Conversion — Quick Look || https://zeropath.com/blog/cve-2026-11933-mongodb-use-after-free-bson-javascript
+Spring Integration CVE-2026-40987: Path Traversal via Malicious Remote File Server — Quick Look || https://zeropath.com/blog/cve-2026-40987-spring-integration-path-traversal
+Brief Summary: CVE-2026-40994 Spring Web Services BSP Enforcement Bypass via Insecure Default Initialization || https://zeropath.com/blog/cve-2026-40994-spring-ws-bsp-enforcement-bypass
+Spring Web Services CVE-2026-40999: Brief Summary of a High Severity SSRF via WS-Addressing Headers || https://zeropath.com/blog/cve-2026-40999-spring-ws-ssrf-ws-addressing
+Brief Summary: CVE-2026-41700 Cross-Site WebSocket Hijacking in Spring for GraphQL || https://zeropath.com/blog/cve-2026-41700-spring-graphql-websocket-hijacking
+Spring for GraphQL CVE-2026-41856: Overview of Authorization Bypass via Annotation Detection Failure in Type Hierarchies || https://zeropath.com/blog/cve-2026-41856-spring-graphql-authorization-bypass
+Netty CVE-2026-44249: Brief Summary of the IPv6 Subnet Filter Bypass in IpSubnetFilterRule || https://zeropath.com/blog/cve-2026-44249-netty-ipv6-subnet-filter-bypass
+Brief Summary: CVE-2026-47365 — Argument Injection in cPanel WP Toolkit Breaks Tenant Isolation || https://zeropath.com/blog/cve-2026-47365-cpanel-wp-toolkit-argument-injection
+Brief Summary: CVE-2026-47369 UniFi OS Privilege Escalation via Improper Input Validation (CVSS 9.9) || https://zeropath.com/blog/cve-2026-47369-unifi-os-privilege-escalation
+Quick Look: CVE-2026-47370 Command Injection in Ubiquiti UniFi OS (CVSS 9.9) || https://zeropath.com/blog/cve-2026-47370-ubiquiti-unifi-os-command-injection
+phpBB CVE-2026-48611: Brief Summary of a Critical OAuth Authentication Bypass Enabling Account Hijacking || https://zeropath.com/blog/cve-2026-48611-phpbb-oauth-authentication-bypass
+Brief Summary: CVE-2026-49982 Type-Confusion Path Traversal in node-tmp || https://zeropath.com/blog/cve-2026-49982-node-tmp-type-confusion-path-traversal
+Brief Summary: CVE-2026-7870 — IBM i Privilege Escalation via Unqualified Library Call Affects All Supported Releases || https://zeropath.com/blog/cve-2026-7870-ibm-i-privilege-escalation-unqualified-library-call
+UpdraftPlus CVE-2026-10795: Brief Summary of the Authentication Bypass Threatening 3M+ WordPress Sites || https://zeropath.com/blog/cve-2026-10795-updraftplus-authentication-bypass
+Quick Look: Splunk Secure Gateway CVE-2026-20251 RCE via jsonpickle Deserialization || https://zeropath.com/blog/cve-2026-20251-splunk-secure-gateway-rce-jsonpickle
+Splunk Enterprise CVE-2026-20252: Overview of SSRF via Dashboard Studio PDF Export with Dual Bypass Mechanisms || https://zeropath.com/blog/cve-2026-20252-splunk-ssrf-dashboard-studio-pdf-export
+Brief Summary: CVE-2026-3018 Unauthenticated SQL Injection in WordPress Newsletters Plugin || https://zeropath.com/blog/cve-2026-3018-wordpress-newsletters-sql-injection
+Quick Look: CVE-2026-35273, Unauthenticated RCE in Oracle PeopleSoft PeopleTools Updates Environment Management || https://zeropath.com/blog/cve-2026-35273-oracle-peoplesoft-peopletools-rce
+js-cookie CVE-2026-46625: Per-Instance Prototype Hijack Enables Cookie Attribute Injection — Quick Look with PoC and Patch Analysis || https://zeropath.com/blog/cve-2026-46625-js-cookie-prototype-pollution
+Ghidra BSim SQL Injection (CVE-2026-49498): Brief Summary of PostgreSQL Privilege Escalation via Unescaped Usernames || https://zeropath.com/blog/cve-2026-49498-ghidra-bsim-sql-injection
+Brief Summary: CVE-2026-50566 — Fission Kubernetes Serverless Framework SecurityContext Bypass Enables Cluster Compromise || https://zeropath.com/blog/cve-2026-50566-fission-kubernetes-securitycontext-bypass
+Brief Summary: Ghidra Extension Installer Zip Slip Vulnerability (CVE-2026-52752) || https://zeropath.com/blog/cve-2026-52752-ghidra-zip-slip-path-traversal
+Brief Summary: CVE-2026-52754 — NSA Ghidra Server PKI Null Signature Authentication Bypass || https://zeropath.com/blog/cve-2026-52754-ghidra-pki-null-signature-auth-bypass
+Brief Summary: Ghidra Theme Import Zip Slip Path Traversal (CVE-2026-52755) || https://zeropath.com/blog/cve-2026-52755-ghidra-zip-slip-path-traversal
+WordPress Insert PHP Plugin CVE-2017-20251: Overview of a Critical Unauthenticated RCE via REST API Shortcode Injection || https://zeropath.com/blog/cve-2017-20251-wordpress-insert-php-rce
+Ivanti Sentry CVE-2026-10523: Quick Look at a CVSS 9.9 Authentication Bypass Enabling Full Admin Takeover || https://zeropath.com/blog/cve-2026-10523-ivanti-sentry-authentication-bypass
+SQLite FTS5 Memory Corruption: Quick Look at CVE-2026-11822 and Its Billion-Device Attack Surface || https://zeropath.com/blog/cve-2026-11822-sqlite-fts5-memory-corruption
+SQLite FTS5 Heap Buffer Overflow via Integer Underflow: Quick Look at CVE-2026-11824 with PoC and Patch Analysis || https://zeropath.com/blog/cve-2026-11824-sqlite-fts5-heap-buffer-overflow
+Quick Look: CVE-2026-11837 — Symlink Following in Ansible Posix authorized_key Enables Local Privilege Escalation || https://zeropath.com/blog/cve-2026-11837-ansible-posix-authorized-key-symlink-privilege-escalation
+Brief Summary: CVE-2026-25089 — Unauthenticated OS Command Injection in Fortinet FortiSandbox via VNC Feature || https://zeropath.com/blog/cve-2026-25089-fortinet-fortisandbox-os-command-injection
+Spring Framework CVE-2026-41855: Brief Summary of JMS Deserialization Vulnerability Affecting All Supported Release Lines || https://zeropath.com/blog/cve-2026-41855-spring-framework-jms-deserialization
+Blocksy WordPress Theme CVE-2026-8365: Brief Summary of PHP Object Injection to Remote Code Execution || https://zeropath.com/blog/cve-2026-8365-blocksy-wordpress-php-object-injection-rce
+Quick Look: CVE-2026-9740 — MongoDB Server BSON Validation Crash via Uncontrolled Mutual Recursion || https://zeropath.com/blog/cve-2026-9740-mongodb-bson-mutual-recursion-dos
+MongoDB CVE-2026-9742: Quick Look at the Pre-Auth OIDC Denial-of-Service Vulnerability || https://zeropath.com/blog/cve-2026-9742-mongodb-oidc-pre-auth-dos
+MongoDB CVE-2026-9753: Brief Summary of the $_internalApplyOplogUpdate Out-of-Bounds Memory Read || https://zeropath.com/blog/cve-2026-9753-mongodb-oob-read
+AWS AgentCore CLI CVE-2026-11393: Brief Summary of a Critical Code Injection via Triple-Quote Escaping || https://zeropath.com/blog/cve-2026-11393-aws-agentcore-cli-code-injection
+Keycloak CVE-2026-11577: Brief Summary of the partialImport FGAP Bypass Leading to Full Realm Privilege Escalation || https://zeropath.com/blog/cve-2026-11577-keycloak-partialimport-fgap-bypass
+Brief Summary: CVE-2026-40519 — Authenticated RCE via OS Command Injection in Nginx Proxy Manager || https://zeropath.com/blog/cve-2026-40519-nginx-proxy-manager-authenticated-rce
+Quick Look: CVE-2026-40984 Micrometer HTTP Server Denial of Service via Uncontrolled Resource Consumption || https://zeropath.com/blog/cve-2026-40984-micrometer-http-dos
+Brief Summary: AdGuard Home CVE-2026-41448 Path Traversal Authentication Bypass in GL.iNet Router Mode || https://zeropath.com/blog/cve-2026-41448-adguard-home-path-traversal-auth-bypass
+VMware Cloud Foundation Operations CVE-2026-41722: Overview of Stored XSS Enabling Administrative Takeover || https://zeropath.com/blog/cve-2026-41722-vmware-vcf-operations-stored-xss
+VMware Cloud Foundation Operations CVE-2026-41723: Overview of Stored XSS Enabling Administrative Hijacking || https://zeropath.com/blog/cve-2026-41723-vmware-vcf-operations-stored-xss
+Spring Framework CVE-2026-41845: Brief Summary of the Template Literal XSS Escaping Flaw in JavaScriptUtils || https://zeropath.com/blog/cve-2026-41845-spring-framework-xss-javascript-escaping
+Spring Framework CVE-2026-41849: Overview of SpEL Integer Overflow Denial of Service in an EOL Branch || https://zeropath.com/blog/cve-2026-41849-spring-framework-spel-integer-overflow-dos
+Spring Framework CVE-2026-41850: Brief Summary of the SpEL Algorithmic Denial of Service Vulnerability || https://zeropath.com/blog/cve-2026-41850-spring-framework-spel-algorithmic-dos
+Brief Summary: CVE-2026-44751 — SAP ABAP Missing Authorization Check Enables Privilege Escalation via Report Generation || https://zeropath.com/blog/cve-2026-44751-sap-abap-missing-authorization-privilege-escalation
+Quick Look: CVE-2026-50752 — Check Point IKEv1 Certificate Validation Bypass in Site-to-Site VPNs || https://zeropath.com/blog/cve-2026-50752-check-point-ikev1-certificate-bypass
+WordPress Background Image Cropper CVE-2024-58348: Unauthenticated RCE via Unrestricted File Upload with Public Exploit and CISA KEV Listing || https://zeropath.com/blog/cve-2024-58348-wordpress-background-image-cropper-rce
+Boost Serialization CVE-2026-11460: Overview of an Unpatched Type Confusion and RCE Vulnerability Affecting Two Decades of Releases || https://zeropath.com/blog/cve-2026-11460-boost-serialization-type-confusion-rce
+Comodo Internet Security CVE-2026-49494: Remote Kernel BSOD via IPv6 Integer Underflow with Public PoC || https://zeropath.com/blog/cve-2026-49494-comodo-inspect-sys-ipv6-underflow
+Hippoo Mobile App for WooCommerce CVE-2026-10580: Quick Look at a Null Sentinel Logic Flaw Leading to Unauthenticated Admin Takeover || https://zeropath.com/blog/cve-2026-10580-hippoo-woocommerce-authentication-bypass
+Brief Summary: CVE-2026-11332 Argument Injection in Ansible Core ansible-galaxy Role Install || https://zeropath.com/blog/cve-2026-11332-ansible-core-argument-injection
+Brief Summary: CVE-2026-49777 — CVSS 10.0 Backdoor in Product Slider Pro for WooCommerce || https://zeropath.com/blog/cve-2026-49777-product-slider-pro-woocommerce-backdoor
+X.Org X Server CVE-2026-50256: Brief Summary of a Stack Buffer Overflow in Font Alias Resolution || https://zeropath.com/blog/cve-2026-50256-xorg-stack-buffer-overflow-font-alias
+Brief Summary: CVE-2026-50258 Stack Buffer Overflow in X.Org X Server and Xwayland XKB Extension || https://zeropath.com/blog/cve-2026-50258-xorg-xkb-stack-buffer-overflow
+Brief Summary: CVE-2026-50259 Stack Buffer Overflow in X.Org X Server XKB SetMap Request || https://zeropath.com/blog/cve-2026-50259-xorg-xkb-stack-buffer-overflow
+Quick Look: CVE-2026-50261 — X.Org Server XSYNC Use-After-Free Enables Local Privilege Escalation || https://zeropath.com/blog/cve-2026-50261-xorg-xsync-use-after-free
+Brief Summary: CVE-2026-50264 — X.Org X Server DRI2 Out-of-Bounds Heap Write via Duplicate Buffer Attachments || https://zeropath.com/blog/cve-2026-50264-xorg-dri2-oob-write
+WP Captcha PRO CVE-2026-5411: Brief Summary of Arbitrary File Upload to Remote Code Execution via Licensing Module || https://zeropath.com/blog/cve-2026-5411-wp-captcha-pro-arbitrary-file-upload-rce
+WP Captcha PRO CVE-2026-5415: Quick Look at a Three-Step Authentication Bypass Affecting 200,000+ WordPress Sites || https://zeropath.com/blog/cve-2026-5415-wp-captcha-pro-authentication-bypass
+Quick Look: CVE-2026-8438 — Unauthenticated Stored XSS in All-In-One Security (AIOS) WordPress Plugin || https://zeropath.com/blog/cve-2026-8438-aios-wordpress-stored-xss
+Quick Look: CVE-2026-9290 Unauthenticated Local File Inclusion in WP User Manager WordPress Plugin || https://zeropath.com/blog/cve-2026-9290-wp-user-manager-lfi
+Brief Summary: CVE-2026-9851 Privilege Escalation in WordPress Booking Package Plugin via Account Takeover || https://zeropath.com/blog/cve-2026-9851-wordpress-booking-package-privilege-escalation
+WordPress Hybrid Composer CVE-2019-25738: Overview of a Critical Unauthenticated Options Update Leading to Full Site Takeover || https://zeropath.com/blog/cve-2019-25738-wordpress-hybrid-composer-unauthenticated-options-update
+Brief Summary: CVE-2024-27890 Authentication Bypass in Arista EOS OpenConfig gNMI Interface || https://zeropath.com/blog/cve-2024-27890-arista-eos-openconfig-gnmi-auth-bypass
+Arista EOS CVE-2024-27892: Brief Summary of a Critical gNMI Authentication Bypass in OpenConfig || https://zeropath.com/blog/cve-2024-27892-arista-eos-gnmi-authentication-bypass
+Brief Summary: CVE-2026-10840 OpenShift Pipelines RBAC Misconfiguration Grants Any Authenticated User Cluster Wide Write Access || https://zeropath.com/blog/cve-2026-10840-openshift-pipelines-rbac-misconfiguration
+Supermicro BMC SMTP Command Injection (CVE-2026-3820): Overview of a Recurring Firmware Weakness || https://zeropath.com/blog/cve-2026-3820-supermicro-bmc-smtp-command-injection
+Brief Summary: CVE-2026-41567 in Docker/Moby — Container Escape via Decompression Binary Path Hijacking || https://zeropath.com/blog/cve-2026-41567-docker-moby-container-escape-path-hijacking
+Brief Summary: CVE-2026-50292 in libinput — CRLF Injection in udev Helper Enables Root Code Execution || https://zeropath.com/blog/cve-2026-50292-libinput-crlf-injection-root-code-execution
+Cisco Unified Communications Manager CVE-2026-20230: Critical SSRF Leading to Root Privilege Escalation || https://zeropath.com/blog/cve-2026-20230-cisco-unified-cm-ssrf
+Quick Look: CVE-2026-35075 — Hardcoded Default Password in MBS Universal Gateways Exposes Building Automation Networks || https://zeropath.com/blog/cve-2026-35075-mbs-universal-gateway-hardcoded-password
+MLflow AI Gateway CVE-2026-4035: Brief Summary of Critical Environment Variable Exfiltration via Gateway Secrets || https://zeropath.com/blog/cve-2026-4035-mlflow-ai-gateway-env-var-exfiltration
+OpenStack Mistral CVE-2026-41283: Brief Summary of a Critical Policy Bypass Leading to Remote Code Execution || https://zeropath.com/blog/cve-2026-41283-openstack-mistral-rce
+Quick Look: CVE-2026-5241 — HuggingFace Transformers LightGlue trust_remote_code Bypass Enables Arbitrary Code Execution || https://zeropath.com/blog/cve-2026-5241-huggingface-transformers-lightglue-trust-remote-code-bypass
+Quick Look: CVE-2026-1784 — HAProxy Configuration Injection via OpenShift Route spec.path || https://zeropath.com/blog/cve-2026-1784-openshift-haproxy-config-injection
+React Router CVE-2026-42342: Quick Look at the __manifest Endpoint Denial of Service Vulnerability || https://zeropath.com/blog/cve-2026-42342-react-router-manifest-dos
+ARMember Premium CVE-2026-5076: Brief Summary of a Critical Plaintext Password Reset Key Flaw Enabling WordPress Admin Takeover || https://zeropath.com/blog/cve-2026-5076-armember-premium-insecure-password-reset
+Brief Summary: CVE-2026-7198 — Critical Unauthenticated Access Control Bypass in Progress Sitefinity OData Web Services || https://zeropath.com/blog/cve-2026-7198-progress-sitefinity-odata-access-control
+Progress Sitefinity CVE-2026-7312: Brief Summary of a CVSS 10.0 Plaintext Credential Exposure in OData Web Services || https://zeropath.com/blog/cve-2026-7312-progress-sitefinity-plaintext-credential-exposure
+Quick Look: CVE-2025-59605, Qualcomm HLOS Out-of-Bounds Write Affecting 130+ Chipsets || https://zeropath.com/blog/cve-2025-59605-qualcomm-hlos-out-of-bounds-write
+Poppler CVE-2026-10118: Quick Look at the Integer Overflow in tilingPatternFill Leading to Heap Corruption || https://zeropath.com/blog/cve-2026-10118-poppler-tiling-pattern-fill-integer-overflow
+Qualcomm CVE-2026-24090: Brief Summary of a Boot Flow Cryptographic Bypass Affecting Dozens of Snapdragon Chipsets || https://zeropath.com/blog/cve-2026-24090-qualcomm-boot-flow-cryptographic-bypass
+Quick Look: CVE-2026-25276, Qualcomm StrongBox Bounds Check Bypass Threatens Hardware Root of Trust || https://zeropath.com/blog/cve-2026-25276-qualcomm-strongbox-memory-corruption
+Quick Look: CVE-2026-25277 — Qualcomm Secure Processor StrongBox Buffer Overflow Threatens Hardware Backed Key Storage || https://zeropath.com/blog/cve-2026-25277-qualcomm-strongbox-buffer-overflow
+Cloud Foundry UAA CVE-2026-40965: EC Private Key Disclosure via Public Endpoint — Brief Summary and Patch Analysis || https://zeropath.com/blog/cve-2026-40965-cloud-foundry-uaa-ec-private-key-disclosure
+Apache Solr CVE-2026-44825: Quick Look at Hardcoded Credentials in BasicAuth Bootstrapping || https://zeropath.com/blog/cve-2026-44825-apache-solr-hardcoded-credentials
+Nextcloud User OIDC CVE-2026-45156: Authentication Bypass via Missing JWT Signature Verification in ID4me Flow || https://zeropath.com/blog/cve-2026-45156-nextcloud-user-oidc-jwt-signature-bypass
+Gravity Forms CVE-2026-48866: Brief Summary of a Critical Arbitrary File Deletion via Path Traversal || https://zeropath.com/blog/cve-2026-48866-gravity-forms-path-traversal-file-deletion
+Kirki WordPress Plugin CVE-2026-8206: Brief Summary of a Critical Unauthenticated Privilege Escalation via Password Reset Hijacking || https://zeropath.com/blog/cve-2026-8206-kirki-wordpress-privilege-escalation
+IBM WebSphere Application Server CVE-2026-8644: Critical Identity Spoofing via Improper Signature Validation — Quick Look || https://zeropath.com/blog/cve-2026-8644-ibm-websphere-identity-spoofing
+IBM WebSphere Application Server CVE-2026-9311: Brief Summary of a Critical RCE via Security Control Bypass || https://zeropath.com/blog/cve-2026-9311-ibm-websphere-rce
+IBM WebSphere Application Server CVE-2026-9319: Brief Summary of Critical RCE via JAX-WS Deserialization || https://zeropath.com/blog/cve-2026-9319-ibm-websphere-jax-ws-deserialization-rce
+IBM WebSphere Application Server CVE-2026-9330: SAML SSO Deserialization Leading to Remote Code Execution || https://zeropath.com/blog/cve-2026-9330-ibm-websphere-saml-deserialization-rce
+OTRS CVE-2026-48188: Critical Unauthenticated SQL Injection Enables Authentication Bypass Across a Decade of Releases || https://zeropath.com/blog/cve-2026-48188-otrs-sql-injection-authentication-bypass
+Spectra Gutenberg Blocks CVE-2026-7465: Brief Summary of a Contributor-Level RCE via Block Callback Injection || https://zeropath.com/blog/cve-2026-7465-spectra-gutenberg-blocks-rce
+Brief Summary: CVE-2026-3655 Firebase OTP Authentication Bypass in WordPress OTP Login Plugin || https://zeropath.com/blog/cve-2026-3655-wordpress-otp-login-firebase-auth-bypass
+Brief Summary: CVE-2026-4290 in WP Travel Pro — Unauthenticated Admin Deletion via Broken REST API Authorization || https://zeropath.com/blog/cve-2026-4290-wp-travel-pro-unauthenticated-user-deletion

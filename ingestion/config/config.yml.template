@@ -1,0 +1,49 @@
+mongodb:
+  user: ""
+  pass: ""
+  ip: ""
+  cluster: ""
+  collection: ""
+
+github:
+  token: ""
+
+nvd:
+  key: ""
+
+otx:
+  api_key: ""  # Get from https://otx.alienvault.com → Settings → API Integration
+
+abuseipdb:
+  api_key: ""  # Get from https://www.abuseipdb.com → Account → API
+
+shodan:
+  api_key: ""  # Get from https://account.shodan.io/ — needs Search API credit (Membership tier)
+
+llm:
+  # provider: openai | deepseek | qwen | gemini
+  
+  # provider: openai
+  # model: gpt-4o
+  
+  provider: ""  # openai | deepseek | qwen | gemini
+  api_key: ""
+
+news_db:
+  user: ""
+  pass: ""
+  ip: ""
+  db: ""
+
+azure:
+  tenant_id: ""
+  client_id: ""
+  client_secret: ""
+
+twitter:
+  api_key: ""
+  accounts_file: "supportFile/twitterAccounts.txt"
+  state_file: "supportFile/twitterLastSeen.json"
+
+ransomware_live:
+  api_token: ""

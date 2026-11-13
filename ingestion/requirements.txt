@@ -1,0 +1,27 @@
+lxml
+bs4
+pyyaml
+mmh3 # Shodan-compatible favicon hashing for faviconWatchScanner.py
+selenium
+spacy
+# python3 -m spacy download en_core_web_sm
+sumy
+# add timeout=7 to "fetch_url" function in /usr/local/lib/[python version]/site-packages/sumy/utils.py 
+### For Sumy ###
+# import nltk
+# nltk.download('punkt_tab')
+################
+bert-extractive-summarizer
+torch
+deep_translator
+pymongo
+cpe
+playwright # then run python3 -m playwright install
+defusedxml
+newspaper3k
+openai
+xmltodict
+lxml_html_clean
+pymongo
+nltk
+setuptools<82

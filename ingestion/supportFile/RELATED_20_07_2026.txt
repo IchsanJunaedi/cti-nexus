@@ -1,0 +1,251 @@
+CVE-2026-20182
+[local] Remote Sunrise Helper for Windows 2026.14 - Unauthenticated File/Directory Listing
+[local] Remote Sunrise Helper for Windows 2026.14 - Remote Code Execution
+CVE-2026-42897
+CVE-2009-1537
+CVE-2009-3459
+CVE-2010-0806
+CVE-2026-41091
+CVE-2026-45498
+[webapps] Cockpit 359 - RCE
+[webapps] BookStack 25.12.1 - Denial of Service
+[local] Lenovo LegionSpace 1.7.11.2 - 'DAService' Unquoted Service Path
+[webapps] solaredge - (CSRF-OOB-Injection)
+[webapps] FUXA  1.2.9 -  RCE
+CVE-2026-9082
+[webapps] Apache HTTP Server 2.4.66 - 'mod_http2' Double-Free Denial of Service
+[hardware] D-Link DSL2600U - 'rom-0' Admin Password Disclosure
+[webapps] Wordpress Temporary Login Plugin  1.0.0 - 'temp-login-token' Authentication Bypass to Account Takeover
+[webapps] cPanel - CRLF Injection
+[webapps] Casdoor 3.54.1 - Arbitrary File Write via Path Traversal
+[webapps] scramble - Remote Code Execution
+CVE-2026-45321
+[remote] Wing FTP Server 8.1.3 - Authenticated Remote Code Execution
+[local] ZTE Routers  - Unauthenticated Denial of Service
+[remote] Microsoft - NTLMv2 Hash Capture
+[local] ImageMagick - Infinite Loop in the MIFF decoder can lead to CPU exhaustion
+[webapps] YAMCS yamcs-core  5.12.7 - No Rate Limiting
+CVE-2025-48595
+CVE-2026-45247
+CVE-2026-12569
+[webapps] OpenEMR 7.0.2 - Arbitrary File Read
+[webapps] WordPress Contest Gallery 28.1.4 - Unauthenticated Blind SQL Injection
+May 2026 Threat Trend Report on APT Attacks (South Korea)
+RedAmon AI Tool that Chains Reconnaissance, Exploitation, and Post-exploitation
+China’s New Zhipu AI Reportedly Matches Claude Mythos in Vulnerability Detection
+Hijacked npm and Go Packages Use VS Code Tasks to Deploy Python Infostealer
+A week in security (June 22 &#8211; June 28)
+Millenium RAT Rewritten in C++ Infects 62,000+ Devices Across 160 Countries
+UNC1151 Ghostwriter Hackers Target Belarusian Politician in Gmail Phishing Campaign
+Hackers Use Rokarolla Banking Trojan to Intercept SMS Codes and Steal Crypto Credentials
+The Gentlemen are knocking: сustom backdoors and evolving tactics
+LLM-Generated Mythic Agents Enable Disposable Red-Team Tooling From Prompt to Deployment
+DCloud Uni-App Scam Network Powers RainbowEx-Style Crypto Fraud and WhatsApp Phishing
+US seizes hundreds of FIFA World Cup illegal streaming domains
+The Borderless Attack Surface: Securing Public Sector Hybrid Environments
+The Red Agent POV: Exploiting Broken Object-Level Authorization in an Airline GraphQL API
+Webinar: Why business email compromise attacks keep succeeding
+Why Post-Quantum Cryptography Starts With Credentials
+Gamaredon Expands Ukraine Attacks with New Malware and Cloud Service Abuse
+ClawHub Skills Expose AI Agents to Remote Control Backdoors and Data Theft Attacks
+236,000 DCloud Uni-App Sites Used in Crypto Scams, Phishing, and Wallet Drainers
+Agentic AI Has an Identity Problem and Attackers Know It
+Critical SimpleHelp flaw exploited to deploy new stealer malware
+The Bear Necessities: A Look at the Drivers, Dynamics, and Applications of the Pro-Russia Influence Ecosystem
+Reconnaissance in the Age of AI: Exploring Modern ML Infrastructure
+119 Edge extensions promised useful tools, instead downloaded malware
+From Bing Search to Ransomware: Bumblebee and AdaptixC2 Deliver Akira
+U.S. offers $10 million for hackers targeting WhatsApp, Signal users
+⚡ Weekly Recap: Linux Kernel Flaws, AI Malware Tricks, Turla Backdoor, Infostealers and More
+29th June – Threat Intelligence Report
+ Bridging the Visibility Gap: A Unified Security Operating Model for Hybrid Cloud Teams
+CVE-2026-48558
+CVE-2026-45659
+Kairos Ransomware: Data-Extortion Case Study Involving a U.S. Government Entity | Ransom-ISAC Blog - Ransom-ISAC
+Cyber Security News Bulletin Weekly – Mythos is Back, WhatsApp Username, Kali Linux 2026.2, +20 Stories
+[webapps] WordPress Plugin WPZOOM Portfolio 1.4.21 -  Reflected Cross-Site Scripting (XSS)
+[webapps] Joomla Extension 4.1.4 - PHP Object injection
+[webapps] Pulpy 0.1.1-Beta - Filesystem Sandbox Bypass
+[local] MEmu Android Emulator 9.2.7.0 - Local Privilege Escalation
+[local] Windows Defender (MsMpEng.exe) - Race Condition
+[remote] iOS Bluetooth PAN Exploit - Ethernet Gateway without Adapter
+[webapps] MCPJam Inspector - Remote Code Execution
+CVE-2026-55255
+CVE-2026-56290
+CVE-2026-48282
+[webapps] Krayin CRM v2.2.x - Authenticated Remote Code Execution
+[webapps] Atarim WordPress Plugin  4.2.2 - Sensitive Information Exposure
+[webapps] Langflow 1.9.0 - RCE
+[webapps] Joomla Page Builder CK  3.5.10 -  Arbitrary File Upload
+Everest Ransomware Claims 1 TB Data Theft But Encryptor Shows No Exfiltration Code
+20 Remote Code Execution Vulnerabilities Patched in Foxit PDF Reader and Editor
+New HalluSquatting Attack Allows Hackers to Poison AI Coding Assistants Into Installing Botnet Malware
+GitHub Copilot Refuses Harmful Chat Prompts But Writes Them Inside Code Workflows
+GoodPersonRAT Uses Fake LetsVPN Installer to Give Attackers Full Remote Control
+Microsoft fixes RoguePlanet zero-day in Defender
+Fluffy Wolf tests new toolkit on Russian companies
+Ransom & Dark Web  Issues Week 2, July 2026
+Statistical Report on Malware Targeting Linux SSH Servers in the Second Quarter of 2026
+Statistical Report on Malware Targeting Windows Database Servers in the Second Quarter of 2026
+Q2 2026 Statistical Report on Malware Targeting Windows Web Servers
+AI Gateways Offer Attackers the Keys to the Kingdom
+Vishing actors target Entra passkey enrollment
+UNC6692 Hackers Uses Microsoft Teams Helpdesk Impersonation to Deploy SNOW Malware
+RoguePlanet Zero-Day Fixed in Microsoft Defender
+Why we cannot wait for better post-quantum signature algorithms
+The Hidden Security Risks of Reduced Summer IT Coverage
+Windows Update Silently Installs LG Monitor App That Pushes McAfee Ads
+The AI Agent Credential Crisis: From Stealer Log to Source Code
+New Forg365 phishing platform uses AI to target Microsoft 365 accounts
+Hackers Abuse Microsoft Entra Passkey Enrollment to Hijack Enterprise Accounts
+HP Linux Printing Software Vulnerability Allows Remote Attackers to Execute Arbitrary Code
+Hackers Use Fake Paysafe, Skrill, and Neteller Packages to Harvest API Keys and Tokens
+Linux Kernel Vulnerability Enables Passwordless Root Through DRM Render Nodes
+6.9 million driver’s license numbers stolen from AssuranceAmerica
+GigaWiper: Anatomy of a destructive backdoor assembled from multiple malware
+CVE-2026-56291
+CVE-2026-48939
+AI Agents Are Creating a New Class of Employee Risk
+Rogue Agent: How a Single Code Block Could Hijack Your AI Conversations in Google’s DialogFlow
+MyBait: Why We Lured Attackers To Encrypt Our Cloud MySQL
+SearchLeak: How We Turned M365 Copilot Into a One-Click Data Exfiltration Weapon
+Phishing for Lobsters: How We Tricked OpenClaw into Spilling Secrets
+The July 2026 Security Update Review
+Brief Summary: CVE-2026-20266 OS Command Injection in Splunk AI Toolkit btool Configuration Helper
+Brief Summary: CVE-2026-42055 Heap Buffer Overflow in NGINX HTTP/2 Proxy and gRPC Modules
+NGINX HTTP/3 QPACK Use After Free (CVE-2026-42530): Brief Summary of a Critical Remote Vulnerability
+Envoy Proxy CVE-2026-47774: HTTP/2 Memory Exhaustion via Cookie Header Bypass with PoC and Patch Analysis
+Brief Summary: CVE-2024-24909 Command Injection RCE in Dell OpenManage Integration with Windows Admin Center
+Dell VxRail CVE-2024-38487: Brief Summary of a Root Container Escape in the API Gateway
+Pacemaker CVE-2026-10649: Pre-Auth Integer Overflow in Remote Message Decompression with PoC and Patch Analysis
+Quick Look: CVE-2026-44932 — Indirect Shell Command Injection via SUSE Wicked DHCP Client
+Foxit PDF Reader CVE-2026-12057: Brief Summary of JavaScript Sandbox Bypass Leading to Arbitrary Code Execution
+Brief Summary: CVE-2026-49952 — Discuz! X5.0 Authentication Bypass via Cross-Context Cryptographic Key Reuse
+Multer CVE-2026-5079: Brief Summary of a Single Request DoS via Deeply Nested Field Names
+WooCommerce PDF Invoice Builder CVE-2026-52704: Overview of a CVSS 10.0 Remote Code Execution Vulnerability
+GStreamer WavPack Decoder CVE-2026-53705: Overview of an Integer Overflow Leading to Heap Corruption
+Brief Summary: CVE-2026-54420 LiteSpeed cPanel Plugin Symlink Escalation Bypasses CloudLinux CageFS Isolation
+Yarbo Robot Fleet CVE-2026-10557: Hard-Coded MQTT Credentials Expose 50,000+ Devices to Remote Takeover
+Netty CVE-2026-44894: Brief Summary of a QUIC Anti-Amplification Bypass via Default Token Handler
+Brief Summary: Netty SNI Handler Pre-Allocation DoS (CVE-2026-45416) Turns Nine Bytes Into 16 MiB of Memory Pressure
+Netty CVE-2026-45674: Brief Summary of DNS Cache Poisoning via Bailiwick Bypass in CNAME Resolution
+vm2 Sandbox Escape to Host RCE (CVE-2026-47131): Technical Breakdown with PoC and Patch Analysis
+vm2 Sandbox Escape CVE-2026-47137: Quick Look at a CVSS 10.0 Patch Bypass Enabling Host RCE
+vm2 CVE-2026-47139: Underscored Builtin Network Bypass Enables SSRF from Node.js Sandbox — Quick Look with PoC and Detection Guidance
+vm2 Sandbox Escape via Builtin Denylist Bypass: Overview of CVE-2026-47140 (CVSS 10.0)
+vm2 Sandbox Breakout via Promise Species Hijack (CVE-2026-47208): Technical Breakdown with PoC and Patch Analysis
+vm2 CVE-2026-47209: Brief Summary of the Bridge Proxy Set Trap Receiver Bypass
+vm2 Sandbox Escape via JSPI Promise Species Bypass (CVE-2026-47210): Technical Breakdown with PoC and Patch Analysis
+GPTranslate WordPress Plugin CVE-2026-9109: Brief Summary of Unauthenticated Stored XSS via Exposed API Key and REST API
+WP Ticket Plugin CVE-2026-9848: Brief Summary of an Unauthenticated SQL Injection via WordPress Search
+Keras CVE-2026-11816: Path Traversal via CWD Validation Bypass in Archive Extraction — Technical Breakdown with PoC
+MongoDB Server CVE-2026-11933: Use-After-Free in Server-Side JavaScript BSON Conversion — Quick Look
+Spring Integration CVE-2026-40987: Path Traversal via Malicious Remote File Server — Quick Look
+Brief Summary: CVE-2026-40994 Spring Web Services BSP Enforcement Bypass via Insecure Default Initialization
+Spring Web Services CVE-2026-40999: Brief Summary of a High Severity SSRF via WS-Addressing Headers
+Brief Summary: CVE-2026-41700 Cross-Site WebSocket Hijacking in Spring for GraphQL
+Spring for GraphQL CVE-2026-41856: Overview of Authorization Bypass via Annotation Detection Failure in Type Hierarchies
+Netty CVE-2026-44249: Brief Summary of the IPv6 Subnet Filter Bypass in IpSubnetFilterRule
+Axios CVE-2026-44486: Proxy Credential Leakage via Redirect Handling in Node.js — Technical Breakdown with PoC and Patch Analysis
+Axios Fetch Adapter Size Limit Bypass (CVE-2026-44488): Technical Breakdown with PoC and Patch Analysis
+Axios CVE-2026-44492: IPv4-Mapped IPv6 NO_PROXY Bypass Enables SSRF with PoC and Patch Analysis
+Brief Summary: CVE-2026-47365 — Argument Injection in cPanel WP Toolkit Breaks Tenant Isolation
+Brief Summary: CVE-2026-47367 Command Injection in Ubiquiti UID Enterprise Agent (CVSS 9.9)
+Brief Summary: CVE-2026-47368 Path Traversal in Ubiquiti UniFi OS and Its Role in a Five CVE Bulletin
+Brief Summary: CVE-2026-47369 UniFi OS Privilege Escalation via Improper Input Validation (CVSS 9.9)
+Quick Look: CVE-2026-47370 Command Injection in Ubiquiti UniFi OS (CVSS 9.9)
+phpBB CVE-2026-48611: Brief Summary of a Critical OAuth Authentication Bypass Enabling Account Hijacking
+Brief Summary: CVE-2026-49982 Type-Confusion Path Traversal in node-tmp
+Brief Summary: CVE-2026-7870 — IBM i Privilege Escalation via Unqualified Library Call Affects All Supported Releases
+UpdraftPlus CVE-2026-10795: Brief Summary of the Authentication Bypass Threatening 3M+ WordPress Sites
+Quick Look: Splunk Secure Gateway CVE-2026-20251 RCE via jsonpickle Deserialization
+Splunk Enterprise CVE-2026-20252: Overview of SSRF via Dashboard Studio PDF Export with Dual Bypass Mechanisms
+Brief Summary: CVE-2026-3018 Unauthenticated SQL Injection in WordPress Newsletters Plugin
+Quick Look: CVE-2026-35273, Unauthenticated RCE in Oracle PeopleSoft PeopleTools Updates Environment Management
+js-cookie CVE-2026-46625: Per-Instance Prototype Hijack Enables Cookie Attribute Injection — Quick Look with PoC and Patch Analysis
+Ghidra BSim SQL Injection (CVE-2026-49498): Brief Summary of PostgreSQL Privilege Escalation via Unescaped Usernames
+Brief Summary: CVE-2026-50566 — Fission Kubernetes Serverless Framework SecurityContext Bypass Enables Cluster Compromise
+Brief Summary: Ghidra Extension Installer Zip Slip Vulnerability (CVE-2026-52752)
+Brief Summary: CVE-2026-52754 — NSA Ghidra Server PKI Null Signature Authentication Bypass
+Brief Summary: Ghidra Theme Import Zip Slip Path Traversal (CVE-2026-52755)
+WordPress Insert PHP Plugin CVE-2017-20251: Overview of a Critical Unauthenticated RCE via REST API Shortcode Injection
+Ivanti Sentry CVE-2026-10520: Quick Look at a CVSS 10.0 Unauthenticated Root RCE via OS Command Injection
+Ivanti Sentry CVE-2026-10523: Quick Look at a CVSS 9.9 Authentication Bypass Enabling Full Admin Takeover
+Brief Summary: CVE-2026-10727 Root Level OS Command Injection in Ivanti EPMM
+SQLite FTS5 Memory Corruption: Quick Look at CVE-2026-11822 and Its Billion-Device Attack Surface
+SQLite FTS5 Heap Buffer Overflow via Integer Underflow: Quick Look at CVE-2026-11824 with PoC and Patch Analysis
+Quick Look: CVE-2026-11837 — Symlink Following in Ansible Posix authorized_key Enables Local Privilege Escalation
+Brief Summary: CVE-2026-25089 — Unauthenticated OS Command Injection in Fortinet FortiSandbox via VNC Feature
+Spring Framework CVE-2026-41855: Brief Summary of JMS Deserialization Vulnerability Affecting All Supported Release Lines
+Blocksy WordPress Theme CVE-2026-8365: Brief Summary of PHP Object Injection to Remote Code Execution
+Quick Look: CVE-2026-9740 — MongoDB Server BSON Validation Crash via Uncontrolled Mutual Recursion
+MongoDB CVE-2026-9742: Quick Look at the Pre-Auth OIDC Denial-of-Service Vulnerability
+MongoDB CVE-2026-9753: Brief Summary of the $_internalApplyOplogUpdate Out-of-Bounds Memory Read
+AWS AgentCore CLI CVE-2026-11393: Brief Summary of a Critical Code Injection via Triple-Quote Escaping
+Keycloak CVE-2026-11577: Brief Summary of the partialImport FGAP Bypass Leading to Full Realm Privilege Escalation
+Brief Summary: CVE-2026-40128 — Critical Unauthenticated Path Traversal in SAP NetWeaver AS Java Web Container
+Brief Summary: CVE-2026-40519 — Authenticated RCE via OS Command Injection in Nginx Proxy Manager
+Quick Look: CVE-2026-40984 Micrometer HTTP Server Denial of Service via Uncontrolled Resource Consumption
+Brief Summary: AdGuard Home CVE-2026-41448 Path Traversal Authentication Bypass in GL.iNet Router Mode
+VMware Cloud Foundation Operations CVE-2026-41722: Overview of Stored XSS Enabling Administrative Takeover
+VMware Cloud Foundation Operations CVE-2026-41723: Overview of Stored XSS Enabling Administrative Hijacking
+VMware Cloud Foundation Operations CVE-2026-41724: Overview of Stored XSS Leading to Admin Privilege Escalation
+Spring Framework CVE-2026-41845: Brief Summary of the Template Literal XSS Escaping Flaw in JavaScriptUtils
+Spring Framework CVE-2026-41849: Overview of SpEL Integer Overflow Denial of Service in an EOL Branch
+Spring Framework CVE-2026-41850: Brief Summary of the SpEL Algorithmic Denial of Service Vulnerability
+SAP NetWeaver ABAP CVE-2026-44748: Brief Summary of a Critical XML Signature Wrapping Vulnerability
+Brief Summary: CVE-2026-44751 — SAP ABAP Missing Authorization Check Enables Privilege Escalation via Report Generation
+Quick Look: CVE-2026-50752 — Check Point IKEv1 Certificate Validation Bypass in Site-to-Site VPNs
+WordPress Background Image Cropper CVE-2024-58348: Unauthenticated RCE via Unrestricted File Upload with Public Exploit and CISA KEV Listing
+Boost Serialization CVE-2026-11460: Overview of an Unpatched Type Confusion and RCE Vulnerability Affecting Two Decades of Releases
+Comodo Internet Security CVE-2026-49494: Remote Kernel BSOD via IPv6 Integer Underflow with Public PoC
+Hippoo Mobile App for WooCommerce CVE-2026-10580: Quick Look at a Null Sentinel Logic Flaw Leading to Unauthenticated Admin Takeover
+Brief Summary: CVE-2026-11332 Argument Injection in Ansible Core ansible-galaxy Role Install
+Brief Summary: CVE-2026-49777 — CVSS 10.0 Backdoor in Product Slider Pro for WooCommerce
+X.Org X Server CVE-2026-50256: Brief Summary of a Stack Buffer Overflow in Font Alias Resolution
+Brief Summary: CVE-2026-50258 Stack Buffer Overflow in X.Org X Server and Xwayland XKB Extension
+Brief Summary: CVE-2026-50259 Stack Buffer Overflow in X.Org X Server XKB SetMap Request
+X.Org X Server CVE-2026-50260: Use-After-Free in FreeCounter() Enables Local Privilege Escalation — Brief Summary and Patch Analysis
+Quick Look: CVE-2026-50261 — X.Org Server XSYNC Use-After-Free Enables Local Privilege Escalation
+Brief Summary: CVE-2026-50264 — X.Org X Server DRI2 Out-of-Bounds Heap Write via Duplicate Buffer Attachments
+WP Captcha PRO CVE-2026-5411: Brief Summary of Arbitrary File Upload to Remote Code Execution via Licensing Module
+WP Captcha PRO CVE-2026-5415: Quick Look at a Three-Step Authentication Bypass Affecting 200,000+ WordPress Sites
+Quick Look: CVE-2026-8438 — Unauthenticated Stored XSS in All-In-One Security (AIOS) WordPress Plugin
+Quick Look: CVE-2026-9290 Unauthenticated Local File Inclusion in WP User Manager WordPress Plugin
+Brief Summary: CVE-2026-9851 Privilege Escalation in WordPress Booking Package Plugin via Account Takeover
+WordPress Hybrid Composer CVE-2019-25738: Overview of a Critical Unauthenticated Options Update Leading to Full Site Takeover
+Brief Summary: CVE-2024-27890 Authentication Bypass in Arista EOS OpenConfig gNMI Interface
+Arista EOS CVE-2024-27892: Brief Summary of a Critical gNMI Authentication Bypass in OpenConfig
+Brief Summary: CVE-2026-10840 OpenShift Pipelines RBAC Misconfiguration Grants Any Authenticated User Cluster Wide Write Access
+OpenShift Cloud Credential Operator CVE-2026-10843: Overview of Account-Wide IAM Over-Privilege in Mint Mode on AWS
+Supermicro BMC SMTP Command Injection (CVE-2026-3820): Overview of a Recurring Firmware Weakness
+Brief Summary: CVE-2026-41567 in Docker/Moby — Container Escape via Decompression Binary Path Hijacking
+Brief Summary: CVE-2026-50292 in libinput — CRLF Injection in udev Helper Enables Root Code Execution
+Cisco Unified Communications Manager CVE-2026-20230: Critical SSRF Leading to Root Privilege Escalation
+Quick Look: CVE-2026-35075 — Hardcoded Default Password in MBS Universal Gateways Exposes Building Automation Networks
+MLflow AI Gateway CVE-2026-4035: Brief Summary of Critical Environment Variable Exfiltration via Gateway Secrets
+OpenStack Mistral CVE-2026-41283: Brief Summary of a Critical Policy Bypass Leading to Remote Code Execution
+Quick Look: CVE-2026-5241 — HuggingFace Transformers LightGlue trust_remote_code Bypass Enables Arbitrary Code Execution
+Quick Look: CVE-2026-1784 — HAProxy Configuration Injection via OpenShift Route spec.path
+React Router CVE-2026-42342: Quick Look at the __manifest Endpoint Denial of Service Vulnerability
+ARMember Premium CVE-2026-5076: Brief Summary of a Critical Plaintext Password Reset Key Flaw Enabling WordPress Admin Takeover
+Brief Summary: CVE-2026-7198 — Critical Unauthenticated Access Control Bypass in Progress Sitefinity OData Web Services
+Progress Sitefinity CVE-2026-7312: Brief Summary of a CVSS 10.0 Plaintext Credential Exposure in OData Web Services
+Quick Look: CVE-2025-59605, Qualcomm HLOS Out-of-Bounds Write Affecting 130+ Chipsets
+Poppler CVE-2026-10118: Quick Look at the Integer Overflow in tilingPatternFill Leading to Heap Corruption
+Qualcomm CVE-2026-24090: Brief Summary of a Boot Flow Cryptographic Bypass Affecting Dozens of Snapdragon Chipsets
+Quick Look: CVE-2026-25276, Qualcomm StrongBox Bounds Check Bypass Threatens Hardware Root of Trust
+Quick Look: CVE-2026-25277 — Qualcomm Secure Processor StrongBox Buffer Overflow Threatens Hardware Backed Key Storage
+Cloud Foundry UAA CVE-2026-40965: EC Private Key Disclosure via Public Endpoint — Brief Summary and Patch Analysis
+Apache Solr CVE-2026-44825: Quick Look at Hardcoded Credentials in BasicAuth Bootstrapping
+Nextcloud User OIDC CVE-2026-45156: Authentication Bypass via Missing JWT Signature Verification in ID4me Flow
+Gravity Forms CVE-2026-48866: Brief Summary of a Critical Arbitrary File Deletion via Path Traversal
+Kirki WordPress Plugin CVE-2026-8206: Brief Summary of a Critical Unauthenticated Privilege Escalation via Password Reset Hijacking
+IBM WebSphere Application Server CVE-2026-8644: Critical Identity Spoofing via Improper Signature Validation — Quick Look
+IBM WebSphere Application Server CVE-2026-9311: Brief Summary of a Critical RCE via Security Control Bypass
+IBM WebSphere Application Server CVE-2026-9319: Brief Summary of Critical RCE via JAX-WS Deserialization
+IBM WebSphere Application Server CVE-2026-9330: SAML SSO Deserialization Leading to Remote Code Execution
+OTRS CVE-2026-48188: Critical Unauthenticated SQL Injection Enables Authentication Bypass Across a Decade of Releases
+Spectra Gutenberg Blocks CVE-2026-7465: Brief Summary of a Contributor-Level RCE via Block Callback Injection
+Brief Summary: CVE-2026-3655 Firebase OTP Authentication Bypass in WordPress OTP Login Plugin
+Brief Summary: CVE-2026-4290 in WP Travel Pro — Unauthenticated Admin Deletion via Broken REST API Authorization
