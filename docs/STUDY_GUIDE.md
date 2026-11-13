@@ -87,111 +87,119 @@ CTI Nexus dirancang menggunakan arsitektur **Monorepo Terpisah (Decoupled Engine
 
 ## BAB 3: SKEMA BASIS DATA & MODEL DATA MONGODB
 
-Sistem menggunakan 2 basis data utama dalam kluster MongoDB:
-1. `news_db`: Menyimpan artikel feeds, IOC hasil ekstraksi, dan akun pengguna.
-2. `threatintel`: Menyimpan intelijen terstruktur (CVE, Threat Actors, Ransomware victims, dan skenario serangan).
+Basis data CTI Nexus terbagi menjadi dua kluster database utama di MongoDB:
+- `news_db`: Pemanenan data dinamis (artikel intelijen mentah/diperkaya, IOC terekstraksi, dan manajemen pengguna).
+- `threatintel`: Basis pengetahuan intelijen terstruktur (katalog CVE, profil Threat Actor, riwayat korban ransomware, dan skenario serangan).
 
-### 3.1 Skema Koleksi `news_db.articles`
-Menyimpan seluruh artikel berita dan peringatan siber global yang telah diperkaya:
-```json
-{
-  "_id": "ObjectId('66e8f1...')",
-  "title": "APT29 Deploys New Stealth Malware Targeting Defense Sector",
-  "source": "BleepingComputer",
-  "url": "https://www.bleepingcomputer.com/news/security/...",
-  "published_at": "2026-11-12T14:30:00Z",
-  "raw_content": "Pusat analisis intelijen melaporkan aktivitas...",
-  "summary": "Analisis teknis aktivitas spionase APT29 menggunakan backdoor baru...",
-  "ttp_tags": [
-    "T1059.001",
-    "T1566.001",
-    "T1071.001"
-  ],
-  "cve_tags": [
-    "CVE-2026-24090"
-  ],
-  "threat_actors": [
-    "APT29",
-    "Cozy Bear"
-  ],
-  "targeted_sectors": [
-    "Defense",
-    "Government"
-  ],
-  "targeted_countries": [
-    "ID",
-    "SG"
-  ],
-  "severity": "CRITICAL",
-  "created_at": "2026-11-12T14:35:12Z"
-}
+### 3.1 Diagram Relasi Entitas (ER Diagram)
+
+Berikut visualisasi diagram hubungan antar-koleksi dalam ekosistem CTI Nexus:
+
+```mermaid
+erDiagram
+    ARTICLES ||--o{ IOCS : "mengekstraksi"
+    ARTICLES }o--o{ THREAT_ACTORS : "mengidentifikasi"
+    ARTICLES }o--o{ CVE_TRACKER : "membahas"
+    
+    THREAT_ACTORS ||--o{ IOCS : "mengoperasikan_infrastruktur"
+    THREAT_ACTORS ||--o{ RANSOMWARE_VICTIMS : "mengklaim_serangan"
+    
+    CVE_TRACKER ||--o{ IOCS : "dieksploitasi_dalam"
+
+    ARTICLES {
+        ObjectId id PK "ID Unik Dokumen Artikel"
+        string title "Judul Berita/Peringatan Siber"
+        string source "Sumber Feed OSINT"
+        datetime published_at "Waktu Publikasi Sumber"
+        string summary "Ringkasan Hasil Ekstraksi NLP"
+        string severity "Tingkat Keparahan (CRITICAL, HIGH, dll)"
+        array threat_actors FK "Relasi ke nama Threat Actor"
+        array ttp_tags "Daftar ID Teknik MITRE ATT&CK"
+        array cve_tags FK "Relasi ke CVE Tracker"
+        array targeted_sectors "Sektor Industri Target"
+        array targeted_countries "Kode Negara Sasaran (ID, SG, dll)"
+    }
+
+    IOCS {
+        ObjectId id PK "ID Unik Indikator Kompromi"
+        string type "Tipe (ipv4, domain, url, hash)"
+        string value "Nilai Asli Indikator"
+        string defanged_value "Nilai Aman / Defanged"
+        int confidence_score "Skor Kepercayaan (0 - 100)"
+        boolean is_active "Status Liveness Infrastruktur"
+        array related_threat_actors FK "Aktor Terkait"
+        array related_cves FK "CVE Terkait"
+        array mitre_d3fend_remedy "Rekomendasi Tindakan D3FEND"
+        datetime last_seen "Waktu Terakhir Terdeteksi Aktif"
+    }
+
+    THREAT_ACTORS {
+        ObjectId id PK "ID Unik Profil Aktor"
+        string name "Nama Utama Aktor (e.g. APT29)"
+        array aliases "Nama Alias (e.g. Cozy Bear, Midnight Blizzard)"
+        string origin_country "Dugaan Negara Asal"
+        array motivations "Motivasi (Espionage, Financial)"
+        array targeted_sectors "Sektor Sasaran Utama"
+        array tools "Alat / Malware yang Digunakan"
+        array associated_ttps "Kompilasi TTP MITRE ATT&CK"
+    }
+
+    CVE_TRACKER {
+        string cve_id PK "ID Standar CVE (e.g. CVE-2026-24090)"
+        string description "Deskripsi Celah Keamanan"
+        float cvss_v3 "Skor Keparahan Base CVSS v3.1"
+        float epss_score "Probabilitas Eksploitasi (0.0 - 1.0)"
+        boolean cisa_kev "Terdaftar di CISA Known Exploited"
+        string vendor "Nama Vendor Perangkat Lunak"
+        string product "Produk Terdampak"
+        boolean poc_available "Ketersediaan Kode Eksploit Proof-of-Concept"
+        array mitre_d3fend_countermeasures "Langkah Penangkalan D3FEND"
+    }
+
+    RANSOMWARE_VICTIMS {
+        ObjectId id PK "ID Unik Korban Pemerasan"
+        string victim_name "Nama Perusahaan/Institusi Korban"
+        string group_name FK "Nama Kelompok Ransomware Pelaku"
+        string country "Negara Korban"
+        string industry "Sektor Korban"
+        datetime leak_date "Tanggal Kebocoran Data"
+        string ransom_status "Status (PAID, NEGOTIATING, DUMPED)"
+        float data_size_gb "Ukuran Data yang Dicuri (GB)"
+    }
+
+    USERS {
+        ObjectId id PK "ID Pengguna"
+        string username "Username Pengguna"
+        string email "Email Resmi Pengguna"
+        string role "Hak Akses (Admin, Analyst, Viewer)"
+        string hashed_password "Hash Password (Bcrypt/Argon2)"
+        datetime created_at "Waktu Akun Dibuat"
+    }
 ```
 
-### 3.2 Skema Koleksi `news_db.iocs`
-Menyimpan indikator kompromi teknis yang siap diumpankan ke firewall atau SIEM:
-```json
-{
-  "_id": "ObjectId('66e8f9...')",
-  "type": "ipv4",                     // ipv4 | domain | url | sha256 | md5
-  "value": "198.51.100.42",
-  "defanged_value": "198.51.100[.]42",
-  "confidence_score": 85,             // Skor keyakinan 0-100
-  "liveness": {
-    "is_active": true,
-    "last_checked": "2026-11-13T08:00:00Z",
-    "response_code": 200
-  },
-  "sources": [
-    "BleepingComputer",
-    "CISA Alert"
-  ],
-  "related_threat_actors": ["APT29"],
-  "related_cves": ["CVE-2026-24090"],
-  "mitre_d3fend_remedy": [
-    "D3-NID (Inbound Traffic Filtering)",
-    "D3-FIP (IP Address Blocking)"
-  ],
-  "first_seen": "2026-11-10T00:00:00Z",
-  "last_seen": "2026-11-13T08:00:00Z"
-}
-```
+---
 
-### 3.3 Skema Koleksi `threatintel.cve_tracker`
-Menyimpan triase kerentanan perangkat lunak dan status eksploitasi:
-```json
-{
-  "_id": "CVE-2026-24090",
-  "cve_id": "CVE-2026-24090",
-  "description": "Cryptographic signature bypass in bootloader firmware...",
-  "cvss_v3": 9.8,
-  "cvss_vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:H",
-  "epss_score": 0.8945,                // 89.4% probabilitas dieksploitasi dalam 30 hari
-  "cisa_kev": true,                    // Terdaftar di Known Exploited Vulnerabilities
-  "due_date": "2026-11-20",
-  "vendor": "Qualcomm",
-  "product": "Snapdragon Modem Firmware",
-  "poc_available": true,
-  "mitre_d3fend_countermeasures": [
-    "D3-SUA (Software Update Acquisition)",
-    "D3-VSA (Vulnerability Scanning Architecture)"
-  ]
-}
-```
+### 3.2 Kamus Data & Relasi Antar-Koleksi
 
-### 3.4 Skema Koleksi `threatintel.ransomware`
-Menyimpan riwayat korban ransomware global untuk analisis intelijen makro:
-```json
-{
-  "_id": "ObjectId('66e8a2...')",
-  "victim_name": "PT Telekomunikasi Indonesia Partner",
-  "group_name": "LockBit 3.0",
-  "country": "ID",
-  "industry": "Telecommunications",
-  "leak_date": "2026-11-05",
-  "ransom_status": "DUMPED",           // NEGOTIATING | PAID | DUMPED
-  "data_size_gb": 420.5
-}
-```
+| Koleksi | Basis Data | Fungsi Utama | Kunci Relasi (Foreign Key) |
+| :--- | :--- | :--- | :--- |
+| **`articles`** | `news_db` | Menyimpan 11.000+ dokumen berita intelijen hasil crawl yang telah diperkaya NLP. | `threat_actors` $\rightarrow$ `threat_actors.name`<br>`cve_tags` $\rightarrow$ `cve_tracker.cve_id` |
+| **`iocs`** | `news_db` | Repositori teknis indikator jahat (IP, Domain, URL, Hash) hasil ekstrak artikel. | `related_threat_actors` $\rightarrow$ `threat_actors.name`<br>`related_cves` $\rightarrow$ `cve_tracker.cve_id` |
+| **`cve_tracker`** | `threatintel` | Triase kerentanan terintegrasi dengan CVSS v3.1, skor probabilitas EPSS, dan CISA KEV. | `cve_id` dirujuk oleh `articles` dan `iocs` |
+| **`threat_actors`** | `threatintel` | Profil intelijen kelompok peretas (APT, cybercriminal) beserta TTP dan malware yang digunakan. | Dirujuk oleh `articles`, `iocs`, dan `ransomware` |
+| **`ransomware`** | `threatintel` | Rekaman 7.000+ insiden pemerasan ransomware global untuk visualisasi treemap eksekutif. | `group_name` $\rightarrow$ `threat_actors.name` |
+| **`users`** | `news_db` | Manajemen hak akses peran (RBAC) dan sesi pengguna platform. | Terisolasi untuk sistem autentikasi |
+
+---
+
+### 3.3 Alur Relasi Data Terpadu (Data Flow Lifecycle)
+1. **Pemanenan**: Artikel masuk ke `articles` dengan tag otomatis dari worker NLP (`ttp_tags`, `threat_actors`, `cve_tags`).
+2. **Korelasi Silang**:
+   - Jika artikel menyebut nama aktor ancaman (misal: `"APT29"`), sistem otomatis menarik profil dari `threat_actors` untuk ditampilkan di Newsroom.
+   - Jika artikel menyebut celah keamanan (misal: `"CVE-2026-24090"`), sistem mencocokkan status eksploitasi dan skor prioritas dari `cve_tracker`.
+3. **Ekstraksi IOC ke Aksi Penangkalan**:
+   - Indikator teknis yang ditemukan dalam artikel disimpan ke koleksi `iocs`.
+   - Tiap IOC dipasangkan dengan taktik defensif **MITRE D3FEND** yang relevan (contoh: IP jahat dipasangkan dengan *D3-FIP: IP Filtering*), sehingga analis bisa langsung mengambil tindakan pertahanan.
 
 ---
 
