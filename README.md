@@ -1,7 +1,6 @@
 # CTI Nexus 🛡️
-### Autonomous Cyber Threat Intelligence & National Defensive Operations Platform
-**Submisi Resmi Kartika Cyber Hackathon 2026 — Kategori Penangkalan (Defensive Shield)**  
-*Diselenggarakan oleh Pusat Siber TNI AD (PUSSIBERAD) × CODEPOLITAN*
+### Autonomous Cyber Threat Intelligence & Defensive Operations Platform
+**A Next-Generation Defensive Shield Ecosystem for Proactive Threat Detection and Neutralization**
 
 [![Python](https://img.shields.io/badge/Python-3.11+-3776AB?logo=python&logoColor=white)](https://python.org)
 [![FastAPI](https://img.shields.io/badge/FastAPI-0.109+-009688?logo=fastapi&logoColor=white)](https://fastapi.tiangolo.com)
@@ -14,52 +13,52 @@
 
 ---
 
-## 📌 Ringkasan Eksekutif & Relevansi TNI AD
+## 📌 Ringkasan Eksekutif: Transformasi Paradigma Pertahanan Siber
 
-Dalam doktrin pertahanan siber modern, **"Penangkalan" (Defensive Shield)** tidak dapat dibangun di atas kepasifan atau data statis. Ancaman siber terhadap kedaulatan nasional—mulai dari serangan *Advanced Persistent Threat* (APT) negara asing, kampanye *Ransomware* terhadap infrastruktur kritis, hingga eksploitasi *Zero-Day*—memerlukan sistem radar siber otonom yang bekerja 24/7.
+Dalam lanskap ancaman modern, pertahanan siber yang tangguh (**Defensive Shield**) tidak dapat lagi mengandalkan respons pasif setelah insiden terjadi. Ancaman persisten seperti kampanye *Advanced Persistent Threat* (APT), ransomware terdistribusi, dan eksploitasi kerentanan *Zero-Day* memerlukan **arsitektur penangkalan proaktif** yang mampu mengantisipasi serangan sebelum menembus perimeter.
 
-**CTI Nexus** adalah platform *Cyber Threat Intelligence* (CTI) berdaulat (*sovereign-grade*) yang dirancang khusus untuk memenuhi standar operasi taktis dan strategis Pusat Siber TNI AD (**PUSSIBERAD**):
-1. **Kedaulatan Data & Air-Gappable**: Seluruh pipeline dapat di-deploy secara *on-premises* atau *air-gapped* tanpa dependensi layanan intelijen komersial asing.
-2. **Koleksi OSINT & Darkweb Skala Penuh**: Mengintegrasikan lebih dari 60 *crawler* independen yang menyaring intelijen dari situs vendor global, darkweb forum, CISA KEV, hingga kebocoran ransomware secara real-time.
-3. **Penyelarasan Taktis MITRE D3FEND**: Tidak hanya mendeteksi taktik musuh (ATT&CK), CTI Nexus memetakan matriks penangkalan defensif (MITRE D3FEND) yang memberikan rekomendasi tindakan teknis langsung bagi analis SOC.
+**CTI Nexus** adalah platform *Cyber Threat Intelligence* (CTI) otonom dan berdaulat (*sovereign-grade*) yang dirancang untuk menjembatani jurang pemisah antara pengumpulan data intelijen mentah dengan eksekusi penangkalan defensif di lapangan:
+1. **Otonom & Self-Sovereign**: Seluruh pipeline dirancang untuk dapat beroperasi secara mandiri (*self-hosted* atau *air-gapped*), memproses ribuan data intelijen tanpa ketergantungan pada vendor intelijen komersial pihak ketiga.
+2. **Koleksi Multi-Source Skala Penuh**: Mengoperasikan lebih dari 60 *harvester* independen yang menyaring intelijen dari situs riset keamanan global, darknet feeds, radar CISA KEV, hingga kebocoran ransomware secara real-time.
+3. **Penyelarasan Taktis MITRE D3FEND**: Tidak hanya memetakan teknik penyerang (ATT&CK), CTI Nexus secara otomatis menghubungkan temuan intelijen dengan matriks penangkalan defensif (**MITRE D3FEND**) untuk memberikan rekomendasi tindakan mitigasi langsung bagi analis SOC.
 
 ---
 
 ## 🏗️ Arsitektur Sistem (End-to-End Pipeline)
 
-CTI Nexus dibangun menggunakan arsitektur **Monorepo** yang memisahkan subsistem pemanen intelijen (*Ingestion Engine*) dengan subsistem analisis dan visualisasi taktis (*Defense Platform*), terhubung melalui basis data MongoDB berkinerja tinggi.
+CTI Nexus dibangun menggunakan arsitektur **Monorepo terpadu** yang memisahkan subsistem pengumpulan intelijen (*Ingestion Engine*) dengan subsistem analisis dan visualisasi taktis (*Defense Platform*), terhubung melalui basis data MongoDB berkecepatan tinggi.
 
 ```mermaid
 flowchart TD
-    subgraph IngestionSubsystem["1. PUSAT PEMANEN INTELIJEN (ingestion/)"]
+    subgraph IngestionSubsystem["1. SUBSISTEM PEMANEN INTELIJEN (ingestion/)"]
         direction TB
         A1["60+ OSINT Harvesters<br/>(BleepingComp, CISA, RecordedFuture, dll.)"]
         A2["Darknet & Ransomware Trackers<br/>(Ahmia, RansomwareLive, Tor Feeds)"]
         A3["Vulnerability & Exploit Feeds<br/>(CISA KEV, NVD CVE, Exploit-DB)"]
         
-        A1 & A2 & A3 -->|Raw Articles & Feeds| B["Job Queue<br/>(MongoDB Queue)"]
+        A1 & A2 & A3 -->|Raw Feeds & Articles| B["Job Queue<br/>(MongoDB Queue)"]
         B --> C["NLP Enrichment Worker<br/>(spaCy NER + TTP Extractor)"]
         C --> D["IOC Syncer & Liveness Probe<br/>(Regex, Defanging, Validation)"]
     end
 
-    subgraph DataStorage["2. BASIS DATA INTELIJEN PUSAT"]
+    subgraph DataStorage["2. BASIS DATA INTELIJEN TERPUSAT"]
         D -->|Enriched Documents| M1[("MongoDB: news_db<br/>11,000+ Articles, 7,000+ Victims")]
         D -->|Structured IOCs| M2[("MongoDB: threatintel<br/>IOCs, Actors, CVEs, Scenarios")]
     end
 
     subgraph PlatformSubsystem["3. PLATFORM PENANGKALAN TAKTIS (platform/)"]
         direction TB
-        M1 & M2 --> E["FastAPI Core Backend<br/>(Auth, RBAC, Caching, Analytics)"]
+        M1 & M2 --> E["FastAPI Core Backend<br/>(Auth, RBAC, Caching, Analytics Engine)"]
         E --> F1["Executive Radar Dashboard<br/>(KPI Cards, Treemap, Country Trends)"]
         E --> F2["Threat Newsroom & AI Daily Recap<br/>(Automated Briefing Generator)"]
         E --> F3["CVE Prioritization Engine<br/>(CVSS v3.1 + EPSS Exploit Scoring)"]
-        E --> F4["IntelGraph Knowledge Graph<br/>(Force-Directed Threat Actor Topology)"]
+        E --> F4["IntelGraph Knowledge Topology<br/>(Force-Directed Threat Actor Topology)"]
         E --> F5["MITRE ATT&CK & D3FEND Matrix<br/>(Offensive to Defensive Mapping)"]
-        E --> F6["STIX 2.1 Exporter<br/>(Interoperabilitas SIEM/SOAR Militer)"]
+        E --> F6["STIX 2.1 Exporter<br/>(Interoperabilitas Standar SIEM/SOAR)"]
     end
 
-    subgraph DefenseOps["4. AKSI OPERASI PERTAHANAN (PUSSIBERAD SOC)"]
-        F1 & F2 & F3 & F4 & F5 & F6 --> G["Prajurit & Analis Siber TNI AD<br/>(Tindakan Penangkalan & Mitigasi Cepat)"]
+    subgraph DefenseOps["4. OPERASI PERTAHANAN SIBER (SOC)"]
+        F1 & F2 & F3 & F4 & F5 & F6 --> G["Security Operations Center (SOC)<br/>(Triase Cepat & Eksekusi Tindakan Penangkalan)"]
     end
 ```
 
@@ -99,27 +98,27 @@ cti-nexus/
 ├── docs/                              # Dokumentasi Arsitektur & Panduan Operasional
 ├── run.py                             # Root Entrypoint Wrapper (Auto-resolving paths)
 ├── .gitignore                         # Strict Defense-Grade Git Hygiene
-└── README.md                          # Dokumentasi Induk Submisi Hackathon
+└── README.md                          # Dokumentasi Induk Repositori
 ```
 
 ---
 
-## 🚀 Fitur Unggulan (Penangkalan / Defensive Shield)
+## 🚀 Fitur Unggulan (Defensive Shield Capabilities)
 
 ### 1. Executive Cyber Radar & Threat Treemap
-Memberikan visibilitas instan kepada pimpinan perwira dan analis mengenai lanskap ancaman siber yang sedang berlangsung: volume insiden, tren korban ransomware berdasarkan sektor industri, dan persebaran geografis negara target.
+Memberikan visibilitas instan kepada pengambil keputusan dan analis mengenai lanskap ancaman yang sedang berlangsung: volume insiden, tren korban ransomware berdasarkan sektor industri, dan persebaran geografis target serangan.
 
 ### 2. IntelGraph: Visualisasi Topologi Ancaman (Force-Directed Graph)
-Menghubungkan titik-titik intelijen secara interaktif antara **Threat Actors $\rightarrow$ Vulnerabilities (CVE) $\rightarrow$ IOCs $\rightarrow$ Target Sektor**. Memungkinkan analis melacak alur kampanye siber lawan secara komprehensif.
+Menghubungkan entitas intelijen secara dinamis antara **Threat Actors $\rightarrow$ Vulnerabilities (CVE) $\rightarrow$ IOCs $\rightarrow$ Target Sektor**. Memungkinkan analis melacak alur kampanye siber dan infrastruktur lawan secara visual dan mendalam.
 
-### 3. Matriks MITRE D3FEND (Aksi Penangkalan Nyata)
+### 3. Matriks Penangkalan MITRE D3FEND
 Bukan sekadar mencatat bagaimana musuh menyerang (ATT&CK), CTI Nexus memetakan teknik serangan ke tindakan mitigasi dan penangkalan aktif berdasarkan standar **MITRE D3FEND** (misal: *File Hashing, Decoy Environment, Network Traffic Filtering, Inbound Traffic Authentication*).
 
 ### 4. Triase Kerentanan Otomatis (CVSS v3.1 + EPSS)
 Memfilter ratusan kerentanan harian menjadi daftar prioritas tindakan menggunakan skor gabungan keparahan (CVSS) dan probabilitas eksploitasi di dunia nyata (*Exploit Prediction Scoring System / EPSS*), disinkronkan langsung dengan basis data **CISA KEV** (*Known Exploited Vulnerabilities*).
 
-### 5. Interoperabilitas STIX 2.1
-Mendukung ekspor data intelijen ancaman ke format standar internasional OASIS STIX 2.1, siap diintegrasikan secara mulus ke SIEM, SOAR, atau Firewall pertahanan TNI AD.
+### 5. Interoperabilitas Standar OASIS STIX 2.1
+Mendukung ekspor data intelijen ancaman ke format standar internasional OASIS STIX 2.1, siap diintegrasikan secara instan ke SIEM, SOAR, atau perimeter Firewall organisasi.
 
 ---
 
@@ -179,23 +178,23 @@ python3 cisaThreat.py
 
 ## 🌐 Live Demo & Akses Pengujian
 
-Bagi dewan juri yang ingin menguji prototipe secara langsung, kami menyediakan instance server yang aktif dan terhubung dengan data real-time:
+Bagi evaluator dan peninjau yang ingin menguji prototipe secara langsung, instance demo aktif yang terhubung dengan data real-time dapat diakses pada:
 
 - **Public URL**: [https://tap-alfred-dated-luck.trycloudflare.com](https://tap-alfred-dated-luck.trycloudflare.com)
-- **Akun Akses Pengujian Juri**:
+- **Akun Akses Pengujian**:
   - *Username*: `demo@cti-nexus.local`
   - *Password*: `KartikaCyber2026!`
-  *(Catatan: Anda juga dapat mendaftar akun baru langsung di halaman login)*
+  *(Catatan: Pendaftaran akun baru juga dapat dilakukan langsung di halaman login)*
 
 ---
 
-## 👥 Profil Tim Pengembang (Aegis Nexus)
+## 👥 Profil Pengembang & Tim
 
-- **Ketua Tim & Pengembang Utama**: **Ichsan Junaedi** (Universitas / Tim Aegis Nexus)
-- **Kategori Lomba**: Penangkalan (Defensive Shield)
-- **Kompetisi**: Kartika Cyber Hackathon 2026 (Pusat Siber TNI AD × CODEPOLITAN)
+- **Tim Pengembang**: **Aegis Nexus**
+- **Lead Developer**: **Ichsan Junaedi**
+- **Fokus Riset**: Cyber Threat Intelligence, Threat Actor Graph Modeling, and Proactive Cyber Defense Architecture
 
 ---
 
-## 📄 Lisensi & Hak Cipta
-Hak Cipta © 2026 Tim Aegis Nexus. Dikembangkan khusus untuk Submisi Resmi Kartika Cyber Hackathon 2026, Pusat Siber TNI AD.
+## 📄 Lisensi
+Dikembangkan oleh Tim Aegis Nexus untuk kategori Penangkalan (Defensive Shield) - Kartika Cyber Hackathon 2026.
