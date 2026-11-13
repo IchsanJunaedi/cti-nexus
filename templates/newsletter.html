@@ -1,0 +1,1500 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Newsletter Builder — CTI Nexus</title>
+<link rel="icon" type="image/png" href="/static/img/favicon.png">
+<link rel="stylesheet" href="/static/css/theme.css">
+<style>
+  :root {
+    --bg:           #0D1117; --surface: #161B22; --surface2: #21262D;
+    --border:       #30363D; --border-bright: #58A6FF;
+    --accent:       #2F81F7; --accent3: #58A6FF;
+    --text:         #E6EDF3; --text-dim: #8B949E; --text-bright: #E6EDF3;
+    --green:        #3DC9AF; --red: #DA3633; --orange: #E3B341;
+    --yellow:       #58A6FF; --purple: #6E7CFF;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { background: var(--bg); color: var(--text); font-family: var(--font-ui); font-size: 14px; min-height: 100vh; }
+
+  /* ── HEADER ── */
+  .app-header {
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 14px 24px; border-bottom: 1px solid var(--border);
+    background: var(--surface);
+  }
+  .app-title { font-family: var(--font-ui); font-size: 16px; color: var(--accent); letter-spacing: .15em; text-transform: uppercase; }
+  .app-title span { color: var(--text-dim); font-size: 11px; }
+  .nav-links { display: flex; gap: 20px; }
+  .nav-links a { font-family: var(--font-ui); font-size: 11px; color: var(--text-dim); text-decoration: none; letter-spacing: .06em; transition: color .15s; }
+  .nav-links a:hover, .nav-links a.active { color: var(--accent); }
+  #backLink { font-family: var(--font-ui); font-size: 11px; color: var(--text-dim); text-decoration: none; letter-spacing: .06em; margin-right: 16px; transition: color .15s; }
+  #backLink:hover { color: var(--accent); }
+
+  /* ── LAYOUT ── */
+  .layout { display: grid; grid-template-columns: 1fr 420px; height: calc(100vh - 53px); }
+
+  @media (max-width: 900px) {
+    .layout { grid-template-columns: 1fr; height: auto; }
+    .browser, .builder { height: 80vh; }
+    .browser { border-right: none; border-bottom: 1px solid var(--border); }
+  }
+
+  /* ── LEFT: ARTICLE BROWSER ── */
+  .browser { border-right: 1px solid var(--border); display: flex; flex-direction: column; overflow: hidden; }
+  .browser-head { padding: 16px 20px 12px; border-bottom: 1px solid var(--border); flex-shrink: 0; }
+  .browser-title { font-family: var(--font-ui); font-size: 11px; color: var(--text-dim); letter-spacing: .1em; text-transform: uppercase; margin-bottom: 12px; }
+
+  .filters { display: flex; gap: 8px; flex-wrap: wrap; align-items: center; }
+  .f-input {
+    background: var(--surface2); border: 1px solid var(--border-bright);
+    color: var(--text); font-family: var(--font-ui); font-size: 11px;
+    padding: 5px 9px; border-radius: 2px; outline: none; transition: border-color .2s;
+  }
+  .f-input:focus { border-color: var(--accent); }
+  .f-input::placeholder { color: var(--text-dim); }
+  input[type="date"].f-input::-webkit-calendar-picker-indicator { filter: invert(0.4); cursor: pointer; }
+  .f-select {
+    background: var(--surface2); border: 1px solid var(--border-bright);
+    color: var(--text); font-family: var(--font-ui); font-size: 11px;
+    padding: 5px 24px 5px 9px; border-radius: 2px; outline: none; cursor: pointer;
+    appearance: none; -webkit-appearance: none;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6' viewBox='0 0 10 6'%3E%3Cpath d='M1 1l4 4 4-4' stroke='%234a8a96' stroke-width='1.5' fill='none'/%3E%3C/svg%3E");
+    background-repeat: no-repeat; background-position: right 8px center;
+    min-width: 130px; transition: border-color .2s;
+  }
+  .f-select:focus { border-color: var(--accent); }
+  .btn {
+    font-family: var(--font-ui); font-size: 11px; letter-spacing: .1em;
+    padding: 5px 14px; border-radius: 2px; border: none; cursor: pointer; transition: all .15s;
+  }
+  .btn-accent { background: var(--accent); color: #fff; }
+  .btn-accent:hover { background: #58A6FF; }
+  .btn-dim { background: var(--surface2); border: 1px solid var(--border-bright); color: var(--text-dim); }
+  .btn-dim:hover { border-color: var(--accent); color: var(--accent); }
+  .btn-ghost { background: transparent; border: 1px solid var(--border-bright); color: var(--text-dim); font-size: 10px; padding: 3px 10px; }
+  .btn-ghost:hover { border-color: var(--accent); color: var(--accent); }
+  .btn-sm { padding: 3px 10px; font-size: 10px; }
+
+  /* ── ARTICLE LIST ── */
+  .article-list { flex: 1; overflow-y: auto; padding: 10px 12px; }
+  .article-list::-webkit-scrollbar { width: 4px; }
+  .article-list::-webkit-scrollbar-track { background: var(--surface); }
+  .article-list::-webkit-scrollbar-thumb { background: var(--border-bright); border-radius: 2px; }
+
+  .art-card {
+    background: var(--surface); border: 1px solid var(--border);
+    border-radius: 3px; padding: 10px 12px; margin-bottom: 6px;
+    cursor: pointer; transition: border-color .15s, background .15s; position: relative;
+  }
+  .art-card:hover { border-color: var(--border-bright); background: var(--surface2); }
+  .art-card.selected { border-color: var(--accent); background: rgba(47,129,247,0.04); }
+  .art-card .art-title { font-size: 13px; font-weight: 600; color: var(--text-bright); line-height: 1.4; margin-bottom: 5px; }
+  .art-card .art-meta { font-family: var(--font-ui); font-size: 10px; color: var(--text-dim); margin-bottom: 6px; }
+  .art-card .art-tags { display: flex; gap: 4px; flex-wrap: wrap; }
+  .tag {
+    font-family: var(--font-ui); font-size: 9px; padding: 1px 5px;
+    border-radius: 2px; font-weight: 500; letter-spacing: .03em;
+  }
+  .tag-type    { background: rgba(47,129,247,0.1);  color: var(--accent);  border: 1px solid rgba(47,129,247,0.2);  }
+  .tag-country { background: rgba(61,201,175,0.1); color: var(--green);   border: 1px solid rgba(61,201,175,0.2); }
+  .tag-actor   { background: rgba(165,94,234,0.1); color: var(--purple);  border: 1px solid rgba(165,94,234,0.2); }
+  .tag-paywall { background: rgba(227,179,65,0.12); color: var(--orange); border: 1px solid rgba(227,179,65,0.25); }
+
+  /* ── ASSIGN BUTTON + DROPDOWN ── */
+  .assign-wrap { position: relative; flex-shrink: 0; }
+  .assign-plus {
+    width: 22px; height: 22px; border-radius: 3px;
+    background: rgba(47,129,247,0.08); border: 1px solid rgba(47,129,247,0.25);
+    color: var(--accent); font-size: 15px; line-height: 1; cursor: pointer;
+    display: flex; align-items: center; justify-content: center;
+    transition: background .1s, border-color .1s; flex-shrink: 0;
+  }
+  .assign-plus:hover { background: rgba(47,129,247,0.18); border-color: var(--accent); }
+  .assign-menu {
+    display: none; position: absolute; right: 0; top: 26px;
+    background: var(--surface2); border: 1px solid var(--border-bright);
+    border-radius: 3px; padding: 4px; z-index: 200; gap: 3px; flex-direction: column;
+    box-shadow: 0 4px 16px rgba(0,0,0,0.6); min-width: 130px;
+  }
+  .assign-menu.open { display: flex; }
+  .assign-btn {
+    font-family: var(--font-ui); font-size: 9px; padding: 5px 10px;
+    background: transparent; border: 1px solid var(--border-bright);
+    color: var(--text-dim); cursor: pointer; border-radius: 2px; white-space: nowrap;
+    text-align: left; transition: all .1s;
+  }
+  .assign-btn:hover { border-color: var(--accent); color: var(--accent); background: rgba(47,129,247,0.06); }
+
+  .list-footer { text-align: center; padding: 12px; }
+  .loading-bar { text-align: center; padding: 20px; font-family: var(--font-ui); font-size: 11px; color: var(--text-dim); }
+
+  /* ── RIGHT: NEWSLETTER BUILDER ── */
+  .builder { display: flex; flex-direction: column; overflow: hidden; }
+  .builder-head { padding: 14px 18px 10px; border-bottom: 1px solid var(--border); flex-shrink: 0; }
+  .builder-title { font-family: var(--font-ui); font-size: 11px; color: var(--text-dim); letter-spacing: .1em; text-transform: uppercase; margin-bottom: 10px; }
+  .builder-actions { display: flex; gap: 8px; }
+
+  .sections { flex: 1; overflow-y: auto; padding: 12px 16px; }
+  .sections::-webkit-scrollbar { width: 4px; }
+  .sections::-webkit-scrollbar-track { background: var(--surface); }
+  .sections::-webkit-scrollbar-thumb { background: var(--border-bright); border-radius: 2px; }
+
+  .section-block { margin-bottom: 16px; }
+  .section-label {
+    font-family: var(--font-ui); font-size: 10px; letter-spacing: .12em;
+    text-transform: uppercase; padding: 6px 0 6px 0; border-bottom: 1px solid var(--border);
+    margin-bottom: 8px; display: flex; align-items: center; justify-content: space-between;
+  }
+  .section-label .s-name { display: flex; align-items: center; gap: 6px; }
+  .section-label .s-count { color: var(--text-dim); font-size: 9px; }
+  .s-highlight { color: var(--yellow); }
+  .s-apac      { color: var(--accent); }
+  .s-global    { color: var(--purple); }
+  .s-indonesia { color: var(--red); }
+
+  .slot {
+    background: var(--surface); border: 1px dashed var(--border-bright);
+    border-radius: 3px; padding: 8px 10px; margin-bottom: 5px;
+    min-height: 36px; display: flex; align-items: flex-start; justify-content: space-between;
+    gap: 8px; transition: border-color .15s;
+  }
+  .slot.empty { align-items: center; }
+  .slot.empty .slot-placeholder { font-family: var(--font-ui); font-size: 10px; color: var(--text-dim); }
+  .slot.filled { border-style: solid; border-color: var(--border-bright); background: var(--surface2); }
+  .slot-content { flex: 1; min-width: 0; }
+  .slot-title { font-size: 12px; font-weight: 600; color: var(--text-bright); line-height: 1.3; }
+  .slot-meta { font-family: var(--font-ui); font-size: 9px; color: var(--text-dim); margin-top: 2px; }
+  .slot-remove {
+    background: transparent; border: none; color: var(--text-dim); cursor: pointer;
+    font-size: 12px; padding: 0 2px; flex-shrink: 0; line-height: 1;
+    transition: color .1s;
+  }
+  .slot-remove:hover { color: var(--red); }
+
+  /* ── MODAL ── */
+  .modal-overlay {
+    display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.8);
+    z-index: 1000; align-items: flex-start; justify-content: center; padding: 40px 20px; overflow-y: auto;
+  }
+  .modal-overlay.open { display: flex; }
+  .modal {
+    background: var(--surface); border-radius: 8px; max-width: 760px; width: 100%;
+    box-shadow: 0 8px 40px rgba(0,0,0,0.6); overflow: hidden;
+  }
+  .modal-head {
+    background: var(--surface2); color: var(--text); padding: 14px 20px;
+    display: flex; align-items: center; justify-content: space-between;
+    border-bottom: 1px solid var(--border);
+  }
+  .modal-head-title { font-family: var(--font-ui); font-size: 13px; color: var(--accent); letter-spacing: .1em; }
+  .modal-close {
+    background: transparent; border: none; color: var(--text-dim); font-size: 18px;
+    cursor: pointer; line-height: 1; padding: 0; transition: color .15s;
+  }
+  .modal-close:hover { color: var(--text); }
+  .modal-body { padding: 0; }
+  .modal-actions {
+    background: var(--surface2); padding: 12px 20px; display: flex; gap: 10px; justify-content: flex-end;
+    border-top: 1px solid var(--border);
+  }
+  .btn-modal-send {
+    background: var(--accent); color: #fff; border: none; font-family: var(--font-ui);
+    font-size: 12px; letter-spacing: .1em; padding: 8px 20px; border-radius: 3px; cursor: pointer;
+    transition: background .15s;
+  }
+  .btn-modal-send:hover { background: #58A6FF; }
+  .btn-modal-cancel {
+    background: transparent; border: 1px solid var(--border); color: var(--text-dim); font-family: var(--font-ui);
+    font-size: 12px; letter-spacing: .1em; padding: 8px 16px; border-radius: 3px; cursor: pointer;
+  }
+  .btn-modal-cancel:hover { border-color: var(--border-bright); color: var(--text); }
+  #preview-iframe { width: 100%; border: none; min-height: 500px; display: block; }
+
+  /* ── TOAST ── */
+  .toast {
+    position: fixed; bottom: 24px; right: 24px; z-index: 2000;
+    background: var(--surface2); border: 1px solid var(--border-bright);
+    color: var(--text); font-family: var(--font-ui); font-size: 11px;
+    padding: 10px 16px; border-radius: 3px; box-shadow: 0 4px 20px rgba(0,0,0,0.5);
+    transform: translateY(20px); opacity: 0; transition: all .25s; pointer-events: none;
+  }
+  .toast.show { transform: translateY(0); opacity: 1; }
+  .toast.toast-ok  { border-color: var(--green);  color: var(--green);  }
+  .toast.toast-err { border-color: var(--red);    color: var(--red);    }
+  .toast.toast-inf { border-color: var(--accent); color: var(--accent); }
+
+  /* ── PAGINATION ── */
+  .pagination { display: flex; align-items: center; gap: 8px; padding: 8px 20px; border-top: 1px solid var(--border); flex-shrink: 0; }
+  .page-info { font-family: var(--font-ui); font-size: 10px; color: var(--text-dim); flex: 1; }
+
+  .spinner { display: inline-block; width: 14px; height: 14px; border: 2px solid var(--border-bright); border-top-color: var(--accent); border-radius: 50%; animation: spin .6s linear infinite; }
+  @keyframes spin { to { transform: rotate(360deg); } }
+
+  /* ── HISTORY DRAWER ── */
+  .history-drawer {
+    position: fixed; bottom: 0; left: 0; right: 0; z-index: 500;
+    background: var(--surface); border-top: 1px solid var(--border-bright);
+    transform: translateY(calc(100% - 38px)); transition: transform .25s ease;
+  }
+  .history-drawer.open { transform: translateY(0); }
+  .history-toggle {
+    display: flex; align-items: center; gap: 10px; padding: 8px 20px;
+    cursor: pointer; border: none; background: transparent; width: 100%;
+    border-bottom: 1px solid var(--border); color: var(--text-dim);
+    font-family: var(--font-ui); font-size: 10px; letter-spacing: .1em; text-transform: uppercase;
+    transition: color .15s;
+  }
+  .history-toggle:hover { color: var(--accent); }
+  .history-toggle .ht-arrow { transition: transform .25s; }
+  .history-drawer.open .history-toggle .ht-arrow { transform: rotate(180deg); }
+  .history-toggle .ht-count { background: rgba(47,129,247,0.1); color: var(--accent); padding: 1px 6px; border-radius: 2px; font-size: 9px; }
+
+  .history-list {
+    display: flex; gap: 10px; padding: 12px 20px; overflow-x: auto; overflow-y: auto; max-height: min(200px, 35vh);
+    scrollbar-width: thin; scrollbar-color: var(--border-bright) var(--surface);
+  }
+  .history-list::-webkit-scrollbar { height: 4px; }
+  .history-list::-webkit-scrollbar-thumb { background: var(--border-bright); border-radius: 2px; }
+
+  .history-card {
+    flex-shrink: 0; width: 200px; background: var(--surface2);
+    border: 1px solid var(--border-bright); border-radius: 3px; padding: 10px 12px;
+  }
+  .history-card .hc-week { font-family: var(--font-ui); font-size: 10px; color: var(--accent); margin-bottom: 3px; }
+  .history-card .hc-meta { font-family: var(--font-ui); font-size: 9px; color: var(--text-dim); margin-bottom: 8px; }
+  .history-card .hc-counts { font-size: 11px; color: var(--text); margin-bottom: 8px; }
+  .history-card .hc-actions { display: flex; gap: 5px; }
+  .hc-btn {
+    flex: 1; font-family: var(--font-ui); font-size: 9px; padding: 3px 0;
+    border-radius: 2px; border: 1px solid var(--border-bright); background: transparent;
+    color: var(--text-dim); cursor: pointer; text-align: center; transition: all .1s;
+  }
+  .hc-btn:hover { border-color: var(--accent); color: var(--accent); }
+</style>
+<script src="https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.min.js"></script>
+<script src="/static/js/ui/icons.js"></script>
+<script src="/static/js/ui/cti-select.js"></script>
+</head>
+<body>
+
+<!-- ── AUTH GATE ── -->
+<div id="auth-gate" style="display:none;position:fixed;inset:0;background:var(--bg);z-index:2000;align-items:center;justify-content:center;flex-direction:column;gap:16px;">
+  <div style="font-family:var(--font-ui);font-size:14px;color:var(--accent);letter-spacing:.15em;text-transform:uppercase;">CTI Nexus</div>
+  <div style="font-family:var(--font-ui);font-size:11px;color:var(--text-dim);margin-bottom:8px;">Session expired or not logged in.</div>
+  <a href="/newsroom" style="font-family:var(--font-ui);font-size:12px;letter-spacing:.1em;padding:8px 20px;background:var(--accent);color:#000;border-radius:2px;text-decoration:none;">Go to Login</a>
+</div>
+
+<div class="app-header">
+  <div style="display:flex;align-items:center;">
+    <a id="backLink" href="/newsroom" title="Back to CTI Nexus"><i data-ic="arrow-left" data-size="12"></i> CTI Nexus</a>
+    <img src="/static/img/logo.png" alt="CTI Nexus" class="brand-logo" style="width:28px;height:28px;margin-right:10px;border-radius:6px">
+    <div class="app-title">CTI Nexus <span>// Newsletter Builder</span></div>
+  </div>
+  <div class="nav-links">
+    <a href="/newsroom" onclick="goToNewsroom(event)">Newsroom</a>
+    <a href="/newsletter" class="active">Newsletter</a>
+  </div>
+</div>
+
+<div class="layout">
+  <!-- ── LEFT: QUEUE BROWSER ── -->
+  <div class="browser">
+    <div class="browser-head">
+      <div style="display:flex;align-items:center;justify-content:space-between;">
+        <div class="browser-title" style="margin-bottom:0">Queued Articles</div>
+        <div style="display:flex;align-items:center;gap:8px;">
+          <span id="queue-count-badge" style="font-family:var(--font-ui);font-size:10px;color:var(--accent);"></span>
+          <button id="queue-clear-all-btn" onclick="clearQueue()"
+                  style="display:none;font-family:var(--font-ui);font-size:9px;
+                         padding:2px 8px;background:transparent;border:1px solid rgba(255,255,255,0.15);
+                         color:var(--text-dim);border-radius:2px;cursor:pointer;">Clear All</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="article-list" id="article-list">
+      <div class="loading-bar">No queued articles — go to Newsroom to queue articles.</div>
+    </div>
+  </div>
+
+  <!-- ── RIGHT: NEWSLETTER BUILDER ── -->
+  <div class="builder">
+    <div class="builder-head">
+      <div class="builder-title">Newsletter Composer</div>
+      <div class="builder-actions" style="display:flex;align-items:center;gap:10px;">
+        <select id="nl-client-select" onchange="onNewsletterClientChange()"
+          style="background:rgba(0,0,0,0.3);border:1px solid rgba(255,255,255,0.15);color:var(--text);
+                 font-family:var(--font-ui);font-size:10px;padding:4px 8px;border-radius:3px;">
+          <option value="default">Default</option>
+        </select>
+        <button class="btn btn-dim" onclick="openPreview()">Preview</button>
+        <button class="btn btn-accent" onclick="sendDraft()">Send Email</button>
+      </div>
+    </div>
+
+    <div class="sections" id="sections">
+
+      <div class="section-block">
+        <div class="section-label">
+          <span class="s-name s-highlight"><i data-ic="star"></i> Highlight of the Week</span>
+          <span class="s-count" id="cnt-highlight">0 / 1</span>
+        </div>
+        <div id="slots-highlight"></div>
+      </div>
+
+      <div class="section-block">
+        <div class="section-label">
+          <span class="s-name s-apac"><i data-ic="compass"></i> APAC Threats</span>
+          <span class="s-count" id="cnt-apac">0 / 5</span>
+        </div>
+        <div id="slots-apac"></div>
+      </div>
+
+      <div class="section-block">
+        <div class="section-label">
+          <span class="s-name s-global"><i data-ic="globe"></i> Global Threats</span>
+          <span class="s-count" id="cnt-global">0 / 5</span>
+        </div>
+        <div id="slots-global"></div>
+      </div>
+
+      <div class="section-block">
+        <div class="section-label">
+          <span class="s-name s-indonesia"><i data-ic="flag"></i> Indonesia <span style="color:var(--text-dim);font-size:9px">(optional)</span></span>
+          <span class="s-count" id="cnt-indonesia">0 / 5</span>
+        </div>
+        <div id="slots-indonesia"></div>
+      </div>
+
+    <!-- ── TEMPLATE CUSTOMIZATION ── -->
+    <div class="section-block" style="margin: 30px;">
+      <div class="section-label" onclick="toggleTemplatePanel()" style="cursor:pointer;user-select:none;">
+        <span class="s-name" style="color:var(--accent)"><i data-ic="palette"></i> Customize Template</span>
+        <span id="tpl-toggle-arrow" style="font-size:9px;color:var(--text-dim);margin-left:auto"><i data-ic="chevron-right" data-size="10"></i> expand</span>
+      </div>
+      <div id="tpl-panel" style="display:none;padding:10px 0 4px;">
+        <div style="margin-bottom:12px;">
+          <div style="font-size:9px;letter-spacing:.08em;text-transform:uppercase;color:var(--text-dim);margin-bottom:4px;">Custom CSS — whole email</div>
+          <textarea id="tpl-css" placeholder="/* Override any styles, e.g.: .header { background: #1a1a1a; } */"
+            style="width:100%;height:80px;background:rgba(0,0,0,0.3);border:1px solid rgba(255,255,255,0.1);
+                   color:var(--text);font-family:var(--font-ui);font-size:10px;
+                   padding:6px 8px;border-radius:3px;resize:vertical;box-sizing:border-box;"></textarea>
+        </div>
+        <div style="margin-bottom:12px;">
+          <div style="font-size:9px;letter-spacing:.08em;text-transform:uppercase;color:var(--text-dim);margin-bottom:4px;">Custom Intro — injected at top of email body (HTML allowed)</div>
+          <textarea id="tpl-intro" placeholder="<p>This week's newsletter covers...</p>"
+            style="width:100%;height:60px;background:rgba(0,0,0,0.3);border:1px solid rgba(255,255,255,0.1);
+                   color:var(--text);font-family:var(--font-ui);font-size:10px;
+                   padding:6px 8px;border-radius:3px;resize:vertical;box-sizing:border-box;"></textarea>
+        </div>
+        <div style="margin-bottom:4px;">
+          <div style="font-size:9px;letter-spacing:.08em;text-transform:uppercase;color:var(--text-dim);margin-bottom:4px;">Custom Footer — replaces default footer (HTML allowed)</div>
+          <textarea id="tpl-footer" placeholder="<p>CTI Team &nbsp;·&nbsp; Internal &mdash; Confidential</p>"
+            style="width:100%;height:60px;background:rgba(0,0,0,0.3);border:1px solid rgba(255,255,255,0.1);
+                   color:var(--text);font-family:var(--font-ui);font-size:10px;
+                   padding:6px 8px;border-radius:3px;resize:vertical;box-sizing:border-box;"></textarea>
+        </div>
+        <div style="margin-top:12px;display:flex;align-items:center;gap:12px;flex-wrap:wrap;">
+          <label style="display:flex;align-items:center;gap:6px;cursor:pointer;font-size:11px;color:var(--text);">
+            <input type="checkbox" id="tpl-include-clusters" style="cursor:pointer;">
+            Include Top Campaign Clusters section
+          </label>
+          <span style="font-size:10px;color:var(--text-dim);">Lookback:</span>
+          <select id="tpl-cluster-days"
+            style="background:rgba(0,0,0,0.3);border:1px solid rgba(255,255,255,0.15);color:var(--text);
+                   font-size:10px;padding:2px 6px;border-radius:3px;">
+            <option value="7">7 days</option>
+            <option value="14">14 days</option>
+            <option value="30">30 days</option>
+          </select>
+        </div>
+      </div>
+    </div>
+
+    <!-- ── OUTSTANDING TP CVE PICKER ── -->
+    <div class="section-block" style="margin: 30px; margin-bottom:50px">
+      <div class="section-label" onclick="toggleCvePanel()" style="cursor:pointer;user-select:none;">
+        <span class="s-name" style="color:var(--accent)"><i data-ic="shield-alert"></i> Outstanding TP CVEs <span style="color:var(--text-dim);font-size:9px">(manual pick, per client)</span></span>
+        <span id="cve-toggle-arrow" style="font-size:9px;color:var(--text-dim);margin-left:auto"><i data-ic="chevron-right" data-size="10"></i> expand</span>
+      </div>
+      <div id="cve-panel" style="display:none;padding:10px 0 4px;margin-bottom:50px">
+        <div id="cve-picker-list" style="max-height:220px;overflow-y:auto;border:1px solid rgba(255,255,255,0.1);border-radius:3px;padding:8px;">
+          <div style="font-size:10px;color:var(--text-dim);">Loading client's tracked CVEs…</div>
+        </div>
+      </div>
+    </div>
+
+    </div><!-- /#sections -->
+
+  </div>
+</div>
+
+<!-- ── PREVIEW MODAL ── -->
+<div class="modal-overlay" id="confirm-overlay" style="z-index:1100;align-items:center" onclick="handleConfirmOverlayClick(event)">
+  <div class="modal" style="max-width:440px">
+    <div class="modal-head">
+      <span class="modal-head-title" id="confirm-title">CONFIRM ACTION</span>
+      <button class="modal-close" onclick="closeConfirmModal()"><i data-ic="x"></i></button>
+    </div>
+    <div class="modal-body" id="confirm-body" style="padding:22px 20px"></div>
+    <div class="modal-actions">
+      <button class="btn-modal-cancel" onclick="closeConfirmModal()">Cancel</button>
+      <button class="btn-modal-send" id="confirm-ok-btn" style="background:var(--red)" onclick="_confirmAction()">Confirm</button>
+    </div>
+  </div>
+</div>
+
+<div class="modal-overlay" id="modal-overlay">
+  <div class="modal">
+    <div class="modal-head">
+      <span class="modal-head-title" id="modal-title">NEWSLETTER PREVIEW</span>
+      <button class="modal-close" onclick="closeModal()"><i data-ic="x"></i></button>
+    </div>
+    <div class="modal-body">
+      <iframe id="preview-iframe" sandbox="allow-same-origin"></iframe>
+    </div>
+    <div class="modal-actions">
+      <button class="btn-modal-cancel" onclick="closeModal()">Close</button>
+      <button class="btn-modal-send" onclick="sendDraft()">Send Email</button>
+    </div>
+  </div>
+</div>
+
+<!-- ── HISTORY DRAWER ── -->
+<div class="history-drawer" id="history-drawer">
+  <button class="history-toggle" onclick="toggleHistory()">
+    <span class="ht-arrow"><i data-ic="chevron-up" data-size="12"></i></span>
+    <span>Saved Newsletters</span>
+    <span class="ht-count" id="history-count">0</span>
+    <select id="history-client-filter" onclick="event.stopPropagation()" onchange="loadHistory()"
+      style="margin-left:auto;background:rgba(0,0,0,0.3);border:1px solid rgba(255,255,255,0.15);color:var(--text);
+             font-family:var(--font-ui);font-size:9px;padding:2px 6px;border-radius:3px;">
+      <option value="">All clients</option>
+    </select>
+    <span style="font-size:9px;color:var(--text-dim)">click to expand</span>
+  </button>
+  <div class="history-list" id="history-list">
+    <div class="loading-bar"><span class="spinner"></span></div>
+  </div>
+</div>
+
+<!-- ── TOAST ── -->
+<div class="toast" id="toast"></div>
+
+<script src="/static/js/newsletter_queue.js"></script>
+<script>
+const API = '/api';
+const SECTIONS = {
+  highlight: { max: 1, label: 'Highlight' },
+  apac:      { max: 5, label: 'APAC' },
+  global_news: { max: 5, label: 'Global' },
+  indonesia: { max: 5, label: 'Indonesia' },
+};
+
+let state = {
+  highlight: null,  // single article or null
+  apac: [],
+  global_news: [],
+  indonesia: [],
+  notes: {},  // articleId -> analyst note text
+  cve_ids: [],  // manually-picked TP CVE ids for the "Outstanding TP CVEs" section
+};
+
+function _saveState() {
+  localStorage.setItem(nlStateKey(), JSON.stringify(state));
+}
+
+function _loadState() {
+  try {
+    const saved = JSON.parse(localStorage.getItem(nlStateKey()) || 'null');
+    if (saved) state = { highlight: null, apac: [], global_news: [], indonesia: [], notes: {}, cve_ids: [], ...saved };
+  } catch(e) { /* keep default state */ }
+}
+
+let paywallHints = {};
+let page = 1;
+let totalArticles = 0;
+const PAGE_SIZE = 20;
+let debounceTimer = null;
+let token = null;
+
+// ── Auth ──────────────────────────────────────────────────────────────────────
+function getToken() {
+  // Token stored in localStorage by newsroom.html login flow
+  return localStorage.getItem('cti_jwt') || null;
+}
+
+function authHeaders() {
+  const t = getToken();
+  return t ? { 'Authorization': `Bearer ${t}`, 'Content-Type': 'application/json' } : { 'Content-Type': 'application/json' };
+}
+
+function checkAuth() {
+  if (!getToken()) {
+    document.getElementById('auth-gate').style.display = 'flex';
+    document.querySelector('.layout').style.display = 'none';
+    document.getElementById('history-drawer').style.display = 'none';
+  }
+}
+
+// ── Toast ─────────────────────────────────────────────────────────────────────
+function showToast(msg, type = 'inf') {
+  const el = document.getElementById('toast');
+  el.textContent = msg;
+  el.className = `toast toast-${type} show`;
+  clearTimeout(el._timer);
+  el._timer = setTimeout(() => { el.className = 'toast'; }, 3500);
+}
+
+// ── Filters ───────────────────────────────────────────────────────────────────
+async function loadFilterOptions() {
+  try {
+    const r = await fetch(`${API}/filters`);
+    const data = await r.json();
+    const countryEl = document.getElementById('f-country');
+    const typeEl = document.getElementById('f-type');
+    (data.countries || []).forEach(c => {
+      const o = document.createElement('option'); o.value = c; o.textContent = c;
+      countryEl.appendChild(o);
+    });
+    (data.news_types || []).forEach(t => {
+      const o = document.createElement('option'); o.value = t; o.textContent = t;
+      typeEl.appendChild(o);
+    });
+  } catch(e) {}
+}
+
+async function loadPaywallHints() {
+  try {
+    const r = await fetch(`${API}/newsletter/source-hints`, { headers: authHeaders() });
+    if (r.ok) paywallHints = await r.json();
+  } catch(e) {}
+}
+
+function clearFilters() {
+  document.getElementById('f-search').value = '';
+  document.getElementById('f-date-start').value = '';
+  document.getElementById('f-date-end').value = '';
+  document.getElementById('f-country').value = '';
+  document.getElementById('f-type').value = '';
+  page = 1;
+  loadArticles();
+}
+
+function debounceLoad() {
+  clearTimeout(debounceTimer);
+  debounceTimer = setTimeout(() => { page = 1; loadArticles(); }, 350);
+}
+
+// ── Article loading ───────────────────────────────────────────────────────────
+function allSelectedIds() {
+  const ids = new Set();
+  if (state.highlight) ids.add(state.highlight._id);
+  [...state.apac, ...state.global_news, ...state.indonesia].forEach(a => ids.add(a._id));
+  return ids;
+}
+
+async function loadArticles() {
+  const list = document.getElementById('article-list');
+  list.innerHTML = '<div class="loading-bar"><span class="spinner"></span></div>';
+
+  const params = new URLSearchParams({ page, page_size: PAGE_SIZE });
+  const search = document.getElementById('f-search').value.trim();
+  const ds = document.getElementById('f-date-start').value;
+  const de = document.getElementById('f-date-end').value;
+  const country = document.getElementById('f-country').value;
+  const type = document.getElementById('f-type').value;
+
+  if (search) params.set('search', search);
+  if (ds) params.set('posted_on_start', ds);
+  if (de) params.set('posted_on_end', de);
+  if (country) params.append('country', country);
+  if (type) params.append('news_type', type);
+
+  try {
+    const r = await fetch(`${API}/articles?${params}`);
+    const data = await r.json();
+    totalArticles = data.total;
+    renderArticles(data.articles);
+    updatePagination();
+  } catch(e) {
+    list.innerHTML = '<div class="loading-bar" style="color:var(--red)">Failed to load articles</div>';
+  }
+}
+
+function renderArticles(articles) {
+  const list = document.getElementById('article-list');
+  const selectedIds = allSelectedIds();
+
+  if (!articles.length) {
+    list.innerHTML = '<div class="loading-bar">No articles found</div>';
+    return;
+  }
+
+  list.innerHTML = articles.map(a => {
+    const aid = a._id;
+    const isSelected = selectedIds.has(aid);
+    const isPaywall = paywallHints[a.source]?.paywall_likely;
+    const countries = [...(a.victim_countries || []), ...(a.mentioned_countries || [])].slice(0, 3);
+    const actors = (a.threat_actors || []).slice(0, 2);
+
+    const paywallTag = isPaywall ? `<span class="tag tag-paywall" title="Paywall detected — summary will use metadata">${ic("alert-triangle", 11)} Paywall</span>` : '';
+    const typeTag = a.news_type ? `<span class="tag tag-type">${escHtml(a.news_type)}</span>` : '';
+    const countryTags = countries.map(c => `<span class="tag tag-country">${escHtml(c)}</span>`).join('');
+    const actorTags = actors.map(ac => `<span class="tag tag-actor">${escHtml(ac)}</span>`).join('');
+
+    return `
+    <div class="art-card${isSelected ? ' selected' : ''}" data-id="${aid}" style="position:relative;display:flex;align-items:flex-start;gap:8px;">
+      <div style="flex:1;min-width:0;">
+        <div class="art-title">${escHtml(a.title)}</div>
+        <div class="art-meta">${escHtml(a.source)} · ${escHtml(a.posted_on)}</div>
+        <div class="art-tags">${typeTag}${countryTags}${actorTags}${paywallTag}</div>
+      </div>
+      <div class="assign-wrap">
+        <button class="assign-plus" title="Add to section" onclick="toggleAssignMenu(event,'${aid}')">+</button>
+        <div class="assign-menu" id="menu-${aid}">
+          <button class="assign-btn" onclick="assign(event,'highlight','${aid}')">${ic("star", 11)} Highlight</button>
+          <button class="assign-btn" onclick="assign(event,'apac','${aid}')">${ic("compass", 11)} APAC</button>
+          <button class="assign-btn" onclick="assign(event,'global_news','${aid}')">${ic("globe", 11)} Global</button>
+          <button class="assign-btn" onclick="assign(event,'indonesia','${aid}')">${ic("flag", 11)} Indonesia</button>
+        </div>
+      </div>
+    </div>`;
+  }).join('');
+
+  window._articleMap = window._articleMap || {};
+  articles.forEach(a => { window._articleMap[a._id] = a; });
+}
+
+function escHtml(s) {
+  if (!s) return '';
+  return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+}
+
+function updatePagination() {
+  const totalPages = Math.ceil(totalArticles / PAGE_SIZE);
+  document.getElementById('page-info').textContent = `${totalArticles} articles · page ${page} / ${totalPages || 1}`;
+  document.getElementById('btn-prev').disabled = page <= 1;
+  document.getElementById('btn-next').disabled = page >= totalPages;
+}
+
+function changePage(delta) {
+  page += delta;
+  loadArticles();
+}
+
+// ── Assign dropdown ───────────────────────────────────────────────────────────
+let _openMenuId = null;
+
+function toggleAssignMenu(ev, articleId) {
+  ev.stopPropagation();
+  const menu = document.getElementById(`menu-${articleId}`);
+  if (!menu) return;
+  const isOpen = menu.classList.contains('open');
+  closeAllMenus();
+  if (!isOpen) {
+    menu.classList.add('open');
+    _openMenuId = articleId;
+  }
+}
+
+function closeAllMenus() {
+  document.querySelectorAll('.assign-menu.open').forEach(m => m.classList.remove('open'));
+  _openMenuId = null;
+}
+
+document.addEventListener('click', closeAllMenus);
+
+// ── Assignment ────────────────────────────────────────────────────────────────
+function assign(ev, section, articleId) {
+  ev.stopPropagation();
+  const article = window._articleMap?.[articleId];
+  if (!article) { showToast('Article not loaded yet', 'err'); return; }
+
+  if (section === 'highlight') {
+    if (state.highlight && state.highlight._id !== articleId) {
+      addToQueue(state.highlight);
+    }
+    state.highlight = article;
+  } else {
+    const arr = state[section];
+    const max = SECTIONS[section].max;
+    if (arr.find(a => a._id === articleId)) {
+      showToast('Already in section', 'inf'); closeAllMenus(); return;
+    }
+    if (arr.length >= max) {
+      const displaced = arr.shift();
+      addToQueue(displaced);
+    }
+    arr.push(article);
+  }
+  closeAllMenus();
+  renderSections();
+  removeFromQueue(articleId);
+  showToast(`Added to ${SECTIONS[section].label}`, 'ok');
+}
+
+function removeFromSection(section, articleId) {
+  let article;
+  if (section === 'highlight') {
+    article = state.highlight;
+    state.highlight = null;
+  } else {
+    article = state[section].find(a => a._id === articleId);
+    state[section] = state[section].filter(a => a._id !== articleId);
+  }
+  if (article) addToQueue(article);
+  renderSections();
+  renderQueuedArticles();
+}
+
+// ── Sections rendering ────────────────────────────────────────────────────────
+function renderSections() {
+  renderSection('highlight', state.highlight ? [state.highlight] : [], 1);
+  renderSection('apac', state.apac, 5);
+  renderSection('global_news', state.global_news, 5);
+  renderSection('indonesia', state.indonesia, 5);
+  _saveState();
+}
+
+function updateNote(articleId, value) {
+  if (value.trim()) {
+    state.notes[articleId] = value;
+  } else {
+    delete state.notes[articleId];
+  }
+  _saveState();
+}
+
+function renderSection(key, items, max) {
+  const container = document.getElementById(`slots-${key === 'global_news' ? 'global' : key}`);
+  const counter = document.getElementById(`cnt-${key === 'global_news' ? 'global' : key}`);
+  counter.textContent = `${items.length} / ${max}`;
+
+  const slots = [];
+  for (let i = 0; i < max; i++) {
+    const art = items[i];
+    if (art) {
+      const noteVal = state.notes[art._id] || '';
+      slots.push(`
+        <div class="slot filled" style="flex-direction:column;align-items:stretch;">
+          <div style="display:flex;align-items:flex-start;gap:8px;">
+            <div class="slot-content">
+              <div class="slot-title">${escHtml(art.title)}</div>
+              <div class="slot-meta">${escHtml(art.source)} · ${escHtml(art.posted_on)}</div>
+            </div>
+            <button class="slot-remove" onclick="removeFromSection('${key}','${art._id}')" title="Remove"><i data-ic="x"></i></button>
+          </div>
+          <textarea
+            placeholder="Analyst notes (optional)…"
+            oninput="updateNote('${art._id}', this.value)"
+            style="margin-top:6px;width:100%;height:52px;background:rgba(0,0,0,0.2);
+                   border:1px solid rgba(255,255,255,0.1);color:var(--text);
+                   font-family:var(--font-ui);font-size:10px;
+                   padding:5px 7px;border-radius:2px;resize:vertical;box-sizing:border-box;"
+          >${escHtml(noteVal)}</textarea>
+        </div>`);
+    } else {
+      slots.push(`<div class="slot empty"><span class="slot-placeholder">— empty —</span></div>`);
+    }
+  }
+  container.innerHTML = slots.join('');
+}
+
+// ── Preview ───────────────────────────────────────────────────────────────────
+function buildPayload() {
+  if (!state.highlight) { showToast('Add a Highlight article first', 'err'); return null; }
+  if (!state.apac.length && !state.global_news.length) {
+    showToast('Add at least one APAC or Global article', 'err'); return null;
+  }
+  return {
+    highlight: state.highlight._id,
+    apac: state.apac.map(a => a._id),
+    global_news: state.global_news.map(a => a._id),
+    indonesia: state.indonesia.map(a => a._id),
+    client_id:        (document.getElementById('nl-client-select') || {value: 'default'}).value,
+    custom_css:       (document.getElementById('tpl-css')    || {value: ''}).value.trim(),
+    custom_intro:     (document.getElementById('tpl-intro')  || {value: ''}).value.trim(),
+    custom_footer:    (document.getElementById('tpl-footer') || {value: ''}).value.trim(),
+    include_clusters: (document.getElementById('tpl-include-clusters') || {}).checked || false,
+    cluster_days:     parseInt((document.getElementById('tpl-cluster-days') || {value: '7'}).value, 10),
+    notes: { ...state.notes },
+    cve_ids: [...state.cve_ids],
+  };
+}
+
+function toggleCvePanel() {
+  const panel = document.getElementById('cve-panel');
+  const arrow = document.getElementById('cve-toggle-arrow');
+  const open = panel.style.display === 'none';
+  panel.style.display = open ? '' : 'none';
+  arrow.innerHTML = open ? `${ic('chevron-down', 10)} collapse` : `${ic('chevron-right', 10)} expand`;
+}
+
+async function loadCvePickerForClient(clientId) {
+  const list = document.getElementById('cve-picker-list');
+  list.innerHTML = '<div style="font-size:10px;color:var(--text-dim);">Loading client\'s tracked CVEs…</div>';
+  try {
+    const r = await fetch(`${API}/cve?page_size=100&sort_by=severity&sort_dir=desc`, {
+      headers: { ...authHeaders(), 'X-Client-ID': clientId },
+    });
+    if (!r.ok) throw new Error(r.statusText);
+    const data = await r.json();
+    const cves = data.cves || [];
+    if (!cves.length) {
+      list.innerHTML = '<div style="font-size:10px;color:var(--text-dim);">No tracked CVEs for this client.</div>';
+      return;
+    }
+    const checkedSet = new Set(state.cve_ids);
+    list.innerHTML = cves.map(c => `
+      <label style="display:flex;align-items:center;gap:8px;padding:4px 2px;font-size:11px;color:var(--text);cursor:pointer;border-bottom:1px solid rgba(255,255,255,0.05);">
+        <input type="checkbox" value="${escHtml(c.cve_id)}" onchange="onCvePickChange()" ${checkedSet.has(c.cve_id) ? 'checked' : ''}>
+        <span style="font-family:var(--font-ui);color:var(--accent);">${escHtml(c.cve_id)}</span>
+        <span style="color:var(--text-dim);font-size:10px;">${escHtml(c.tech || '')}</span>
+        <span style="margin-left:auto;font-size:9px;color:var(--text-dim);">${escHtml(c.cve_severity || '')}</span>
+      </label>
+    `).join('');
+  } catch(e) {
+    list.innerHTML = `<div style="font-size:10px;color:var(--red);">Failed to load: ${escHtml(e.message)}</div>`;
+  }
+}
+
+function onCvePickChange() {
+  state.cve_ids = [...document.querySelectorAll('#cve-picker-list input:checked')].map(el => el.value);
+  _saveState();
+}
+
+// ── Client selector ─────────────────────────────────────────────────────────
+let _nlClientsCache = [];
+
+async function loadNewsletterClients() {
+  try {
+    const r = await fetch(`${API}/clients`, { headers: authHeaders() });
+    if (!r.ok) return;
+    _nlClientsCache = await r.json();
+    const opts = _nlClientsCache.map(c =>
+      `<option value="${escHtml(c.client_id)}">${escHtml(c.name)}</option>`
+    ).join('') || '<option value="default">Default</option>';
+    document.getElementById('nl-client-select').innerHTML = opts;
+    document.getElementById('history-client-filter').innerHTML = '<option value="">All clients</option>' + opts;
+  } catch(e) { /* keep default option */ }
+}
+
+function onNewsletterClientChange() {
+  const clientId = document.getElementById('nl-client-select').value;
+  const c = _nlClientsCache.find(x => x.client_id === clientId);
+  if (c) {
+    document.getElementById('tpl-css').value    = c.newsletter_css || '';
+    document.getElementById('tpl-intro').value  = c.newsletter_intro || '';
+    document.getElementById('tpl-footer').value = c.newsletter_footer || '';
+  }
+  loadCvePickerForClient(clientId);
+}
+
+function toggleTemplatePanel() {
+  const panel = document.getElementById('tpl-panel');
+  const arrow = document.getElementById('tpl-toggle-arrow');
+  const open = panel.style.display === 'none';
+  panel.style.display = open ? '' : 'none';
+  arrow.innerHTML = open ? `${ic('chevron-down', 10)} collapse` : `${ic('chevron-right', 10)} expand`;
+}
+
+async function openPreview() {
+  const payload = buildPayload();
+  if (!payload) return;
+
+  // Restore send button to current-composition mode
+  document.querySelector('.btn-modal-send').onclick = () => sendDraft();
+
+  showToast('Generating preview — fetching articles & summarizing…', 'inf');
+  const overlay = document.getElementById('modal-overlay');
+  const iframe = document.getElementById('preview-iframe');
+  iframe.srcdoc = '<body style="background:#fff;display:flex;align-items:center;justify-content:center;height:200px;font-family:sans-serif;color:#666">Generating newsletter…</body>';
+  overlay.classList.add('open');
+
+  try {
+    const r = await fetch(`${API}/newsletter/preview`, {
+      method: 'POST',
+      headers: authHeaders(),
+      body: JSON.stringify(payload),
+    });
+    if (!r.ok) { const e = await r.json(); throw new Error(e.detail || r.statusText); }
+    const data = await r.json();
+    iframe.srcdoc = data.html;
+    document.getElementById('modal-title').textContent = `NEWSLETTER PREVIEW — Week ${data.week}, ${data.year}`;
+    if (data.missing_ids && data.missing_ids.length) {
+      const gone = new Set(data.missing_ids);
+      ['apac', 'global_news', 'indonesia'].forEach(k => { state[k] = state[k].filter(a => !gone.has(a._id)); });
+      _saveState();
+      renderSections();
+      showToast(`${gone.size} article(s) no longer exist, removed from selection`, 'inf');
+    } else {
+      showToast('Preview ready', 'ok');
+    }
+  } catch(e) {
+    iframe.srcdoc = `<body style="font-family:sans-serif;padding:20px;color:#d32f2f">Error: ${escHtml(e.message)}</body>`;
+    showToast(`Preview failed: ${e.message}`, 'err');
+  }
+}
+
+function closeModal() {
+  document.getElementById('modal-overlay').classList.remove('open');
+}
+
+// ── Send draft ────────────────────────────────────────────────────────────────
+async function sendDraft() {
+  const payload = buildPayload();
+  if (!payload) return;
+
+  confirmSend(payload.client_id, () => doSendDraft(payload));
+}
+
+function _recipientsBlock(clientId) {
+  const c = _nlClientsCache.find(x => x.client_id === clientId);
+  const clientLabel = c ? c.name : clientId;
+  const list = (c && c.recipients) || [];
+  if (!list.length) {
+    return { ok: false, html: `<p style="font-size:13px;color:var(--red);line-height:1.7">
+      <strong>${escHtml(clientLabel)}</strong> has no recipients configured. Add recipients to the client before sending.</p>` };
+  }
+  const shown = list.slice(0, 8).map(a => `<div>${escHtml(a)}</div>`).join('');
+  const more = list.length > 8 ? `<div style="color:var(--text-dim)">+${list.length - 8} more</div>` : '';
+  return { ok: true, html: `<p style="font-size:13px;color:var(--text);line-height:1.7;margin-bottom:10px">
+      Send to <strong style="color:var(--accent)">${list.length} recipient(s)</strong> for <strong>${escHtml(clientLabel)}</strong>?</p>
+    <div style="font-size:12px;color:var(--text-dim);font-family:var(--font-ui);line-height:1.7;max-height:160px;overflow-y:auto">${shown}${more}</div>` };
+}
+
+function confirmSend(clientId, onConfirm) {
+  const rb = _recipientsBlock(clientId);
+  showConfirmModal({
+    title:   'SEND NEWSLETTER',
+    okLabel: rb.ok ? `${ic('mail', 12)} Send` : 'Close',
+    okColor: rb.ok ? 'var(--accent)' : 'var(--border-bright)',
+    body:    rb.html,
+    onConfirm: rb.ok ? onConfirm : null,
+  });
+}
+
+async function doSendDraft(payload) {
+  showToast('Sending email — this may take a minute…', 'inf');
+  try {
+    const r = await fetch(`${API}/newsletter/draft-email`, {
+      method: 'POST',
+      headers: authHeaders(),
+      body: JSON.stringify(payload),
+    });
+    if (!r.ok) { const e = await r.json(); throw new Error(e.detail || r.statusText); }
+    const data = await r.json();
+    showToast(`${data.method === 'graph' ? 'Draft created' : 'Email sent'} — ${data.method} · Week ${data.week}, ${data.year}`, 'ok');
+    closeModal();
+    // bump history count badge
+    const hc = document.getElementById('history-count');
+    hc.textContent = parseInt(hc.textContent || '0') + 1;
+    if (historyOpen) loadHistory();
+  } catch(e) {
+    showToast(`Send failed: ${e.message}`, 'err');
+  }
+}
+
+// ── History ───────────────────────────────────────────────────────────────────
+let historyOpen = false;
+
+function toggleHistory() {
+  historyOpen = !historyOpen;
+  document.getElementById('history-drawer').classList.toggle('open', historyOpen);
+  if (historyOpen) loadHistory();
+}
+
+async function loadHistory() {
+  const list = document.getElementById('history-list');
+  list.innerHTML = '<div class="loading-bar"><span class="spinner"></span></div>';
+  try {
+    const clientFilter = (document.getElementById('history-client-filter') || {}).value || '';
+    const qs = clientFilter ? `?client_id=${encodeURIComponent(clientFilter)}` : '';
+    const r = await fetch(`${API}/newsletter/history${qs}`, { headers: authHeaders() });
+    if (!r.ok) throw new Error(r.statusText);
+    const data = await r.json();
+    document.getElementById('history-count').textContent = data.total;
+    if (!data.newsletters.length) {
+      list.innerHTML = '<div class="loading-bar">No saved newsletters yet</div>';
+      return;
+    }
+    window._savedNl = {};
+    data.newsletters.forEach(n => { window._savedNl[n._id] = n; });
+    list.innerHTML = data.newsletters.map(n => {
+      const sections = n.sections || {};
+      const apacLen = (sections.apac || []).length;
+      const globalLen = (sections.global_news || []).length;
+      const indonesiaLen = (sections.indonesia || []).length;
+      const highlight = sections.highlight?.title ? `${ic("star", 11)} ${escHtml(sections.highlight.title.slice(0, 40))}…` : '';
+      return `
+      <div class="history-card">
+        <div class="hc-week">Week ${n.week}, ${n.year}${n.client_name ? ` &middot; ${escHtml(n.client_name)}` : ''}</div>
+        <div class="hc-meta">${n.generated_at}<br>by ${escHtml(n.created_by)}</div>
+        <div class="hc-counts">${ic("compass", 11)} ${apacLen} &nbsp; ${ic("globe", 11)} ${globalLen} &nbsp; ${ic("flag", 11)} ${indonesiaLen}</div>
+        <div class="hc-actions">
+          <button class="hc-btn" onclick="previewSaved('${n._id}')">Preview</button>
+          <button class="hc-btn" onclick="resendSaved('${n._id}')">Resend</button>
+          <button class="hc-btn" onclick="generateMindmap('${n._id}')">Mind Map</button>
+          <button class="hc-btn" style="color:var(--red)" onclick="deleteSaved('${n._id}', ${n.week}, ${n.year})">Delete</button>
+        </div>
+      </div>`;
+    }).join('');
+  } catch(e) {
+    list.innerHTML = `<div class="loading-bar" style="color:var(--red)">Failed: ${escHtml(e.message)}</div>`;
+  }
+}
+
+// ── Confirm modal ─────────────────────────────────────────────────────────────
+let _confirmCallback = null;
+
+function showConfirmModal({ title, body, okLabel, okColor, onConfirm }) {
+  document.getElementById('confirm-title').textContent = title || 'CONFIRM ACTION';
+  document.getElementById('confirm-body').innerHTML = body || '';
+  const okBtn = document.getElementById('confirm-ok-btn');
+  okBtn.innerHTML = okLabel || 'Confirm';
+  okBtn.style.background = okColor || 'var(--red)';
+  _confirmCallback = onConfirm || null;
+  document.getElementById('confirm-overlay').classList.add('open');
+}
+
+function _confirmAction() {
+  const cb = _confirmCallback;
+  closeConfirmModal();
+  if (cb) cb();
+}
+
+function closeConfirmModal() {
+  document.getElementById('confirm-overlay').classList.remove('open');
+  _confirmCallback = null;
+}
+
+function handleConfirmOverlayClick(e) {
+  if (e.target === document.getElementById('confirm-overlay')) closeConfirmModal();
+}
+
+function deleteSaved(id, week, year) {
+  showConfirmModal({
+    title:   'DELETE NEWSLETTER',
+    okLabel: `${ic('x', 12)} Delete`,
+    body: `<p style="font-size:13px;color:var(--text);line-height:1.7;margin-bottom:12px">
+      Delete saved newsletter <strong style="color:var(--red)">Week ${week}, ${year}</strong>?
+    </p>
+    <p style="font-size:12px;color:var(--text-dim);font-family:var(--font-ui);line-height:1.7">
+      This cannot be undone.
+    </p>`,
+    onConfirm: async () => {
+      try {
+        const r = await fetch(`${API}/newsletter/${id}`, { method: 'DELETE', headers: authHeaders() });
+        if (!r.ok) { const e = await r.json().catch(() => ({})); throw new Error(e.detail || r.statusText); }
+        showToast('Newsletter deleted', 'ok');
+        loadHistory();
+      } catch(e) {
+        showToast(`Delete failed: ${e.message}`, 'err');
+      }
+    },
+  });
+}
+
+async function previewSaved(id) {
+  const overlay = document.getElementById('modal-overlay');
+  const iframe = document.getElementById('preview-iframe');
+  iframe.srcdoc = '<body style="background:#fff;display:flex;align-items:center;justify-content:center;height:200px;font-family:sans-serif;color:#666">Loading saved newsletter…</body>';
+  overlay.classList.add('open');
+  document.getElementById('modal-title').textContent = 'SAVED NEWSLETTER';
+
+  try {
+    const r = await fetch(`${API}/newsletter/${id}/html`, { headers: authHeaders() });
+    if (!r.ok) throw new Error(r.statusText);
+    const html = await r.text();
+    iframe.srcdoc = html;
+    // wire resend button in modal to this saved id
+    document.querySelector('.btn-modal-send').onclick = () => resendSaved(id);
+  } catch(e) {
+    iframe.srcdoc = `<body style="font-family:sans-serif;padding:20px;color:#d32f2f">Error: ${escHtml(e.message)}</body>`;
+  }
+}
+
+function resendSaved(id) {
+  const n = (window._savedNl || {})[id] || {};
+  confirmSend(n.client_id || 'default', () => doResendSaved(id, n.week, n.year));
+}
+
+async function doResendSaved(id, week, year) {
+  showToast('Resending email…', 'inf');
+  try {
+    const r = await fetch(`${API}/newsletter/${id}/resend`, {
+      method: 'POST', headers: authHeaders(),
+    });
+    if (!r.ok) { const e = await r.json(); throw new Error(e.detail || r.statusText); }
+    const data = await r.json();
+    showToast(`${data.method === 'graph' ? 'Draft recreated' : 'Email resent'} — ${data.method} · Week ${week}, ${year}`, 'ok');
+    closeModal();
+  } catch(e) {
+    showToast(`Resend failed: ${e.message}`, 'err');
+  }
+}
+
+let _nlMmSeq = 0;
+
+async function generateMindmap(id) {
+  showToast('Generating mind map…', 'inf');
+  try {
+    const r = await fetch(`${API}/mindmap/newsletter/${id}`, { headers: authHeaders() });
+    if (!r.ok) { const e = await r.json().catch(() => ({})); throw new Error(e.detail || r.statusText); }
+    const data = await r.json();
+    const syntax = data.display_syntax || data.mermaid_syntax || '';
+    if (!syntax) throw new Error('No mind map data returned');
+    _nlShowMindmapModal(data.title || 'Newsletter Mind Map', syntax, id);
+    showToast('Mind map ready', 'ok');
+  } catch(e) {
+    showToast(`Mind map failed: ${e.message}`, 'err');
+  }
+}
+
+async function _nlShowMindmapModal(title, syntax, id) {
+  document.getElementById('nl-mm-modal')?.remove();
+
+  if (typeof mermaid !== 'undefined') {
+    mermaid.initialize({ startOnLoad: false, theme: 'dark' });
+  }
+
+  const modal = document.createElement('div');
+  modal.id = 'nl-mm-modal';
+  modal.style.cssText = 'position:fixed;inset:0;z-index:9999;background:rgba(0,0,0,.88);display:flex;flex-direction:column;padding:20px;gap:12px';
+  modal.innerHTML = `
+    <div style="display:flex;align-items:center;gap:10px;flex-shrink:0">
+      <span style="font-family:var(--font-ui);font-size:12px;color:var(--accent);letter-spacing:.08em">${escHtml(title)}</span>
+      <span style="font-family:monospace;font-size:10px;color:var(--text-dim);padding:1px 6px;border-radius:2px;border:1px solid var(--border)">MIND MAP</span>
+      <div style="margin-left:auto;display:flex;gap:8px">
+        <button onclick="_nlMmEdit('${escHtml(String(id))}')"
+          style="font-family:var(--font-ui);font-size:10px;padding:4px 12px;background:transparent;border:1px solid var(--border);color:var(--text-dim);border-radius:3px;cursor:pointer">${ic("edit", 11)} Edit Mindmap</button>
+        <button onclick="document.getElementById('nl-mm-modal').remove()"
+          style="font-family:var(--font-ui);font-size:10px;padding:4px 12px;background:transparent;border:1px solid var(--border);color:var(--text-dim);border-radius:3px;cursor:pointer">${ic("x", 11)} Close</button>
+      </div>
+    </div>
+    <div id="nl-mm-diagram" style="flex:1;overflow:auto;background:rgba(255,255,255,0.02);border:1px solid var(--border);border-radius:4px;padding:16px;display:flex;align-items:flex-start;justify-content:center">
+      <span style="color:var(--text-dim);font-size:11px">Rendering…</span>
+    </div>`;
+  document.body.appendChild(modal);
+
+  const diagEl = document.getElementById('nl-mm-diagram');
+  if (typeof mermaid === 'undefined') {
+    diagEl.innerHTML = '<span style="color:#e94560;font-size:11px">Mermaid not loaded.</span>';
+    return;
+  }
+  try {
+    const rid = 'nlmm-' + (++_nlMmSeq);
+    const { svg } = await mermaid.render(rid, syntax);
+    diagEl.innerHTML = svg;
+    const svgEl = diagEl.querySelector('svg');
+    if (svgEl) { svgEl.style.maxWidth = '100%'; svgEl.style.height = 'auto'; }
+  } catch(e) {
+    diagEl.innerHTML = `<pre style="color:#e94560;font-size:10px;white-space:pre-wrap">Render error:\n${escHtml(e.message)}</pre>`;
+  }
+}
+
+let _nlMmCurrentSyntax = '';
+let _nlMmCurrentId = '';
+
+async function _nlMmEdit(id) {
+  document.getElementById('nl-mm-modal')?.remove();
+  document.getElementById('nl-mm-editor')?.remove();
+
+  const r = await fetch(`${API}/mindmap/newsletter/${id}`, { headers: authHeaders() }).catch(() => null);
+  const data = r?.ok ? await r.json() : {};
+  const syntax = data.display_syntax || data.mermaid_syntax || '';
+  _nlMmCurrentId = id;
+  _nlMmCurrentSyntax = syntax;
+
+  const modal = document.createElement('div');
+  modal.id = 'nl-mm-editor';
+  modal.style.cssText = 'position:fixed;inset:0;z-index:9999;background:rgba(0,0,0,.92);display:flex;flex-direction:column;padding:16px;gap:10px';
+  modal.innerHTML = `
+    <div style="display:flex;align-items:center;gap:10px;flex-shrink:0">
+      <span style="font-family:var(--font-ui);font-size:11px;color:var(--accent);letter-spacing:.08em">Mind Map Editor</span>
+      <div style="margin-left:auto;display:flex;gap:6px">
+        <button id="nl-mm-save" onclick="_nlMmSave()"
+          style="font-family:monospace;font-size:10px;padding:3px 10px;background:rgba(47,129,247,0.1);border:1px solid rgba(47,129,247,0.4);color:#58a6ff;border-radius:3px;cursor:pointer">${ic("save", 11)} Save</button>
+        <button onclick="document.getElementById('nl-mm-editor').remove()"
+          style="font-family:monospace;font-size:10px;padding:3px 10px;background:transparent;border:1px solid var(--border);color:var(--text-dim);border-radius:3px;cursor:pointer">${ic("x", 11)} Close</button>
+      </div>
+    </div>
+    <div id="nl-mm-status" style="font-size:9px;color:var(--text-dim);height:14px;flex-shrink:0;font-family:monospace"></div>
+    <div style="display:flex;flex:1;gap:10px;min-height:0">
+      <textarea id="nl-mm-ta" style="width:340px;flex-shrink:0;background:var(--surface,#161b22);border:1px solid var(--border,#30363d);color:#e6edf3;font-family:monospace;font-size:11px;padding:10px;resize:none;border-radius:4px;line-height:1.5"
+        oninput="_nlMmPreviewDebounce()" spellcheck="false">${escHtml(syntax)}</textarea>
+      <div id="nl-mm-preview" style="flex:1;overflow:auto;background:rgba(255,255,255,0.02);border:1px solid var(--border,#30363d);border-radius:4px;padding:16px;display:flex;align-items:flex-start;justify-content:center"></div>
+    </div>`;
+  document.body.appendChild(modal);
+  _nlMmPreview();
+}
+
+let _nlMmPrevTimer = null;
+function _nlMmPreviewDebounce() {
+  clearTimeout(_nlMmPrevTimer);
+  _nlMmPrevTimer = setTimeout(_nlMmPreview, 500);
+}
+
+async function _nlMmPreview() {
+  const ta = document.getElementById('nl-mm-ta');
+  const prev = document.getElementById('nl-mm-preview');
+  if (!ta || !prev || typeof mermaid === 'undefined') return;
+  try {
+    const { svg } = await mermaid.render('nlmme-' + (++_nlMmSeq), ta.value);
+    prev.innerHTML = svg;
+    const svgEl = prev.querySelector('svg');
+    if (svgEl) { svgEl.style.maxWidth = '100%'; svgEl.style.height = 'auto'; }
+  } catch(e) {
+    prev.innerHTML = `<pre style="color:#e94560;font-size:10px;white-space:pre-wrap">Render error:\n${escHtml(e.message)}</pre>`;
+  }
+}
+
+async function _nlMmSave() {
+  const ta = document.getElementById('nl-mm-ta');
+  const btn = document.getElementById('nl-mm-save');
+  const st = document.getElementById('nl-mm-status');
+  if (!ta || !btn) return;
+  btn.disabled = true; btn.textContent = 'Saving…';
+  try {
+    const res = await fetch(`${API}/mindmap/newsletter/${_nlMmCurrentId}`, {
+      method: 'PUT',
+      headers: authHeaders(),
+      body: JSON.stringify({ syntax: ta.value }),
+    });
+    if (!res.ok) throw new Error(await res.text());
+    if (st) st.innerHTML = `${ic('check', 11)} Saved`;
+  } catch(e) {
+    if (st) st.textContent = `Error: ${e.message}`;
+  }
+  btn.disabled = false; btn.innerHTML = `${ic('save', 11)} Save`;
+}
+
+function goToNewsroom(e) {
+  e.preventDefault();
+  if (window.opener && !window.opener.closed) {
+    window.opener.focus();
+    window.close();
+  } else {
+    location.href = '/newsroom';
+  }
+}
+
+// ── Newsroom queue ────────────────────────────────────────────────────────────
+function _getQueue() {
+  return nlQueueGet();
+}
+
+function renderQueuedArticles() {
+  const queue = _getQueue()
+    .map(a => ({ ...a, _id: a._id || a.id || '' }))
+    .filter(a => a._id);
+
+  window._articleMap = window._articleMap || {};
+  queue.forEach(a => { window._articleMap[a._id] = a; });
+
+  const list = document.getElementById('article-list');
+  const badge = document.getElementById('queue-count-badge');
+  const clearBtn = document.getElementById('queue-clear-all-btn');
+
+  if (badge) badge.textContent = queue.length ? `${queue.length} article${queue.length === 1 ? '' : 's'}` : '';
+  if (clearBtn) clearBtn.style.display = queue.length ? '' : 'none';
+
+  if (!queue.length) {
+    list.innerHTML = '<div class="loading-bar">No queued articles — go to Newsroom to queue articles.</div>';
+    return;
+  }
+
+  const selectedIds = allSelectedIds();
+  list.innerHTML = queue.map(a => {
+    const aid = a._id;
+    const isSelected = selectedIds.has(aid);
+    const isPaywall = paywallHints[a.source]?.paywall_likely;
+    const countries = [...(a.victim_countries || []), ...(a.mentioned_countries || [])].slice(0, 3);
+    const actors = (a.threat_actors || []).slice(0, 2);
+
+    const paywallTag = isPaywall ? `<span class="tag tag-paywall" title="Paywall detected — summary will use metadata">${ic("alert-triangle", 11)} Paywall</span>` : '';
+    const typeTag = a.news_type ? `<span class="tag tag-type">${escHtml(a.news_type)}</span>` : '';
+    const countryTags = countries.map(c => `<span class="tag tag-country">${escHtml(c)}</span>`).join('');
+    const actorTags = actors.map(ac => `<span class="tag tag-actor">${escHtml(ac)}</span>`).join('');
+
+    return `
+    <div class="art-card${isSelected ? ' selected' : ''}" data-id="${aid}" style="position:relative;display:flex;align-items:flex-start;gap:8px;">
+      <div style="flex:1;min-width:0;">
+        <div class="art-title">${escHtml(a.title)}</div>
+        <div class="art-meta">${escHtml(a.source)} · ${escHtml(a.posted_on)}</div>
+        <div class="art-tags">${typeTag}${countryTags}${actorTags}${paywallTag}</div>
+      </div>
+      <div class="assign-wrap">
+        <button class="assign-plus" title="Add to section" onclick="toggleAssignMenu(event,'${aid}')">+</button>
+        <div class="assign-menu" id="menu-${aid}">
+          <button class="assign-btn" onclick="assign(event,'highlight','${aid}')">${ic("star", 11)} Highlight</button>
+          <button class="assign-btn" onclick="assign(event,'apac','${aid}')">${ic("compass", 11)} APAC</button>
+          <button class="assign-btn" onclick="assign(event,'global_news','${aid}')">${ic("globe", 11)} Global</button>
+          <button class="assign-btn" onclick="assign(event,'indonesia','${aid}')">${ic("flag", 11)} Indonesia</button>
+        </div>
+        <button onclick="removeFromQueue('${aid}')" title="Remove from queue"
+          style="margin-top:3px;font-size:9px;padding:2px 5px;background:transparent;
+                 border:1px solid rgba(255,255,255,0.15);color:var(--text-dim);
+                 border-radius:2px;cursor:pointer;font-family:var(--font-ui);"><i data-ic="x"></i></button>
+      </div>
+    </div>`;
+  }).join('');
+}
+
+function _renderQueueBanner(queue) {
+  let banner = document.getElementById('queue-banner');
+  if (!queue.length) {
+    if (banner) banner.remove();
+    document.getElementById('queue-toggle-btn').style.display = 'none';
+    _queueBannerVisible = false;
+    return;
+  }
+
+  // Always update badge
+  document.getElementById('queue-badge-count').textContent = queue.length;
+  document.getElementById('queue-toggle-btn').style.display = '';
+
+  // Don't create/update banner DOM unless user has it open
+  if (!_queueBannerVisible) return;
+
+  if (!banner) {
+    banner = document.createElement('div');
+    banner.id = 'queue-banner';
+    const articleList = document.getElementById('article-list');
+    articleList.parentNode.insertBefore(banner, articleList);
+  }
+
+  banner.style.cssText = `
+    background:rgba(47,129,247,0.06);border:1px solid rgba(47,129,247,0.25);
+    border-radius:3px;padding:10px 14px;margin:10px 12px 0;
+    font-family:var(--font-ui);font-size:11px;color:var(--accent);
+  `;
+  banner.innerHTML = `
+    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:8px;">
+      <span style="font-size:10px;letter-spacing:.08em;text-transform:uppercase">${ic("clipboard", 12)} ${queue.length} queued from Newsroom</span>
+      <div style="display:flex;gap:6px;">
+        <button onclick="clearQueue()" style="background:transparent;border:none;color:var(--text-dim);cursor:pointer;font-size:10px;font-family:var(--font-ui)">Clear All</button>
+        <button onclick="toggleQueueBanner()" style="background:transparent;border:none;color:var(--text-dim);cursor:pointer;font-size:12px;line-height:1"><i data-ic="x"></i></button>
+      </div>
+    </div>
+    ${queue.map(a => `
+      <div style="display:flex;align-items:center;justify-content:space-between;padding:4px 0;border-top:1px solid rgba(47,129,247,0.1);">
+        <span style="color:var(--text);font-size:10px;flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;margin-right:8px">${escHtml(a.title)}</span>
+        <div style="display:flex;gap:3px;flex-shrink:0;">
+          <button onclick="assignQueued('highlight','${a._id}')" title="Highlight" style="font-size:9px;padding:2px 5px;background:transparent;border:1px solid rgba(88,166,255,0.4);color:#58A6FF;border-radius:2px;cursor:pointer">${ic("star", 11)}</button>
+          <button onclick="assignQueued('apac','${a._id}')" title="APAC" style="font-size:9px;padding:2px 5px;background:transparent;border:1px solid rgba(47,129,247,0.3);color:var(--accent);border-radius:2px;cursor:pointer">${ic("compass", 11)}</button>
+          <button onclick="assignQueued('global_news','${a._id}')" title="Global" style="font-size:9px;padding:2px 5px;background:transparent;border:1px solid rgba(110,124,255,0.4);color:var(--purple);border-radius:2px;cursor:pointer">${ic("globe", 11)}</button>
+          <button onclick="assignQueued('indonesia','${a._id}')" title="Indonesia" style="font-size:9px;padding:2px 5px;background:transparent;border:1px solid rgba(218,54,51,0.35);color:var(--red);border-radius:2px;cursor:pointer">${ic("flag", 11)}</button>
+          <button onclick="removeFromQueue('${a._id}')" title="Remove from queue" style="font-size:9px;padding:2px 5px;background:transparent;border:1px solid rgba(255,255,255,0.15);color:var(--text-dim);border-radius:2px;cursor:pointer"><i data-ic="x"></i></button>
+        </div>
+      </div>`).join('')}
+  `;
+}
+
+let _queueBannerVisible = false;
+
+function loadNewsroomQueue() {
+  const queue = _getQueue()
+    .map(a => ({ ...a, _id: a._id || a.id || '' }))
+    .filter(a => a._id);
+  if (!queue.length) return;
+
+  window._articleMap = window._articleMap || {};
+  queue.forEach(a => { window._articleMap[a._id] = a; });
+
+  // Update badge only — don't auto-show banner
+  document.getElementById('queue-badge-count').textContent = queue.length;
+  document.getElementById('queue-toggle-btn').style.display = '';
+  showToast(`${queue.length} article(s) queued from Newsroom — click Queue to view`, 'inf');
+}
+
+function toggleQueueBanner() {
+  _queueBannerVisible = !_queueBannerVisible;
+  const banner = document.getElementById('queue-banner');
+  if (_queueBannerVisible) {
+    const queue = _getQueue()
+      .map(a => ({ ...a, _id: a._id || a.id || '' }))
+      .filter(a => a._id);
+    window._articleMap = window._articleMap || {};
+    queue.forEach(a => { window._articleMap[a._id] = a; });
+    _renderQueueBanner(queue);
+  } else {
+    if (banner) banner.remove();
+  }
+}
+
+function assignQueued(section, articleId) {
+  const article = window._articleMap?.[articleId];
+  if (!article) return;
+  if (section === 'highlight') {
+    if (state.highlight && state.highlight._id !== articleId) {
+      addToQueue(state.highlight);
+    }
+    state.highlight = article;
+  } else {
+    const arr = state[section];
+    if (arr.find(a => a._id === articleId)) {
+      showToast('Already in section', 'inf'); return;
+    }
+    if (arr.length >= SECTIONS[section].max) {
+      const displaced = arr.shift();
+      addToQueue(displaced);
+    }
+    arr.push(article);
+  }
+  renderSections();
+  showToast(`Added to ${SECTIONS[section].label}`, 'ok');
+  removeFromQueue(articleId);
+}
+
+function addToQueue(article) {
+  const id = article._id || article.id;
+  if (!id) return;
+  const queue = _getQueue();
+  if (!queue.find(a => (a._id || a.id) === id)) {
+    queue.push(article);
+    nlQueueSet(queue);
+  }
+}
+
+function removeFromQueue(articleId) {
+  const updated = _getQueue().filter(a => (a._id || a.id) !== articleId);
+  nlQueueSet(updated);
+  renderQueuedArticles();
+}
+
+function clearQueue() {
+  nlQueueClear();
+  renderQueuedArticles();
+  showToast('Queue cleared', 'inf');
+}
+
+// ── Init ──────────────────────────────────────────────────────────────────────
+document.getElementById('modal-overlay').addEventListener('click', e => {
+  if (e.target === document.getElementById('modal-overlay')) closeModal();
+});
+
+(async function init() {
+  checkAuth();
+  if (!getToken()) return;
+  _loadState();
+  await loadPaywallHints();
+  await loadNewsletterClients();
+  loadCvePickerForClient(document.getElementById('nl-client-select').value);
+  renderSections();
+  renderQueuedArticles();
+  // load history count without opening drawer
+  try {
+    const r = await fetch(`${API}/newsletter/history?page_size=1`, { headers: authHeaders() });
+    if (r.ok) {
+      const data = await r.json();
+      document.getElementById('history-count').textContent = data.total;
+    }
+  } catch(e) {}
+})();
+</script>
+</body>
+</html>

@@ -1,0 +1,1393 @@
+<div id="tab-apidocs" class="tab-panel">
+  <div style="display:flex;gap:0;min-height:70vh">
+
+    <!-- Sidebar -->
+    <div style="width:200px;flex-shrink:0;border-right:1px solid var(--border);padding:16px 0;position:sticky;top:0;align-self:flex-start;max-height:90vh;overflow-y:auto">
+      <div style="padding:0 16px 12px;font-family:var(--font-ui);font-size:9px;color:var(--text-dim);text-transform:uppercase;letter-spacing:.1em">API Reference</div>
+      <div style="font-size:11px;font-family:var(--font-ui)">
+        <a href="#apidoc-auth"        class="apidoc-nav-link">Authentication</a>
+        <a href="#apidoc-articles"    class="apidoc-nav-link">Articles</a>
+        <a href="#apidoc-iocs"        class="apidoc-nav-link">IOC Management</a>
+        <a href="#apidoc-cve"         class="apidoc-nav-link">CVE Tracker</a>
+        <a href="#apidoc-techstack"   class="apidoc-nav-link">Tech Stack</a>
+        <a href="#apidoc-pir"         class="apidoc-nav-link">PIR</a>
+        <a href="#apidoc-ta"          class="apidoc-nav-link">Threat Actors</a>
+        <a href="#apidoc-stix"        class="apidoc-nav-link">STIX Exports</a>
+        <a href="#apidoc-attack"      class="apidoc-nav-link">ATT&CK DB</a>
+        <a href="#apidoc-crossref"    class="apidoc-nav-link">Cross-Reference</a>
+        <a href="#apidoc-exec"        class="apidoc-nav-link">Exec Dashboard</a>
+        <a href="#apidoc-recap"       class="apidoc-nav-link">Daily Recap</a>
+        <a href="#apidoc-pkgvuln"     class="apidoc-nav-link">Pkg Vulnerabilities</a>
+        <a href="#apidoc-tweets"      class="apidoc-nav-link">X Intel</a>
+        <a href="#apidoc-ransomware"  class="apidoc-nav-link">Ransomware</a>
+        <a href="#apidoc-newsletter"  class="apidoc-nav-link">Newsletter</a>
+        <a href="#apidoc-intel"       class="apidoc-nav-link">Intelligence</a>
+        <a href="#apidoc-sr"          class="apidoc-nav-link">Source Reliability</a>
+        <a href="#apidoc-notif"       class="apidoc-nav-link">Notifications</a>
+        <a href="#apidoc-admin"       class="apidoc-nav-link">Administration</a>
+      </div>
+    </div>
+
+    <!-- Main content -->
+    <div style="flex:1;padding:24px 32px;overflow-y:auto">
+
+      <!-- Header -->
+      <div style="margin-bottom:28px">
+        <h2 style="margin:0 0 6px;font-size:18px;font-family:var(--font-ui);color:var(--text)">API Documentation</h2>
+        <p style="margin:0;font-size:12px;color:var(--text-dim)">Base URL: <code style="background:var(--surface2);padding:2px 6px;border-radius:3px">http://&lt;host&gt;:&lt;port&gt;</code> &nbsp;·&nbsp; All protected endpoints require <code style="background:var(--surface2);padding:2px 6px;border-radius:3px">Authorization: Bearer &lt;token&gt;</code> header or <code style="background:var(--surface2);padding:2px 6px;border-radius:3px">cti_auth</code> cookie.</p>
+      </div>
+
+      <!-- ── AUTHENTICATION ── -->
+      <div id="apidoc-auth" class="apidoc-section">
+        <div class="apidoc-section-header">Authentication</div>
+        <div class="apidoc-endpoints">
+
+          <div class="apidoc-ep">
+            <div class="apidoc-ep-head">
+              <span class="apidoc-badge apidoc-post">POST</span>
+              <code>/api/auth/login</code>
+              <span class="apidoc-desc">Obtain JWT token</span>
+            </div>
+            <div class="apidoc-ep-body">
+              <pre>{ "username": "user", "password": "pass" }</pre>
+              <div class="apidoc-note">Returns: <code>{ "access_token": "...", "token_type": "bearer" }</code>. Store token and send as <code>Authorization: Bearer &lt;token&gt;</code>.</div>
+            </div>
+          </div>
+
+          <div class="apidoc-ep">
+            <div class="apidoc-ep-head">
+              <span class="apidoc-badge apidoc-post">POST</span>
+              <code>/api/auth/logout</code>
+              <span class="apidoc-desc">Invalidate current session · auth required</span>
+            </div>
+          </div>
+
+          <div class="apidoc-ep">
+            <div class="apidoc-ep-head">
+              <span class="apidoc-badge apidoc-get">GET</span>
+              <code>/api/auth/me</code>
+              <span class="apidoc-desc">Current user profile · auth required</span>
+            </div>
+          </div>
+
+          <div class="apidoc-ep">
+            <div class="apidoc-ep-head">
+              <span class="apidoc-badge apidoc-post">POST</span>
+              <code>/api/auth/change-password</code>
+              <span class="apidoc-desc">Change own password · auth required</span>
+            </div>
+            <div class="apidoc-ep-body">
+              <pre>{ "current_password": "...", "new_password": "..." }</pre>
+            </div>
+          </div>
+
+          <div class="apidoc-ep">
+            <div class="apidoc-ep-head">
+              <span class="apidoc-badge apidoc-get">GET</span>
+              <code>/api/auth/audit-log</code>
+              <span class="apidoc-desc">Paginated audit log · admin required</span>
+            </div>
+            <div class="apidoc-ep-body">
+              <div class="apidoc-params">
+                <div class="apidoc-param"><code>page</code> Page number (default 1)</div>
+                <div class="apidoc-param"><code>page_size</code> Results per page</div>
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+      <!-- ── ARTICLES ── -->
+      <div id="apidoc-articles" class="apidoc-section">
+        <div class="apidoc-section-header">Articles</div>
+        <div class="apidoc-endpoints">
+
+          <div class="apidoc-ep">
+            <div class="apidoc-ep-head">
+              <span class="apidoc-badge apidoc-get">GET</span>
+              <code>/api/articles</code>
+              <span class="apidoc-desc">List articles with filters</span>
+            </div>
+            <div class="apidoc-ep-body">
+              <div class="apidoc-params">
+                <div class="apidoc-param"><code>search</code> Substring match on title/body</div>
+                <div class="apidoc-param"><code>country</code> Filter by country</div>
+                <div class="apidoc-param"><code>industry</code> Filter by industry</div>
+                <div class="apidoc-param"><code>actor</code> Filter by threat actor</div>
+                <div class="apidoc-param"><code>date_start</code> ISO date (YYYY-MM-DD)</div>
+                <div class="apidoc-param"><code>date_end</code> ISO date (YYYY-MM-DD)</div>
+                <div class="apidoc-param"><code>page</code> Page number (default 1)</div>
+                <div class="apidoc-param"><code>page_size</code> Results per page (default 20)</div>
+                <div class="apidoc-param"><code>dedup</code> <code>true</code> to collapse duplicates</div>
+                <div class="apidoc-param"><code>dedup_threshold</code> Cosine similarity threshold (default 0.75)</div>
+              </div>
+            </div>
+          </div>
+
+          <div class="apidoc-ep">
+            <div class="apidoc-ep-head">
+              <span class="apidoc-badge apidoc-get">GET</span>
+              <code>/api/articles/{article_id}</code>
+              <span class="apidoc-desc">Single article detail · auth required</span>
+            </div>
+          </div>
+
+          <div class="apidoc-ep">
+            <div class="apidoc-ep-head">
+              <span class="apidoc-badge apidoc-get">GET</span>
+              <code>/api/articles/dedup-groups</code>
+              <span class="apidoc-desc">Inspect semantic duplicate groups</span>
+            </div>
+            <div class="apidoc-ep-body">
+              <div class="apidoc-params">
+                <div class="apidoc-param"><code>days</code> Lookback window (default 7)</div>
+                <div class="apidoc-param"><code>threshold</code> Cosine similarity (default 0.75)</div>
+              </div>
+            </div>
+          </div>
+
+          <div class="apidoc-ep">
+            <div class="apidoc-ep-head">
+              <span class="apidoc-badge apidoc-get">GET</span>
+              <code>/api/dashboard</code>
+              <span class="apidoc-desc">Dashboard statistics (counts, trends, top actors)</span>
+            </div>
+          </div>
+
+          <div class="apidoc-ep">
+            <div class="apidoc-ep-head">
+              <span class="apidoc-badge apidoc-get">GET</span>
+              <code>/api/filters</code>
+              <span class="apidoc-desc">Available filter options (countries, industries, actors)</span>
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+      <!-- ── IOC MANAGEMENT ── -->
+      <div id="apidoc-iocs" class="apidoc-section">
+        <div class="apidoc-section-header">IOC Management</div>
+        <div class="apidoc-endpoints">
+
+          <div class="apidoc-ep">
+            <div class="apidoc-ep-head">
+              <span class="apidoc-badge apidoc-get">GET</span>
+              <code>/api/iocs</code>
+              <span class="apidoc-desc">List / search IOCs · auth required</span>
+            </div>
+            <div class="apidoc-ep-body">
+              <div class="apidoc-params">
+                <div class="apidoc-param"><code>ioc_type</code> <code>ip</code> | <code>domain</code> | <code>url</code> | <code>url_with_path</code> | <code>email</code> | <code>sha256</code> | <code>sha1</code> | <code>md5</code> | <code>cve</code></div>
+                <div class="apidoc-param"><code>search</code> Substring match on value</div>
+                <div class="apidoc-param"><code>page</code> Page number (default 1)</div>
+                <div class="apidoc-param"><code>page_size</code> Max 200 (default 50)</div>
+                <div class="apidoc-param"><code>sort_by</code> <code>last_seen</code> | <code>confidence</code></div>
+              </div>
+            </div>
+          </div>
+
+          <div class="apidoc-ep">
+            <div class="apidoc-ep-head">
+              <span class="apidoc-badge apidoc-get">GET</span>
+              <code>/api/iocs/stats</code>
+              <span class="apidoc-desc">Count by type + confidence summary · auth required</span>
+            </div>
+          </div>
+
+          <div class="apidoc-ep">
+            <div class="apidoc-ep-head">
+              <span class="apidoc-badge apidoc-get">GET</span>
+              <code>/api/iocs/{ioc_type}/{value}</code>
+              <span class="apidoc-desc">Full detail for one IOC · auth required</span>
+            </div>
+          </div>
+
+          <div class="apidoc-ep">
+            <div class="apidoc-ep-head">
+              <span class="apidoc-badge apidoc-post">POST</span>
+              <code>/api/iocs/{ioc_id}/feedback</code>
+              <span class="apidoc-desc">Mark true / false positive · auth required</span>
+            </div>
+            <div class="apidoc-ep-body">
+              <pre>{ "verdict": "tp" | "fp", "note": "optional string" }</pre>
+            </div>
+          </div>
+
+          <div class="apidoc-ep">
+            <div class="apidoc-ep-head">
+              <span class="apidoc-badge apidoc-post">POST</span>
+              <code>/api/iocs/{ioc_type}/{value}/tags</code>
+              <span class="apidoc-desc">Add tags to IOC · auth required</span>
+            </div>
+            <div class="apidoc-ep-body">
+              <pre>{ "tags": ["ransomware", "apt29"] }</pre>
+            </div>
+          </div>
+
+          <div class="apidoc-ep">
+            <div class="apidoc-ep-head">
+              <span class="apidoc-badge apidoc-post">POST</span>
+              <code>/api/iocs/{ioc_type}/{value}/threat-actors</code>
+              <span class="apidoc-desc">Link threat actors to IOC · auth required</span>
+            </div>
+            <div class="apidoc-ep-body">
+              <pre>{ "threat_actors": ["APT28", "Lazarus"] }</pre>
+            </div>
+          </div>
+
+          <div class="apidoc-ep">
+            <div class="apidoc-ep-head">
+              <span class="apidoc-badge apidoc-del">DEL</span>
+              <code>/api/iocs/{ioc_type}/{value}/threat-actors/{actor}</code>
+              <span class="apidoc-desc">Unlink a threat actor · auth required</span>
+            </div>
+          </div>
+
+          <div class="apidoc-ep">
+            <div class="apidoc-ep-head">
+              <span class="apidoc-badge apidoc-del">DEL</span>
+              <code>/api/iocs/{ioc_id}</code>
+              <span class="apidoc-desc">Delete IOC · admin only</span>
+            </div>
+          </div>
+
+          <div class="apidoc-ep">
+            <div class="apidoc-ep-head">
+              <span class="apidoc-badge apidoc-post">POST</span>
+              <code>/api/iocs/bulk-delete</code>
+              <span class="apidoc-desc">Bulk delete IOCs · admin only</span>
+            </div>
+            <div class="apidoc-ep-body">
+              <pre>{ "ids": ["&lt;ioc_id&gt;", "..."] }</pre>
+            </div>
+          </div>
+
+          <div class="apidoc-ep">
+            <div class="apidoc-ep-head">
+              <span class="apidoc-badge apidoc-get">GET</span>
+              <code>/api/iocs/allowlist</code>
+              <span class="apidoc-desc">List IOC extraction allowlist · auth required</span>
+            </div>
+          </div>
+
+          <div class="apidoc-ep">
+            <div class="apidoc-ep-head">
+              <span class="apidoc-badge apidoc-post">POST</span>
+              <code>/api/iocs/allowlist</code>
+              <span class="apidoc-desc">Add allowlist entry · admin only</span>
+            </div>
+            <div class="apidoc-ep-body">
+              <pre>{ "type": "domain" | "ip", "value": "example.com" }</pre>
+            </div>
+          </div>
+
+          <div class="apidoc-ep">
+            <div class="apidoc-ep-head">
+              <span class="apidoc-badge apidoc-del">DEL</span>
+              <code>/api/iocs/allowlist/{entry_id}</code>
+              <span class="apidoc-desc">Remove allowlist entry · admin only</span>
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+      <!-- ── CVE TRACKER ── -->
+      <div id="apidoc-cve" class="apidoc-section">
+        <div class="apidoc-section-header">CVE Tracker</div>
+        <div class="apidoc-endpoints">
+
+          <div class="apidoc-ep">
+            <div class="apidoc-ep-head">
+              <span class="apidoc-badge apidoc-get">GET</span>
+              <code>/api/cve</code>
+              <span class="apidoc-desc">List CVEs with filters · auth required</span>
+            </div>
+            <div class="apidoc-ep-body">
+              <div class="apidoc-params">
+                <div class="apidoc-param"><code>search</code> CVE ID or keyword</div>
+                <div class="apidoc-param"><code>severity</code> <code>CRITICAL</code> | <code>HIGH</code> | <code>MEDIUM</code> | <code>LOW</code></div>
+                <div class="apidoc-param"><code>kev_only</code> <code>true</code> to show CISA KEV only</div>
+                <div class="apidoc-param"><code>page</code> / <code>page_size</code></div>
+              </div>
+            </div>
+          </div>
+
+          <div class="apidoc-ep">
+            <div class="apidoc-ep-head">
+              <span class="apidoc-badge apidoc-get">GET</span>
+              <code>/api/cve/stats</code>
+              <span class="apidoc-desc">CVE counts by severity and status · auth required</span>
+            </div>
+          </div>
+
+          <div class="apidoc-ep">
+            <div class="apidoc-ep-head">
+              <span class="apidoc-badge apidoc-get">GET</span>
+              <code>/api/cve/export</code>
+              <span class="apidoc-desc">Export CVEs as Excel (.xlsx) · auth required</span>
+            </div>
+          </div>
+
+          <div class="apidoc-ep">
+            <div class="apidoc-ep-head">
+              <span class="apidoc-badge apidoc-post">POST</span>
+              <code>/api/cve/{cve_id}/acknowledge</code>
+              <span class="apidoc-desc">Acknowledge a CVE · auth required</span>
+            </div>
+            <div class="apidoc-ep-body">
+              <pre>{ "note": "optional acknowledgement note" }</pre>
+            </div>
+          </div>
+
+          <div class="apidoc-ep">
+            <div class="apidoc-ep-head">
+              <span class="apidoc-badge apidoc-post">POST</span>
+              <code>/api/cve/bulk-acknowledge</code>
+              <span class="apidoc-desc">Bulk acknowledge CVEs · auth required</span>
+            </div>
+            <div class="apidoc-ep-body">
+              <pre>{ "cve_ids": ["CVE-2024-1234", "..."] }</pre>
+            </div>
+          </div>
+
+          <div class="apidoc-ep">
+            <div class="apidoc-ep-head">
+              <span class="apidoc-badge apidoc-post">POST</span>
+              <code>/api/cve/{cve_id}/false-positive</code>
+              <span class="apidoc-desc">Mark CVE as false positive · auth required</span>
+            </div>
+          </div>
+
+          <div class="apidoc-ep">
+            <div class="apidoc-ep-head">
+              <span class="apidoc-badge apidoc-del">DEL</span>
+              <code>/api/cve/{cve_id}/false-positive</code>
+              <span class="apidoc-desc">Unmark false positive · auth required</span>
+            </div>
+          </div>
+
+          <div class="apidoc-ep">
+            <div class="apidoc-ep-head">
+              <span class="apidoc-badge apidoc-get">GET</span>
+              <code>/api/cve/{cve_id}/ticket</code>
+              <span class="apidoc-desc">Get CVE ticket · auth required</span>
+            </div>
+          </div>
+
+          <div class="apidoc-ep">
+            <div class="apidoc-ep-head">
+              <span class="apidoc-badge apidoc-put">PUT</span>
+              <code>/api/cve/{cve_id}/ticket</code>
+              <span class="apidoc-desc">Update CVE ticket · auth required</span>
+            </div>
+            <div class="apidoc-ep-body">
+              <pre>{ "status": "open" | "in_progress" | "resolved", "notes": "..." }</pre>
+            </div>
+          </div>
+
+          <div class="apidoc-ep">
+            <div class="apidoc-ep-head">
+              <span class="apidoc-badge apidoc-post">POST</span>
+              <code>/api/cve/epss-lookup</code>
+              <span class="apidoc-desc">Lookup EPSS scores · auth required</span>
+            </div>
+            <div class="apidoc-ep-body">
+              <pre>{ "cve_ids": ["CVE-2024-1234", "..."] }</pre>
+            </div>
+          </div>
+
+          <div class="apidoc-ep">
+            <div class="apidoc-ep-head">
+              <span class="apidoc-badge apidoc-post">POST</span>
+              <code>/api/cve/cisa-lookup</code>
+              <span class="apidoc-desc">Check CISA KEV membership · auth required</span>
+            </div>
+            <div class="apidoc-ep-body">
+              <pre>{ "cve_ids": ["CVE-2024-1234", "..."] }</pre>
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+      <!-- ── TECH STACK ── -->
+      <div id="apidoc-techstack" class="apidoc-section">
+        <div class="apidoc-section-header">Tech Stack</div>
+        <div class="apidoc-endpoints">
+
+          <div class="apidoc-ep">
+            <div class="apidoc-ep-head">
+              <span class="apidoc-badge apidoc-get">GET</span>
+              <code>/api/techstack</code>
+              <span class="apidoc-desc">List monitored technologies with CVE risk · auth required</span>
+            </div>
+          </div>
+
+          <div class="apidoc-ep">
+            <div class="apidoc-ep-head">
+              <span class="apidoc-badge apidoc-post">POST</span>
+              <code>/api/techstack</code>
+              <span class="apidoc-desc">Add technology to stack · auth required</span>
+            </div>
+            <div class="apidoc-ep-body">
+              <pre>{ "vendor": "Microsoft", "product": "Exchange Server", "version": "2019" }</pre>
+            </div>
+          </div>
+
+          <div class="apidoc-ep">
+            <div class="apidoc-ep-head">
+              <span class="apidoc-badge apidoc-patch">PATCH</span>
+              <code>/api/techstack/{tech_id}/exposure</code>
+              <span class="apidoc-desc">Set exposure level · auth required</span>
+            </div>
+            <div class="apidoc-ep-body">
+              <pre>{ "exposure": "public" | "internal" | "both" }</pre>
+            </div>
+          </div>
+
+          <div class="apidoc-ep">
+            <div class="apidoc-ep-head">
+              <span class="apidoc-badge apidoc-patch">PATCH</span>
+              <code>/api/techstack/{tech_id}/hosting</code>
+              <span class="apidoc-desc">Set hosting type · auth required</span>
+            </div>
+            <div class="apidoc-ep-body">
+              <pre>{ "hosting_type": "on_prem" | "cloud" | "saas" }</pre>
+            </div>
+          </div>
+
+          <div class="apidoc-ep">
+            <div class="apidoc-ep-head">
+              <span class="apidoc-badge apidoc-del">DEL</span>
+              <code>/api/techstack/{tech_id}</code>
+              <span class="apidoc-desc">Remove technology · auth required</span>
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+      <!-- ── PIR ── -->
+      <div id="apidoc-pir" class="apidoc-section">
+        <div class="apidoc-section-header">Priority Intelligence Requirements (PIR)</div>
+        <div class="apidoc-endpoints">
+
+          <div class="apidoc-ep">
+            <div class="apidoc-ep-head">
+              <span class="apidoc-badge apidoc-get">GET</span>
+              <code>/api/pir</code>
+              <span class="apidoc-desc">List PIRs · auth required</span>
+            </div>
+          </div>
+
+          <div class="apidoc-ep">
+            <div class="apidoc-ep-head">
+              <span class="apidoc-badge apidoc-post">POST</span>
+              <code>/api/pir</code>
+              <span class="apidoc-desc">Create PIR · auth required</span>
+            </div>
+            <div class="apidoc-ep-body">
+              <pre>{ "title": "...", "description": "...", "keywords": ["..."], "priority": "P1" | "P2" | "P3" }</pre>
+            </div>
+          </div>
+
+          <div class="apidoc-ep">
+            <div class="apidoc-ep-head">
+              <span class="apidoc-badge apidoc-put">PUT</span>
+              <code>/api/pir/{pir_id}</code>
+              <span class="apidoc-desc">Update PIR · auth required</span>
+            </div>
+          </div>
+
+          <div class="apidoc-ep">
+            <div class="apidoc-ep-head">
+              <span class="apidoc-badge apidoc-del">DEL</span>
+              <code>/api/pir/{pir_id}</code>
+              <span class="apidoc-desc">Delete PIR · auth required</span>
+            </div>
+          </div>
+
+          <div class="apidoc-ep">
+            <div class="apidoc-ep-head">
+              <span class="apidoc-badge apidoc-get">GET</span>
+              <code>/api/pir/{pir_id}/articles</code>
+              <span class="apidoc-desc">Articles matching PIR keywords</span>
+            </div>
+          </div>
+
+          <div class="apidoc-ep">
+            <div class="apidoc-ep-head">
+              <span class="apidoc-badge apidoc-get">GET</span>
+              <code>/api/pir/{pir_id}/export</code>
+              <span class="apidoc-desc">Export PIR data as JSON</span>
+            </div>
+          </div>
+
+          <div class="apidoc-ep">
+            <div class="apidoc-ep-head">
+              <span class="apidoc-badge apidoc-get">GET</span>
+              <code>/api/pir/{pir_id}/export/docx</code>
+              <span class="apidoc-desc">Export PIR as Word document (.docx)</span>
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+      <!-- ── THREAT ACTORS ── -->
+      <div id="apidoc-ta" class="apidoc-section">
+        <div class="apidoc-section-header">Threat Actors</div>
+        <div class="apidoc-endpoints">
+
+          <div class="apidoc-ep">
+            <div class="apidoc-ep-head">
+              <span class="apidoc-badge apidoc-get">GET</span>
+              <code>/api/ta/groups</code>
+              <span class="apidoc-desc">List all tracked threat actor groups</span>
+            </div>
+          </div>
+
+          <div class="apidoc-ep">
+            <div class="apidoc-ep-head">
+              <span class="apidoc-badge apidoc-get">GET</span>
+              <code>/api/ta/watchlist</code>
+              <span class="apidoc-desc">Paginated watchlist with profiles</span>
+            </div>
+          </div>
+
+          <div class="apidoc-ep">
+            <div class="apidoc-ep-head">
+              <span class="apidoc-badge apidoc-post">POST</span>
+              <code>/api/ta/watchlist</code>
+              <span class="apidoc-desc">Add actor to watchlist · auth required</span>
+            </div>
+            <div class="apidoc-ep-body">
+              <pre>{ "name": "APT28" }</pre>
+            </div>
+          </div>
+
+          <div class="apidoc-ep">
+            <div class="apidoc-ep-head">
+              <span class="apidoc-badge apidoc-del">DEL</span>
+              <code>/api/ta/watchlist/{name}</code>
+              <span class="apidoc-desc">Remove actor from watchlist · auth required</span>
+            </div>
+          </div>
+
+          <div class="apidoc-ep">
+            <div class="apidoc-ep-head">
+              <span class="apidoc-badge apidoc-post">POST</span>
+              <code>/api/ta/profile/generate</code>
+              <span class="apidoc-desc">Generate LLM profile for actor · auth required</span>
+            </div>
+            <div class="apidoc-ep-body">
+              <pre>{ "actor_name": "APT28" }</pre>
+            </div>
+          </div>
+
+          <div class="apidoc-ep">
+            <div class="apidoc-ep-head">
+              <span class="apidoc-badge apidoc-get">GET</span>
+              <code>/api/ta/profile/{name}</code>
+              <span class="apidoc-desc">Get cached threat actor profile</span>
+            </div>
+          </div>
+
+          <div class="apidoc-ep">
+            <div class="apidoc-ep-head">
+              <span class="apidoc-badge apidoc-get">GET</span>
+              <code>/api/ta/{actor}/timeline</code>
+              <span class="apidoc-desc">Actor activity timeline · auth required</span>
+            </div>
+          </div>
+
+          <div class="apidoc-ep">
+            <div class="apidoc-ep-head">
+              <span class="apidoc-badge apidoc-get">GET</span>
+              <code>/api/ta/stats</code>
+              <span class="apidoc-desc">Threat actor statistics</span>
+            </div>
+          </div>
+
+          <div class="apidoc-ep">
+            <div class="apidoc-ep-head">
+              <span class="apidoc-badge apidoc-get">GET</span>
+              <code>/api/ta/watchlist/navigator-layer</code>
+              <span class="apidoc-desc">ATT&CK Navigator layer for all watched actors</span>
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+      <!-- ── STIX EXPORTS ── -->
+      <div id="apidoc-stix" class="apidoc-section">
+        <div class="apidoc-section-header">STIX 2.1 Exports</div>
+        <div class="apidoc-endpoints">
+
+          <div class="apidoc-ep">
+            <div class="apidoc-ep-head">
+              <span class="apidoc-badge apidoc-get">GET</span>
+              <code>/api/stix/ta/{actor_name}</code>
+              <span class="apidoc-desc">Export threat actor as STIX 2.1 bundle — downloads as .json</span>
+            </div>
+          </div>
+
+          <div class="apidoc-ep">
+            <div class="apidoc-ep-head">
+              <span class="apidoc-badge apidoc-get">GET</span>
+              <code>/api/stix/iocs</code>
+              <span class="apidoc-desc">Export IOCs as STIX 2.1 Indicator objects</span>
+            </div>
+            <div class="apidoc-ep-body">
+              <div class="apidoc-params">
+                <div class="apidoc-param"><code>type</code> IOC type filter (same values as <code>/api/iocs</code>)</div>
+                <div class="apidoc-param"><code>limit</code> Max records, default 500, max 2000</div>
+              </div>
+            </div>
+          </div>
+
+          <div class="apidoc-ep">
+            <div class="apidoc-ep-head">
+              <span class="apidoc-badge apidoc-get">GET</span>
+              <code>/api/stix/pirs</code>
+              <span class="apidoc-desc">Export PIRs as STIX 2.1 bundle</span>
+            </div>
+          </div>
+
+          <div class="apidoc-ep">
+            <div class="apidoc-ep-head">
+              <span class="apidoc-badge apidoc-get">GET</span>
+              <code>/api/stix/article/{article_id}</code>
+              <span class="apidoc-desc">Export single article as STIX 2.1 bundle · auth required</span>
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+      <!-- ── ATT&CK DB ── -->
+      <div id="apidoc-attack" class="apidoc-section">
+        <div class="apidoc-section-header">ATT&amp;CK Database</div>
+        <div class="apidoc-endpoints">
+
+          <div class="apidoc-ep">
+            <div class="apidoc-ep-head">
+              <span class="apidoc-badge apidoc-get">GET</span>
+              <code>/api/attack/status</code>
+              <span class="apidoc-desc">Sync status for all ATT&CK domains · auth required</span>
+            </div>
+          </div>
+
+          <div class="apidoc-ep">
+            <div class="apidoc-ep-head">
+              <span class="apidoc-badge apidoc-post">POST</span>
+              <code>/api/attack/sync</code>
+              <span class="apidoc-desc">Trigger full ATT&CK sync · admin required</span>
+            </div>
+          </div>
+
+          <div class="apidoc-ep">
+            <div class="apidoc-ep-head">
+              <span class="apidoc-badge apidoc-get">GET</span>
+              <code>/api/attack/techniques</code>
+              <span class="apidoc-desc">List techniques with search and tactic filter · auth required</span>
+            </div>
+            <div class="apidoc-ep-body">
+              <div class="apidoc-params">
+                <div class="apidoc-param"><code>domain</code> <code>enterprise</code> | <code>ics</code> | <code>mobile</code></div>
+                <div class="apidoc-param"><code>tactic</code> Filter by tactic name</div>
+                <div class="apidoc-param"><code>search</code> Keyword search</div>
+                <div class="apidoc-param"><code>page</code> / <code>page_size</code></div>
+              </div>
+            </div>
+          </div>
+
+          <div class="apidoc-ep">
+            <div class="apidoc-ep-head">
+              <span class="apidoc-badge apidoc-get">GET</span>
+              <code>/api/attack/techniques/{attack_id}</code>
+              <span class="apidoc-desc">Single technique detail (e.g. T1566) incl. detection strategies + analytics (ATT&amp;CK v18+) · auth required</span>
+            </div>
+          </div>
+
+          <div class="apidoc-ep">
+            <div class="apidoc-ep-head">
+              <span class="apidoc-badge apidoc-get">GET</span>
+              <code>/api/attack/tactics</code>
+              <span class="apidoc-desc">List all tactics · auth required</span>
+            </div>
+          </div>
+
+          <div class="apidoc-ep">
+            <div class="apidoc-ep-head">
+              <span class="apidoc-badge apidoc-get">GET</span>
+              <code>/api/attack/mitigations</code>
+              <span class="apidoc-desc">List mitigations with search · auth required</span>
+            </div>
+          </div>
+
+          <div class="apidoc-ep">
+            <div class="apidoc-ep-head">
+              <span class="apidoc-badge apidoc-get">GET</span>
+              <code>/api/attack/groups</code>
+              <span class="apidoc-desc">ATT&CK group catalogue · auth required</span>
+            </div>
+          </div>
+
+          <div class="apidoc-ep">
+            <div class="apidoc-ep-head">
+              <span class="apidoc-badge apidoc-get">GET</span>
+              <code>/api/attack/software</code>
+              <span class="apidoc-desc">Malware and tools catalogue · auth required</span>
+            </div>
+          </div>
+
+          <div class="apidoc-ep">
+            <div class="apidoc-ep-head">
+              <span class="apidoc-badge apidoc-get">GET</span>
+              <code>/api/attack/navigator-layer</code>
+              <span class="apidoc-desc">DB-sourced ATT&CK Navigator layer JSON · auth required</span>
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+      <!-- ── CROSS-REFERENCE ── -->
+      <div id="apidoc-crossref" class="apidoc-section">
+        <div class="apidoc-section-header">Cross-Reference</div>
+        <div class="apidoc-endpoints">
+
+          <div class="apidoc-ep">
+            <div class="apidoc-ep-head">
+              <span class="apidoc-badge apidoc-get">GET</span>
+              <code>/api/crossref/cve/{cve_id}</code>
+              <span class="apidoc-desc">PIRs and TAs linked to a CVE · auth required</span>
+            </div>
+          </div>
+
+          <div class="apidoc-ep">
+            <div class="apidoc-ep-head">
+              <span class="apidoc-badge apidoc-get">GET</span>
+              <code>/api/crossref/pir/{pir_id}</code>
+              <span class="apidoc-desc">CVEs and TAs linked to a PIR · auth required</span>
+            </div>
+          </div>
+
+          <div class="apidoc-ep">
+            <div class="apidoc-ep-head">
+              <span class="apidoc-badge apidoc-get">GET</span>
+              <code>/api/crossref/ta/{actor_name}</code>
+              <span class="apidoc-desc">CVEs and PIRs linked to a threat actor · auth required</span>
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+      <!-- ── EXEC DASHBOARD ── -->
+      <div id="apidoc-exec" class="apidoc-section">
+        <div class="apidoc-section-header">Executive Dashboard</div>
+        <div class="apidoc-endpoints">
+
+          <div class="apidoc-ep">
+            <div class="apidoc-ep-head">
+              <span class="apidoc-badge apidoc-get">GET</span>
+              <code>/api/exec/dashboard-v2</code>
+              <span class="apidoc-desc">Role-aware executive metrics · auth required</span>
+            </div>
+          </div>
+
+          <div class="apidoc-ep">
+            <div class="apidoc-ep-head">
+              <span class="apidoc-badge apidoc-post">POST</span>
+              <code>/api/exec/brief</code>
+              <span class="apidoc-desc">Generate LLM executive brief from live metrics · auth required</span>
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+      <!-- ── DAILY RECAP ── -->
+      <div id="apidoc-recap" class="apidoc-section">
+        <div class="apidoc-section-header">Daily Recap</div>
+        <div class="apidoc-endpoints">
+
+          <div class="apidoc-ep">
+            <div class="apidoc-ep-head">
+              <span class="apidoc-badge apidoc-get">GET</span>
+              <code>/api/recap/latest</code>
+              <span class="apidoc-desc">Most recent generated recap · auth required</span>
+            </div>
+          </div>
+
+          <div class="apidoc-ep">
+            <div class="apidoc-ep-head">
+              <span class="apidoc-badge apidoc-get">GET</span>
+              <code>/api/recap/list</code>
+              <span class="apidoc-desc">List recap history (last 60 days) · auth required</span>
+            </div>
+          </div>
+
+          <div class="apidoc-ep">
+            <div class="apidoc-ep-head">
+              <span class="apidoc-badge apidoc-get">GET</span>
+              <code>/api/recap/{date}</code>
+              <span class="apidoc-desc">Recap for specific date (YYYY-MM-DD) · auth required</span>
+            </div>
+          </div>
+
+          <div class="apidoc-ep">
+            <div class="apidoc-ep-head">
+              <span class="apidoc-badge apidoc-post">POST</span>
+              <code>/api/recap/generate</code>
+              <span class="apidoc-desc">Generate or force-regenerate recap · auth required</span>
+            </div>
+            <div class="apidoc-ep-body">
+              <div class="apidoc-params">
+                <div class="apidoc-param"><code>date</code> Target date (YYYY-MM-DD), defaults to yesterday</div>
+                <div class="apidoc-param"><code>force</code> <code>true</code> to overwrite existing recap</div>
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+      <!-- ── PKG VULNERABILITIES ── -->
+      <div id="apidoc-pkgvuln" class="apidoc-section">
+        <div class="apidoc-section-header">Package Vulnerabilities</div>
+        <div class="apidoc-endpoints">
+
+          <div class="apidoc-ep">
+            <div class="apidoc-ep-head">
+              <span class="apidoc-badge apidoc-get">GET</span>
+              <code>/api/pkgvuln/packages</code>
+              <span class="apidoc-desc">List monitored packages · auth required</span>
+            </div>
+          </div>
+
+          <div class="apidoc-ep">
+            <div class="apidoc-ep-head">
+              <span class="apidoc-badge apidoc-post">POST</span>
+              <code>/api/pkgvuln/packages</code>
+              <span class="apidoc-desc">Add package to monitor · auth required</span>
+            </div>
+            <div class="apidoc-ep-body">
+              <pre>{ "ecosystem": "PyPI" | "npm" | "Go" | "Maven", "name": "requests", "version": "2.28.0" }</pre>
+            </div>
+          </div>
+
+          <div class="apidoc-ep">
+            <div class="apidoc-ep-head">
+              <span class="apidoc-badge apidoc-post">POST</span>
+              <code>/api/pkgvuln/import-lockfile</code>
+              <span class="apidoc-desc">Bulk import from lockfile · auth required</span>
+            </div>
+            <div class="apidoc-ep-body">
+              <div class="apidoc-note">Multipart form upload. Supported formats: <code>requirements.txt</code>, <code>package-lock.json</code>, <code>go.mod</code>, <code>pom.xml</code>, <code>poetry.lock</code></div>
+            </div>
+          </div>
+
+          <div class="apidoc-ep">
+            <div class="apidoc-ep-head">
+              <span class="apidoc-badge apidoc-post">POST</span>
+              <code>/api/pkgvuln/scan</code>
+              <span class="apidoc-desc">Scan all packages now · auth required</span>
+            </div>
+          </div>
+
+          <div class="apidoc-ep">
+            <div class="apidoc-ep-head">
+              <span class="apidoc-badge apidoc-get">GET</span>
+              <code>/api/pkgvuln/vulns</code>
+              <span class="apidoc-desc">List package vulnerabilities with filters · auth required</span>
+            </div>
+            <div class="apidoc-ep-body">
+              <div class="apidoc-params">
+                <div class="apidoc-param"><code>kev_only</code> <code>true</code> to show CISA KEV only</div>
+                <div class="apidoc-param"><code>sort_by</code> <code>adjusted_score</code> | <code>epss</code></div>
+                <div class="apidoc-param"><code>page</code> / <code>page_size</code></div>
+              </div>
+            </div>
+          </div>
+
+          <div class="apidoc-ep">
+            <div class="apidoc-ep-head">
+              <span class="apidoc-badge apidoc-get">GET</span>
+              <code>/api/pkgvuln/stats</code>
+              <span class="apidoc-desc">Package vulnerability summary stats · auth required</span>
+            </div>
+          </div>
+
+          <div class="apidoc-ep">
+            <div class="apidoc-ep-head">
+              <span class="apidoc-badge apidoc-del">DEL</span>
+              <code>/api/pkgvuln/packages/{pkg_id}</code>
+              <span class="apidoc-desc">Remove package from monitoring · auth required</span>
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+      <!-- ── X INTEL ── -->
+      <div id="apidoc-tweets" class="apidoc-section">
+        <div class="apidoc-section-header">X Intel (Tweets)</div>
+        <div class="apidoc-endpoints">
+
+          <div class="apidoc-ep">
+            <div class="apidoc-ep-head">
+              <span class="apidoc-badge apidoc-get">GET</span>
+              <code>/api/tweets</code>
+              <span class="apidoc-desc">List ingested tweets with TI signals · auth required</span>
+            </div>
+            <div class="apidoc-ep-body">
+              <div class="apidoc-params">
+                <div class="apidoc-param"><code>search</code> Full-text search</div>
+                <div class="apidoc-param"><code>author</code> Filter by Twitter handle</div>
+                <div class="apidoc-param"><code>lang</code> Language code (e.g. <code>en</code>)</div>
+                <div class="apidoc-param"><code>date_start</code> / <code>date_end</code> ISO date range</div>
+                <div class="apidoc-param"><code>apac_only</code> <code>true</code> for APAC-relevant tweets</div>
+                <div class="apidoc-param"><code>ot_only</code> <code>true</code> for OT/ICS tweets</div>
+                <div class="apidoc-param"><code>confirmed_only</code> <code>true</code> for high-confidence tweets</div>
+                <div class="apidoc-param"><code>page</code> / <code>page_size</code></div>
+              </div>
+            </div>
+          </div>
+
+          <div class="apidoc-ep">
+            <div class="apidoc-ep-head">
+              <span class="apidoc-badge apidoc-get">GET</span>
+              <code>/api/tweets/stats</code>
+              <span class="apidoc-desc">Tweet volume and signal statistics · auth required</span>
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+      <!-- ── RANSOMWARE ── -->
+      <div id="apidoc-ransomware" class="apidoc-section">
+        <div class="apidoc-section-header">Ransomware Tracker</div>
+        <div class="apidoc-endpoints">
+
+          <div class="apidoc-ep">
+            <div class="apidoc-ep-head">
+              <span class="apidoc-badge apidoc-get">GET</span>
+              <code>/api/ransomware/victims</code>
+              <span class="apidoc-desc">Paginated ransomware victim list · auth required</span>
+            </div>
+            <div class="apidoc-ep-body">
+              <div class="apidoc-params">
+                <div class="apidoc-param"><code>group</code> Filter by ransomware group name</div>
+                <div class="apidoc-param"><code>country</code> Filter by victim country</div>
+                <div class="apidoc-param"><code>industry</code> Filter by victim industry</div>
+                <div class="apidoc-param"><code>page</code> / <code>page_size</code></div>
+              </div>
+            </div>
+          </div>
+
+          <div class="apidoc-ep">
+            <div class="apidoc-ep-head">
+              <span class="apidoc-badge apidoc-get">GET</span>
+              <code>/api/ransomware/victims/filters</code>
+              <span class="apidoc-desc">Available filter options (groups, countries, industries) · auth required</span>
+            </div>
+          </div>
+
+          <div class="apidoc-ep">
+            <div class="apidoc-ep-head">
+              <span class="apidoc-badge apidoc-get">GET</span>
+              <code>/api/ransomware/related-articles</code>
+              <span class="apidoc-desc">News articles related to a ransomware group · auth required</span>
+            </div>
+            <div class="apidoc-ep-body">
+              <div class="apidoc-params">
+                <div class="apidoc-param"><code>group</code> Ransomware group name</div>
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+      <!-- ── NEWSLETTER ── -->
+      <div id="apidoc-newsletter" class="apidoc-section">
+        <div class="apidoc-section-header">Newsletter</div>
+        <div class="apidoc-endpoints">
+
+          <div class="apidoc-ep">
+            <div class="apidoc-ep-head">
+              <span class="apidoc-badge apidoc-get">GET</span>
+              <code>/api/newsletter/history</code>
+              <span class="apidoc-desc">List past newsletters · auth required</span>
+            </div>
+          </div>
+
+          <div class="apidoc-ep">
+            <div class="apidoc-ep-head">
+              <span class="apidoc-badge apidoc-get">GET</span>
+              <code>/api/newsletter/{newsletter_id}/html</code>
+              <span class="apidoc-desc">Saved newsletter HTML · auth required</span>
+            </div>
+          </div>
+
+          <div class="apidoc-ep">
+            <div class="apidoc-ep-head">
+              <span class="apidoc-badge apidoc-post">POST</span>
+              <code>/api/newsletter/preview</code>
+              <span class="apidoc-desc">Preview rendered newsletter HTML · auth required</span>
+            </div>
+          </div>
+
+          <div class="apidoc-ep">
+            <div class="apidoc-ep-head">
+              <span class="apidoc-badge apidoc-post">POST</span>
+              <code>/api/newsletter/{newsletter_id}/resend</code>
+              <span class="apidoc-desc">Resend existing newsletter · auth required</span>
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+      <!-- ── INTELLIGENCE ── -->
+      <div id="apidoc-intel" class="apidoc-section">
+        <div class="apidoc-section-header">Intelligence (Clusters / Spikes)</div>
+        <div class="apidoc-endpoints">
+
+          <div class="apidoc-ep">
+            <div class="apidoc-ep-head">
+              <span class="apidoc-badge apidoc-get">GET</span>
+              <code>/api/clusters/recent</code>
+              <span class="apidoc-desc">Campaign clusters with enrichment · auth required</span>
+            </div>
+            <div class="apidoc-ep-body">
+              <div class="apidoc-params">
+                <div class="apidoc-param"><code>days</code> Lookback window (default 7)</div>
+                <div class="apidoc-param"><code>min_size</code> Minimum cluster size (default 2)</div>
+              </div>
+            </div>
+          </div>
+
+          <div class="apidoc-ep">
+            <div class="apidoc-ep-head">
+              <span class="apidoc-badge apidoc-get">GET</span>
+              <code>/api/spikes</code>
+              <span class="apidoc-desc">Early warning volume spikes · auth required</span>
+            </div>
+          </div>
+
+          <div class="apidoc-ep">
+            <div class="apidoc-ep-head">
+              <span class="apidoc-badge apidoc-get">GET</span>
+              <code>/api/source-scores</code>
+              <span class="apidoc-desc">Source reliability scores · auth required</span>
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+      <!-- ── SOURCE RELIABILITY ── -->
+      <div id="apidoc-sr" class="apidoc-section">
+        <div class="apidoc-section-header">Source Reliability</div>
+        <div class="apidoc-endpoints">
+
+          <div class="apidoc-ep">
+            <div class="apidoc-ep-head">
+              <span class="apidoc-badge apidoc-get">GET</span>
+              <code>/api/sr/entries</code>
+              <span class="apidoc-desc">List source reliability entries</span>
+            </div>
+          </div>
+
+          <div class="apidoc-ep">
+            <div class="apidoc-ep-head">
+              <span class="apidoc-badge apidoc-post">POST</span>
+              <code>/api/sr/entries</code>
+              <span class="apidoc-desc">Add source reliability entry · auth required</span>
+            </div>
+            <div class="apidoc-ep-body">
+              <pre>{ "source_domain": "example.com", "reliability": "A" | "B" | "C" | "D" | "E" | "F", "credibility": 1-6 }</pre>
+            </div>
+          </div>
+
+          <div class="apidoc-ep">
+            <div class="apidoc-ep-head">
+              <span class="apidoc-badge apidoc-put">PUT</span>
+              <code>/api/sr/entries/{entry_id}</code>
+              <span class="apidoc-desc">Update source entry · auth required</span>
+            </div>
+          </div>
+
+          <div class="apidoc-ep">
+            <div class="apidoc-ep-head">
+              <span class="apidoc-badge apidoc-del">DEL</span>
+              <code>/api/sr/entries/{entry_id}</code>
+              <span class="apidoc-desc">Remove source entry · auth required</span>
+            </div>
+          </div>
+
+          <div class="apidoc-ep">
+            <div class="apidoc-ep-head">
+              <span class="apidoc-badge apidoc-get">GET</span>
+              <code>/api/sr/stats</code>
+              <span class="apidoc-desc">Source reliability statistics</span>
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+      <!-- ── NOTIFICATIONS ── -->
+      <div id="apidoc-notif" class="apidoc-section">
+        <div class="apidoc-section-header">Notifications</div>
+        <div class="apidoc-endpoints">
+
+          <div class="apidoc-ep">
+            <div class="apidoc-ep-head">
+              <span class="apidoc-badge apidoc-get">GET</span>
+              <code>/api/notifications</code>
+              <span class="apidoc-desc">List notifications, newest first · per-user read state · auth required</span>
+            </div>
+            <div class="apidoc-ep-body">
+              <div class="apidoc-params">
+                <div class="apidoc-param"><code>unread</code> <code>true</code> to return only unread items</div>
+              </div>
+            </div>
+          </div>
+
+          <div class="apidoc-ep">
+            <div class="apidoc-ep-head">
+              <span class="apidoc-badge apidoc-post">POST</span>
+              <code>/api/notifications/{id}/read</code>
+              <span class="apidoc-desc">Mark one notification read · auth required</span>
+            </div>
+          </div>
+
+          <div class="apidoc-ep">
+            <div class="apidoc-ep-head">
+              <span class="apidoc-badge apidoc-post">POST</span>
+              <code>/api/notifications/read-all</code>
+              <span class="apidoc-desc">Mark all notifications read · auth required</span>
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+      <!-- ── ADMINISTRATION ── -->
+      <div id="apidoc-admin" class="apidoc-section">
+        <div class="apidoc-section-header">Administration</div>
+        <div class="apidoc-endpoints">
+
+          <div class="apidoc-ep">
+            <div class="apidoc-ep-head">
+              <span class="apidoc-badge apidoc-get">GET</span>
+              <code>/api/auth/users</code>
+              <span class="apidoc-desc">List all users · admin required</span>
+            </div>
+          </div>
+
+          <div class="apidoc-ep">
+            <div class="apidoc-ep-head">
+              <span class="apidoc-badge apidoc-post">POST</span>
+              <code>/api/auth/users</code>
+              <span class="apidoc-desc">Create user · admin required</span>
+            </div>
+            <div class="apidoc-ep-body">
+              <pre>{ "username": "...", "password": "...", "role": "analyst" | "admin", "clients": ["client_id"] }</pre>
+            </div>
+          </div>
+
+          <div class="apidoc-ep">
+            <div class="apidoc-ep-head">
+              <span class="apidoc-badge apidoc-post">POST</span>
+              <code>/api/auth/users/{username}/reset-password</code>
+              <span class="apidoc-desc">Reset user password · admin required</span>
+            </div>
+            <div class="apidoc-ep-body">
+              <pre>{ "new_password": "..." }</pre>
+            </div>
+          </div>
+
+          <div class="apidoc-ep">
+            <div class="apidoc-ep-head">
+              <span class="apidoc-badge apidoc-put">PUT</span>
+              <code>/api/auth/users/{username}/role</code>
+              <span class="apidoc-desc">Change user role · admin required</span>
+            </div>
+            <div class="apidoc-ep-body">
+              <pre>{ "role": "analyst" | "admin" | "superadmin" }</pre>
+            </div>
+          </div>
+
+          <div class="apidoc-ep">
+            <div class="apidoc-ep-head">
+              <span class="apidoc-badge apidoc-get">GET</span>
+              <code>/api/clients</code>
+              <span class="apidoc-desc">List all clients · admin required</span>
+            </div>
+          </div>
+
+          <div class="apidoc-ep">
+            <div class="apidoc-ep-head">
+              <span class="apidoc-badge apidoc-post">POST</span>
+              <code>/api/clients</code>
+              <span class="apidoc-desc">Create client · superadmin required</span>
+            </div>
+            <div class="apidoc-ep-body">
+              <pre>{ "name": "ACME Corp", "client_id": "acme" }</pre>
+            </div>
+          </div>
+
+          <div class="apidoc-ep">
+            <div class="apidoc-ep-head">
+              <span class="apidoc-badge apidoc-del">DEL</span>
+              <code>/api/clients/{client_id}</code>
+              <span class="apidoc-desc">Delete client · superadmin required</span>
+            </div>
+          </div>
+
+          <div class="apidoc-ep">
+            <div class="apidoc-ep-head">
+              <span class="apidoc-badge apidoc-get">GET</span>
+              <code>/api/roles</code>
+              <span class="apidoc-desc">List all roles and permissions · auth required</span>
+            </div>
+          </div>
+
+          <div class="apidoc-ep">
+            <div class="apidoc-ep-head">
+              <span class="apidoc-badge apidoc-get">GET</span>
+              <code>/api/scraper/health</code>
+              <span class="apidoc-desc">Scraper pipeline health summary · auth required</span>
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+    </div><!-- end main content -->
+  </div><!-- end flex layout -->
+</div><!-- end tab-apidocs -->
+
+<style>
+  .apidoc-nav-link {
+    display: block;
+    padding: 5px 16px;
+    color: var(--text-dim);
+    text-decoration: none;
+    font-size: 11px;
+    border-left: 2px solid transparent;
+    transition: color .15s, border-color .15s;
+  }
+  .apidoc-nav-link:hover {
+    color: var(--text);
+    border-left-color: var(--accent);
+  }
+  .apidoc-section {
+    margin-bottom: 36px;
+  }
+  .apidoc-section-header {
+    font-family: var(--font-ui);
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: .1em;
+    color: var(--accent3);
+    border-bottom: 1px solid var(--border);
+    padding-bottom: 8px;
+    margin-bottom: 14px;
+  }
+  .apidoc-endpoints {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+  .apidoc-ep {
+    border: 1px solid var(--border);
+    border-radius: 5px;
+    overflow: hidden;
+    font-size: 12px;
+  }
+  .apidoc-ep-head {
+    background: var(--surface2);
+    padding: 8px 12px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    flex-wrap: wrap;
+  }
+  .apidoc-ep-head code {
+    font-family: var(--font-ui);
+    font-size: 12px;
+    color: var(--text);
+  }
+  .apidoc-ep-body {
+    padding: 10px 12px;
+    background: var(--surface);
+  }
+  .apidoc-ep-body pre {
+    margin: 0;
+    background: var(--surface2);
+    padding: 8px;
+    border-radius: 4px;
+    font-size: 11px;
+    overflow-x: auto;
+    font-family: var(--font-ui);
+    color: var(--text);
+  }
+  .apidoc-desc {
+    color: var(--text-dim);
+    font-size: 11px;
+  }
+  .apidoc-note {
+    font-size: 11px;
+    color: var(--text-dim);
+    margin-top: 6px;
+  }
+  .apidoc-note code, .apidoc-ep-body code {
+    background: var(--surface2);
+    padding: 1px 5px;
+    border-radius: 3px;
+    font-family: var(--font-ui);
+    font-size: 11px;
+  }
+  .apidoc-params {
+    display: flex;
+    flex-direction: column;
+    gap: 3px;
+  }
+  .apidoc-param {
+    color: var(--text-dim);
+    font-size: 11px;
+  }
+  .apidoc-param code {
+    background: var(--surface2);
+    padding: 1px 5px;
+    border-radius: 3px;
+    font-family: var(--font-ui);
+    color: var(--text);
+    margin-right: 4px;
+  }
+  .apidoc-badge {
+    padding: 2px 7px;
+    border-radius: 3px;
+    font-size: 10px;
+    font-weight: 700;
+    font-family: var(--font-ui);
+    flex-shrink: 0;
+  }
+  .apidoc-get   { background: #2F81F7; color: #fff; }
+  .apidoc-post  { background: #238636; color: #fff; }
+  .apidoc-put   { background: #9A6700; color: #fff; }
+  .apidoc-patch { background: #6E40C9; color: #fff; }
+  .apidoc-del   { background: #DA3633; color: #fff; }
+</style>

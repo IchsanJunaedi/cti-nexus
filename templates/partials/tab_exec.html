@@ -1,0 +1,255 @@
+  <div id="tab-exec" class="tab-panel">
+
+    <!-- Controls -->
+    <div style="display:flex;align-items:center;gap:14px;margin-bottom:16px;flex-wrap:wrap;">
+      <span style="font-family:var(--font-ui);font-size:11px;color:var(--accent3);text-transform:uppercase;letter-spacing:.08em;">Executive Intelligence Dashboard <span style="color:var(--accent3);font-size:9px;border:1px solid rgba(88,166,255,0.4);padding:1px 6px;border-radius:2px;margin-left:4px">V2</span></span>
+      <!-- Role indicator + admin switcher -->
+      <span id="exec-role-badge" style="font-family:var(--font-ui);font-size:9px;padding:2px 8px;border-radius:2px;background:rgba(88,166,255,0.15);border:1px solid rgba(88,166,255,0.3);color:var(--accent3);display:none;"></span>
+      <select id="exec-role-switcher" style="display:none;font-family:var(--font-ui);font-size:10px;background:var(--surface2);color:var(--accent3);border:1px solid rgba(88,166,255,0.3);border-radius:2px;padding:2px 6px;" onchange="execSwitchRolePreview(this.value)">
+        <option value="">— Preview role —</option>
+        <option value="exec">Exec</option>
+        <option value="analyst">Analyst</option>
+        <option value="soc">SOC</option>
+        <option value="admin">Admin</option>
+      </select>
+      <select id="exec-days" class="filter-select" style="width:auto" onchange="loadExecDashboard()">
+        <option value="30">Last 30 days</option>
+        <option value="90" selected>Last 90 days</option>
+        <option value="180">Last 180 days</option>
+        <option value="365">Last 365 days</option>
+      </select>
+      <label style="font-family:var(--font-ui);font-size:10px;color:var(--text-dim);cursor:pointer;display:flex;align-items:center;gap:5px;white-space:nowrap" title="Incident Types Only — Excludes non-incident content such as vendor advisories, product news, and general IT articles based on article category. Recommended baseline for all threat analysis. Use this as your default view.">
+        <input type="checkbox" id="exec-incident-only" checked onchange="loadExecDashboard()"> Incident Types Only
+      </label>
+      <label style="font-family:var(--font-ui);font-size:10px;color:rgba(61,201,175,0.8);cursor:pointer;display:flex;align-items:center;gap:5px;white-space:nowrap" title="AI-Verified Only — Restricts to articles where the AI confirmed a specific, named security incident with stated impact (breach, ransomware, disruption). Highest signal-to-noise ratio. Note: only applies to articles ingested after the AI classifier was deployed — older articles are excluded.">
+        <input type="checkbox" id="exec-confirmed-only" onchange="loadExecDashboard()"> AI-Verified Only
+      </label>
+      <button class="btn-apply" onclick="loadExecDashboard()">REFRESH</button>
+      <button class="btn-reset" id="exec-save-watchlist" onclick="saveExecWatchlist()" style="border-color:rgba(47,129,247,0.3);color:var(--accent)" title="Save current filter settings to browser storage"><i data-ic="save"></i> SAVE VIEW</button>
+      <button class="btn-reset" id="exec-clear-watchlist" onclick="clearExecWatchlist()" style="display:none;border-color:rgba(139,148,158,0.4);color:var(--text-dim)" title="Clear saved view"><i data-ic="x"></i> CLEAR SAVED</button>
+      <button class="btn-reset" id="exec-export-csv" onclick="exportExecCsv()" style="margin-left:auto;border-color:rgba(61,201,175,0.4);color:#3DC9AF" disabled>EXPORT CSV</button>
+      <div data-section="exec_brief_button" style="display:inline">
+        <button class="btn-reset" id="exec-generate-brief" onclick="generateExecBrief()" style="border-color:rgba(110,124,255,0.4);color:#6E7CFF" title="AI-generate executive briefing"><i data-ic="sparkles"></i> GENERATE BRIEF</button>
+      </div>
+    </div>
+
+    <!-- T1-2: Spike Alert Banner -->
+    <div data-section="spike_alerts">
+      <div id="exec-spike-banner" style="display:none;margin-bottom:16px;"></div>
+    </div>
+
+    <!-- T1-1: KPI Cards -->
+    <div data-section="kpis">
+      <div class="exec-kpis" id="exec-kpis">
+        <div class="exec-kpi">
+          <div class="exec-kpi-val" id="exec-kpi-total">—</div>
+          <div class="exec-kpi-label">Total Incidents</div>
+          <div class="exec-kpi-trend" id="exec-kpi-total-trend"></div>
+        </div>
+        <div class="exec-kpi">
+          <div class="exec-kpi-val" id="exec-kpi-sectors">—</div>
+          <div class="exec-kpi-label">Active Sectors</div>
+          <div class="exec-kpi-trend" id="exec-kpi-sectors-trend"></div>
+        </div>
+        <div class="exec-kpi">
+          <div class="exec-kpi-val" id="exec-kpi-tas">—</div>
+          <div class="exec-kpi-label">Threat Actors</div>
+          <div class="exec-kpi-trend" id="exec-kpi-tas-trend"></div>
+        </div>
+        <div class="exec-kpi">
+          <div class="exec-kpi-val" id="exec-kpi-cve-crit">—</div>
+          <div class="exec-kpi-label">Critical CVEs</div>
+        </div>
+        <div class="exec-kpi" style="border-color:rgba(218,54,51,0.3);">
+          <div class="exec-kpi-val" id="exec-kpi-top-risk" style="color:var(--red);font-size:14px;line-height:1.3;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">—</div>
+          <div class="exec-kpi-label" style="color:rgba(218,54,51,0.7)">Highest Risk Sector</div>
+          <div class="exec-kpi-trend" id="exec-kpi-top-risk-score" style="color:rgba(218,54,51,0.6)"></div>
+        </div>
+        <div class="exec-kpi" style="border-color:rgba(88,166,255,0.3);">
+          <div class="exec-kpi-val" id="exec-kpi-spike-count" style="color:var(--accent3)">—</div>
+          <div class="exec-kpi-label" style="color:rgba(88,166,255,0.7)">Active Spikes</div>
+        </div>
+        <div class="exec-kpi" style="border-color:rgba(61,201,175,0.3);" title="Confirmed Incident Rate: % of articles where GPT-4o verified a specific named victim or confirmed impact. null = field not yet populated on older articles.">
+          <div class="exec-kpi-val" id="exec-kpi-confirmed-rate" style="color:var(--green)">—</div>
+          <div class="exec-kpi-label" style="color:rgba(61,201,175,0.7)">Confirmed Incident Rate</div>
+          <div class="exec-kpi-trend" id="exec-kpi-confirmed-rate-sub" style="color:rgba(61,201,175,0.5)"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Ransomware Group Activity Treemap -->
+    <div class="exec-charts-row" style="margin-top:16px;">
+      <div class="exec-chart-card" style="grid-column:1/3">
+        <div class="exec-section-title" style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px;margin-bottom:8px">
+          <span>RANSOMWARE GROUP ACTIVITY (TREEMAP) <span style="font-size:9px;color:var(--text-dim)">size = victims · color = change vs prior period</span></span>
+          <div class="rw-tm-ranges" id="rwtm-ranges">
+            <button data-days="1">1D</button><button data-days="7" class="active">1W</button><button data-days="30">1M</button><button data-days="90">3M</button><button data-days="365">1Y</button>
+          </div>
+        </div>
+        <div class="rw-tm-legend" id="rwtm-legend"></div>
+        <div class="rw-tm-wrap" id="rwtm-map" style="position:relative;width:100%;height:560px;margin-top:8px"></div>
+      </div>
+    </div>
+
+    <!-- T1-1: Sector Risk Matrix + T1-3: TA Leaderboard w/ NEW badge -->
+    <div data-section="sector_risk">
+      <div class="exec-charts-row">
+        <div class="exec-chart-card">
+          <div class="exec-chart-title">SECTOR RISK MATRIX <span style="font-size:9px;color:var(--text-dim)">(volume · trend · spike weighted)</span></div>
+          <div id="exec-sector-risk-matrix" style="margin-top:8px;display:flex;flex-direction:column;gap:6px;"></div>
+        </div>
+        <div data-section="ta_leaderboard" class="exec-chart-card">
+          <div class="exec-chart-title">TOP THREAT ACTORS <span style="font-size:9px;color:var(--text-dim)">(NEW = first appearance this period)</span></div>
+          <div class="ta-leaderboard" id="exec-ta-leaderboard" style="margin-top:6px;"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Sector trend + Country trend -->
+    <div class="exec-charts-row" style="margin-top:16px;">
+      <div class="exec-chart-card">
+        <div class="exec-chart-title">INCIDENTS BY SECTOR (MONTHLY)</div>
+        <div style="position:relative;height:260px"><canvas id="exec-chart-sector"></canvas></div>
+      </div>
+      <div class="exec-chart-card">
+        <div class="exec-chart-title">INCIDENTS BY COUNTRY (MONTHLY)</div>
+        <div style="position:relative;height:260px"><canvas id="exec-chart-country"></canvas></div>
+      </div>
+    </div>
+
+    <!-- T1-4: Enhanced CVE Table + Incident type -->
+    <div class="exec-charts-row" style="margin-top:16px;">
+      <div class="exec-chart-card">
+        <div class="exec-chart-title">CVE EXPOSURE · TECH STACK <span style="font-size:9px;color:var(--text-dim)">(CVSS · PoC)</span></div>
+        <table class="cve-exposure-table" id="exec-cve-table">
+          <thead>
+            <tr>
+              <th>Technology</th>
+              <th>Total</th>
+              <th>Critical</th>
+              <th>High</th>
+              <th>Medium</th>
+              <th title="Highest CVSS base score in group">CVSS</th>
+              <th title="CVEs with public PoC/exploit code">PoC</th>
+            </tr>
+          </thead>
+          <tbody></tbody>
+        </table>
+      </div>
+      <div class="exec-chart-card">
+        <div class="exec-chart-title">INCIDENT TYPE BREAKDOWN</div>
+        <div style="position:relative;height:260px"><canvas id="exec-chart-newstype"></canvas></div>
+      </div>
+    </div>
+
+    <!-- Sector heatmap -->
+    <div class="exec-charts-row" style="margin-top:16px;align-items:start">
+      <div class="exec-chart-card" style="grid-column:1/3">
+        <div class="exec-section-title" style="margin-bottom:12px">SECTOR ACTIVITY HEATMAP (SECTOR × MONTH)</div>
+        <div class="heatmap-wrap">
+          <table class="heatmap-table" id="exec-sector-heatmap"></table>
+        </div>
+      </div>
+    </div>
+
+    <!-- ── TIER 2 SECTION DIVIDER ── -->
+    <div style="margin:24px 0 16px;padding:10px 0 8px;border-top:1px solid var(--border);border-bottom:1px solid var(--border);display:flex;align-items:center;gap:12px;">
+      <span style="font-family:var(--font-ui);font-size:10px;color:var(--accent3);text-transform:uppercase;letter-spacing:.1em;"><i data-ic="git-merge"></i> Intelligence Depth (Tier 2)</span>
+    </div>
+
+    <!-- T2-10: Incident Type Trend (stacked bar) + T2-7: Top TTPs -->
+    <div class="exec-charts-row">
+      <div class="exec-chart-card">
+        <div class="exec-chart-title">INCIDENT TYPE TREND (MONTHLY) <span style="font-size:9px;color:var(--text-dim)">replaces static donut</span></div>
+        <div style="position:relative;height:280px"><canvas id="exec-chart-newstype-trend"></canvas></div>
+      </div>
+      <div class="exec-chart-card">
+        <div class="exec-chart-title">TOP TACTICS &amp; TECHNIQUES (TTPs) <span style="font-size:9px;color:var(--text-dim)">MITRE ATT&amp;CK</span></div>
+        <div id="exec-ttp-list" style="margin-top:6px;display:flex;flex-direction:column;gap:5px;max-height:280px;overflow-y:auto;"></div>
+      </div>
+    </div>
+
+    <!-- T2-8: TA Velocity + T2-6: Victim Country Trend -->
+    <div class="exec-charts-row" style="margin-top:16px;">
+      <div class="exec-chart-card">
+        <div class="exec-chart-title">THREAT ACTOR VELOCITY <span style="font-size:9px;color:var(--text-dim)">(last month vs avg prev · % change)</span></div>
+        <div id="exec-ta-velocity" style="margin-top:8px;display:flex;flex-direction:column;gap:6px;"></div>
+      </div>
+      <div class="exec-chart-card">
+        <div class="exec-chart-title">VICTIM GEOGRAPHY (MONTHLY) <span style="font-size:9px;color:var(--text-dim)">victim_countries only</span></div>
+        <div style="position:relative;height:260px"><canvas id="exec-chart-victim-country"></canvas></div>
+      </div>
+    </div>
+
+    <!-- T2-11: Sector × Actor heatmap + T2-9: Sector Co-occurrence -->
+    <div class="exec-charts-row" style="margin-top:16px;align-items:start">
+      <div class="exec-chart-card">
+        <div class="exec-chart-title">SECTOR × THREAT ACTOR MATRIX <span style="font-size:9px;color:var(--text-dim)">(co-targeting frequency)</span></div>
+        <div style="overflow-x:auto;">
+          <table class="heatmap-table" id="exec-sector-actor-matrix"></table>
+        </div>
+      </div>
+      <div class="exec-chart-card">
+        <div class="exec-chart-title">SECTOR CO-TARGETING (SUPPLY CHAIN SIGNAL) <span style="font-size:9px;color:var(--text-dim)">sectors hit together</span></div>
+        <div id="exec-sector-cooccur" style="margin-top:8px;display:flex;flex-direction:column;gap:5px;max-height:320px;overflow-y:auto;"></div>
+      </div>
+    </div>
+
+    <!-- ── ROLE-SPECIFIC SECTIONS ── -->
+
+    <!-- Source Reliability Spread (analyst + admin) -->
+    <div data-section="source_reliability_spread" style="display:none;margin-top:16px;">
+      <div class="exec-charts-row">
+        <div class="exec-chart-card">
+          <div class="exec-chart-title">SOURCE RELIABILITY SPREAD <span style="font-size:9px;color:var(--text-dim)">Admiralty grading A–F</span></div>
+          <div style="position:relative;height:260px"><canvas id="exec-chart-sr-spread"></canvas></div>
+        </div>
+        <!-- Cluster List (analyst + admin) -->
+        <div data-section="cluster_list" style="display:none;" class="exec-chart-card">
+          <div class="exec-chart-title">RECENT CAMPAIGN CLUSTERS <span style="font-size:9px;color:var(--text-dim)">last 30d</span></div>
+          <div id="exec-cluster-list" style="margin-top:6px;overflow-y:auto;max-height:260px;">
+            <div style="color:var(--text-dim);font-family:var(--font-ui);font-size:10px;padding:12px 0;">No data yet — feature pending.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- FP Feedback Queue (analyst + admin) -->
+    <div data-section="fp_feedback_queue" style="display:none;margin-top:16px;">
+      <div class="exec-chart-card" style="grid-column:1/3">
+        <div class="exec-chart-title">FALSE POSITIVE REVIEW QUEUE <span style="font-size:9px;color:var(--text-dim)">IOCs with confidence 40–75%</span></div>
+        <div id="exec-fp-queue">
+          <div style="color:var(--text-dim);font-family:var(--font-ui);font-size:10px;padding:12px 0;">No data yet — feature pending.</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Critical CVE Feed (soc + admin) -->
+    <div data-section="critical_cve_feed" style="display:none;margin-top:16px;">
+      <div class="exec-chart-card" style="grid-column:1/3">
+        <div class="exec-chart-title">CRITICAL CVE FEED <span style="font-size:9px;color:var(--text-dim)">EPSS ≥ 50% or CISA KEV</span></div>
+        <div id="exec-critical-cve">
+          <div style="color:var(--text-dim);font-family:var(--font-ui);font-size:10px;padding:12px 0;">No data yet — feature pending.</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- IOC Enrichment Hits (analyst + soc + admin) -->
+    <div data-section="ioc_enrichment_hits" style="display:none;margin-top:16px;">
+      <div class="exec-chart-card">
+        <div class="exec-chart-title">IOC ENRICHMENT HITS <span style="font-size:9px;color:var(--text-dim)">recent high-confidence IOCs</span></div>
+        <div id="exec-ioc-hits" style="color:var(--text-dim);font-family:var(--font-ui);font-size:10px;padding:12px 0;">No data yet — feature pending.</div>
+      </div>
+    </div>
+
+    <!-- Sigma Export Quick (soc + admin) -->
+    <div data-section="sigma_export_quick" style="display:none;margin-top:16px;">
+      <div class="exec-chart-card">
+        <div class="exec-chart-title">SIGMA RULE EXPORT <span style="font-size:9px;color:var(--text-dim)">quick export</span></div>
+        <div style="color:var(--text-dim);font-family:var(--font-ui);font-size:10px;padding:12px 0;">Coming soon — Sigma export feature pending deployment.</div>
+      </div>
+    </div>
+
+  </div><!-- end #tab-exec -->
+
+  <!-- ══════════ USER MANAGEMENT TAB ══════════ -->

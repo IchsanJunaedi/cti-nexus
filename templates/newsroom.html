@@ -1,0 +1,2751 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CTI Nexus — Threat Intelligence Platform</title>
+<link rel="icon" type="image/png" href="/static/img/favicon.png">
+<style>
+  :root {
+    --bg:           #0D1117;
+    --surface:      #161B22;
+    --surface2:     #21262D;
+    --border:       #30363D;
+    --border-bright:#58A6FF;
+    --accent:       #2F81F7;
+    --accent3:      #58A6FF;
+    --text:         #E6EDF3;
+    --text-dim:     #8B949E;
+    --text-bright:  #E6EDF3;
+    --green:        #3DC9AF;
+    --red:          #DA3633;
+    --orange:       #E3B341;
+  }
+
+  * {
+    margin: 0; padding: 0; box-sizing: border-box;
+    scrollbar-color: var(--border-bright) var(--surface);
+    scrollbar-width: thin;
+  }
+  ::-webkit-scrollbar { width: 10px; height: 10px; }
+  ::-webkit-scrollbar-track { background: var(--surface); }
+  ::-webkit-scrollbar-thumb { background: var(--border-bright); border-radius: 6px; border: 2px solid var(--surface); }
+  ::-webkit-scrollbar-thumb:hover { background: var(--accent); }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'Inter', sans-serif;
+    font-size: 14px;
+    min-height: 100vh;
+    overflow-x: hidden;
+  }
+
+  body::before {
+    content: '';
+    position: fixed;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background:
+      radial-gradient(ellipse 80% 50% at 50% -20%, rgba(47,129,247,0.04) 0%, transparent 60%),
+      radial-gradient(ellipse 50% 30% at 90% 80%, rgba(218,54,51,0.03) 0%, transparent 50%);
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  .scanline {
+    position: fixed;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background: repeating-linear-gradient(0deg, transparent, transparent 2px, rgba(0,0,0,0.03) 2px, rgba(0,0,0,0.03) 4px);
+    pointer-events: none;
+    z-index: 1000;
+  }
+
+  .app {
+    position: relative;
+    z-index: 1;
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 0 16px 40px;
+  }
+
+  /* ── HEADER ── */
+  .header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 18px 0 0;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .header-left { display: flex; align-items: baseline; gap: 12px; }
+
+  .title {
+    font-family: var(--font-ui);
+    font-size: 22px;
+    color: var(--accent);
+    letter-spacing: 0.15em;
+    text-shadow: 0 0 20px rgba(47,129,247,0.4);
+    text-transform: uppercase;
+  }
+
+  .title span { color: var(--text-dim); font-size: 12px; letter-spacing: 0.05em; }
+
+  .version-badge {
+    font-family: var(--font-ui);
+    font-size: 10px;
+    color: var(--text-dim);
+    border: 1px solid var(--border-bright);
+    padding: 2px 8px;
+    border-radius: 2px;
+    letter-spacing: 0.1em;
+    background: rgba(3,47,48,0.6);
+    cursor: pointer;
+    transition: color .15s, border-color .15s;
+  }
+  .version-badge:hover { color: var(--accent); border-color: var(--accent); }
+
+  /* ── Changelog modal ── */
+  .cl-version-list { display: flex; flex-direction: column; gap: 4px; }
+  .cl-version-row {
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 10px 14px; border: 1px solid var(--border);
+    border-radius: 2px; cursor: pointer; transition: background .15s, border-color .15s;
+    font-family: var(--font-ui);
+  }
+  .cl-version-row:hover { background: var(--surface2); border-color: var(--border-bright); }
+  .cl-version-row .cl-ver { font-size: 13px; color: var(--accent); }
+  .cl-version-row .cl-date { font-size: 10px; color: var(--text-dim); }
+  .cl-content { font-family: var(--font-ui); font-size: 11px; color: var(--text); line-height: 1.8; }
+  .cl-content h3 { font-size: 12px; color: var(--accent); margin: 16px 0 6px; text-transform: uppercase; letter-spacing: .08em; }
+  .cl-content h4 { font-size: 11px; color: var(--text); margin: 12px 0 4px; }
+  .cl-content ul { padding-left: 18px; margin: 4px 0 8px; }
+  .cl-content li { margin-bottom: 4px; color: var(--text-dim); }
+  .cl-content strong { color: var(--text); }
+  .cl-content code { background: var(--surface2); border: 1px solid var(--border); padding: 1px 4px; border-radius: 2px; font-size: 10px; color: var(--accent2); }
+
+  .header-status { display: flex; align-items: center; gap: 16px; }
+
+  .status-dot {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-family: var(--font-ui);
+    font-size: 10px;
+    color: var(--text-dim);
+  }
+
+  .status-dot::before {
+    content: '';
+    width: 6px; height: 6px;
+    border-radius: 50%;
+    background: var(--green);
+    box-shadow: 0 0 6px var(--green);
+    animation: pulse 2s infinite;
+  }
+
+  @keyframes pulse { 0%,100%{opacity:1}50%{opacity:.4} }
+
+  /* ── APP BODY (sidebar + main) ── */
+  .app-body {
+    display: flex;
+    align-items: flex-start;
+    gap: 0;
+  }
+
+  .main-content {
+    flex: 1;
+    min-width: 0;
+  }
+
+  /* ── TABS (left sidebar) ── */
+  .tabs {
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    width: 220px;
+    flex-shrink: 0;
+    border-bottom: none;
+    border-right: 1px solid var(--border);
+    position: sticky;
+    top: 0;
+    max-height: 100vh;
+    overflow-y: auto;
+    overflow-x: hidden;
+    scrollbar-width: thin;
+  }
+  .tabs::-webkit-scrollbar { width: 4px; }
+  .tabs::-webkit-scrollbar-thumb { background: var(--border); border-radius: 2px; }
+
+  .tab {
+    font-family: 'Inter', sans-serif;
+    font-weight: 600;
+    font-size: 13px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--text-dim);
+    padding: 12px 16px;
+    cursor: pointer;
+    border: none;
+    background: none;
+    border-left: 2px solid transparent;
+    border-bottom: none;
+    transition: all .2s;
+    display: flex;
+    align-items: center;
+    gap: 7px;
+    white-space: nowrap;
+    flex-shrink: 0;
+    text-align: left;
+    width: 100%;
+  }
+
+  .tab:hover { color: var(--text); }
+  .tab.active { color: var(--accent); border-left: 2px solid var(--accent); border-bottom: none; background: rgba(47,129,247,0.06); }
+  a.tab { display: flex; text-decoration: none; }
+
+  /* below 768px: fold sidebar back into a horizontal scrolling top bar */
+  @media (max-width: 768px) {
+    .app-body { flex-direction: column; }
+    .tabs {
+      flex-direction: row;
+      width: 100%;
+      max-height: none;
+      position: static;
+      overflow-x: auto;
+      overflow-y: hidden;
+      border-right: none;
+      border-bottom: 1px solid var(--border);
+    }
+    .tab { border-left: none; border-bottom: 2px solid transparent; width: auto; }
+    .tab.active { border-left: none; border-bottom: 2px solid var(--accent); background: none; }
+  }
+  @media (max-width: 600px) {
+    .tab { padding: 9px 10px; font-size: 11px; letter-spacing: 0.04em; gap: 4px; }
+    .tab-icon { width: 12px; height: 12px; }
+  }
+
+  .tab-icon {
+    width: 14px;
+    height: 14px;
+    flex-shrink: 0;
+    fill: none;
+    stroke: currentColor;
+    stroke-width: 1.8;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+  }
+
+  .tab-count {
+    display: inline-block;
+    background: rgba(47,129,247,0.1);
+    color: var(--accent);
+    font-size: 9px;
+    padding: 1px 5px;
+    border-radius: 2px;
+    margin-left: 6px;
+    font-family: var(--font-ui);
+  }
+
+  /* ── FILTER BAR ── */
+  .filter-bar {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-top: none;
+    padding: 14px 20px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    flex-wrap: wrap;
+  }
+
+  .filter-label {
+    font-family: var(--font-ui);
+    font-size: 10px;
+    color: var(--text-dim);
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+  }
+
+  .filter-sep { font-family: var(--font-ui); font-size: 10px; color: var(--text-dim); }
+
+  .filter-group { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; flex: 1; }
+
+  .filter-select {
+    background: var(--surface2);
+    border: 1px solid var(--border-bright);
+    color: var(--text);
+    font-family: var(--font-ui);
+    font-size: 11px;
+    padding: 6px 24px 6px 10px;
+    border-radius: 2px;
+    outline: none;
+    cursor: pointer;
+    appearance: none;
+    -webkit-appearance: none;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6' viewBox='0 0 10 6'%3E%3Cpath d='M1 1l4 4 4-4' stroke='%235a6a7a' stroke-width='1.5' fill='none'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 8px center;
+    transition: border-color .2s;
+    min-width: 140px;
+  }
+
+  .filter-select:hover, .filter-select:focus { border-color: var(--accent); }
+
+  /* ── Instant custom tooltip for password info button ── */
+  .pw-info-wrap { position: relative; display: inline-flex; align-items: center; margin-left: 5px; }
+  .pw-info-btn {
+    display: inline-flex; align-items: center; justify-content: center;
+    width: 14px; height: 14px; border-radius: 50%;
+    background: rgba(47,129,247,0.15); border: 1px solid rgba(47,129,247,0.4);
+    color: var(--accent); font-size: 9px; font-family: var(--font-ui);
+    cursor: default; flex-shrink: 0;
+  }
+  .pw-tooltip {
+    display: none; position: absolute; left: 20px; top: 50%; transform: translateY(-50%);
+    background: var(--surface2); border: 1px solid var(--border-bright);
+    color: var(--text-bright); font-family: var(--font-ui); font-size: 10px;
+    padding: 5px 9px; border-radius: 3px; white-space: nowrap; z-index: 9999;
+    pointer-events: none; box-shadow: 0 4px 12px rgba(0,0,0,0.4);
+  }
+  .pw-info-wrap:hover .pw-tooltip { display: block; }
+
+  .filter-input {
+    background: var(--surface2);
+    border: 1px solid var(--border-bright);
+    color: var(--text);
+    font-family: var(--font-ui);
+    font-size: 11px;
+    padding: 6px 10px;
+    border-radius: 2px;
+    outline: none;
+    width: 130px;
+    transition: border-color .2s;
+  }
+
+  .filter-input:focus { border-color: var(--accent); }
+  .filter-input::placeholder { color: var(--text-dim); }
+  input[type="date"].filter-input::-webkit-calendar-picker-indicator { filter: invert(0.4); cursor: pointer; }
+
+  .btn-apply {
+    background: var(--accent);
+    color: #000;
+    border: none;
+    font-family: var(--font-ui);
+    font-size: 12px;
+    letter-spacing: 0.12em;
+    padding: 7px 7px;
+    cursor: pointer;
+    text-transform: uppercase;
+    border-radius: 2px;
+    transition: all .2s;
+    margin-left: auto;
+  }
+
+  .btn-apply:hover { background: #fff; box-shadow: 0 0 12px rgba(47,129,247,0.4); }
+
+  .btn-reset {
+    background: transparent;
+    color: var(--text-dim);
+    border: 1px solid var(--border-bright);
+    font-family: var(--font-ui);
+    font-size: 11px;
+    padding: 6px 14px;
+    cursor: pointer;
+    border-radius: 2px;
+    transition: all .2s;
+  }
+
+  .btn-reset:hover { color: var(--text); border-color: var(--text-dim); }
+
+  /* ── TAB PANELS ── */
+  .tab-panel { display: none; }
+  .tab-panel.active { display: block; }
+
+  /* ── NEWS GRID ── */
+  .news-grid-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr 340px;
+    gap: 1px;
+    background: var(--border);
+    margin-top: 1px;
+  }
+
+  .news-grid-row-bottom {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 1px;
+    background: var(--border);
+    margin-top: 1px;
+  }
+
+  /* ── NEWS PANEL ── */
+  .news-panel {
+    background: var(--surface);
+    display: flex;
+    flex-direction: column;
+    min-height: 380px;
+  }
+
+  .panel-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 12px 16px;
+    border-bottom: 1px solid var(--border);
+    background: var(--surface2);
+    flex-shrink: 0;
+  }
+
+  .panel-title {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-family: var(--font-ui);
+    font-size: 12px;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--text-bright);
+  }
+
+  .panel-icon { width: 6px; height: 6px; border-radius: 50%; }
+  .panel-icon.apac       { background: var(--accent);  box-shadow: 0 0 6px var(--accent);  }
+  .panel-icon.global     { background: var(--accent3); box-shadow: 0 0 6px var(--accent3); }
+  .panel-icon.ransomware { background: var(--red);     box-shadow: 0 0 6px var(--red);     }
+  .panel-icon.indonesia  { background: var(--green);   box-shadow: 0 0 6px var(--green);   }
+
+  .panel-meta { display: flex; align-items: center; gap: 8px; }
+
+  .panel-count { font-family: var(--font-ui); font-size: 9px; color: var(--text-dim); }
+
+  .panel-refresh {
+    background: none;
+    border: none;
+    color: var(--text-dim);
+    cursor: pointer;
+    font-size: 12px;
+    padding: 2px;
+    transition: color .2s;
+    line-height: 1;
+  }
+
+  .panel-refresh:hover { color: var(--accent); }
+  .panel-refresh.spinning { animation: spin .7s linear infinite; color: var(--accent); }
+  @keyframes spin { from{transform:rotate(0deg)} to{transform:rotate(360deg)} }
+
+  /* ── NEWS ITEMS ── */
+  .news-list { flex: 1; overflow-y: auto; padding: 0; }
+  .news-list::-webkit-scrollbar { width: 3px; }
+  .news-list::-webkit-scrollbar-track { background: transparent; }
+  .news-list::-webkit-scrollbar-thumb { background: var(--border-bright); }
+
+  .news-item {
+    padding: 12px 16px;
+    border-bottom: 1px solid var(--border);
+    cursor: pointer;
+    transition: background .15s;
+    animation: fadeSlideIn .25s ease both;
+    display: block;
+  }
+
+  .news-item:hover { background: var(--surface2); }
+
+  @keyframes fadeSlideIn { from{opacity:0;transform:translateY(5px)} to{opacity:1;transform:translateY(0)} }
+
+  .news-item-header { display: flex; align-items: flex-start; gap: 8px; margin-bottom: 5px; }
+
+  .news-headline {
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--text-bright);
+    line-height: 1.4;
+    flex: 1;
+  }
+
+  .news-item:hover .news-headline { color: var(--accent); }
+
+  .news-meta { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
+
+  .news-tag {
+    font-family: var(--font-ui);
+    font-size: 9px;
+    color: var(--text-dim);
+    background: rgba(3,47,48,0.8);
+    padding: 1px 6px;
+    border-radius: 1px;
+    border: 1px solid var(--border);
+  }
+
+  .news-time  { font-family: var(--font-ui); font-size: 9px; color: var(--text-dim); }
+  .news-source{ font-family: var(--font-ui); font-size: 9px; color: var(--text-dim); margin-left: auto; }
+
+  .ioc-badge {
+    font-family: var(--font-ui);
+    font-size: 9px;
+    padding: 1px 6px;
+    border-radius: 1px;
+    background: rgba(255, 107, 53, 0.12);
+    border: 1px solid rgba(255, 107, 53, 0.35);
+    color: var(--orange);
+    letter-spacing: 0.04em;
+  }
+
+  .cve-tp-badge {
+    font-family: var(--font-ui);
+    font-size: 9px;
+    padding: 1px 6px;
+    border-radius: 1px;
+    background: rgba(218, 54, 51, 0.15);
+    border: 1px solid rgba(218, 54, 51, 0.45);
+    color: var(--red);
+    letter-spacing: 0.04em;
+    font-weight: 600;
+  }
+
+  /* ── RANSOMWARE ITEMS ── */
+  .rw-item {
+    padding: 10px 16px;
+    border-bottom: 1px solid var(--border);
+    cursor: pointer;
+    transition: background .15s;
+    animation: fadeSlideIn .25s ease both;
+    display: block;
+  }
+
+  .rw-item:hover { background: var(--surface2); }
+
+  .rw-group-name {
+    font-family: var(--font-ui);
+    font-size: 11px;
+    color: var(--red);
+    letter-spacing: 0.05em;
+    margin-bottom: 3px;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    text-transform: uppercase;
+  }
+
+  .rw-group-name::before { content: ''; width: 5px; height: 5px; border-right: 1.5px solid currentColor; border-bottom: 1.5px solid currentColor; transform: rotate(-45deg); display: inline-block; margin-right: 3px; }
+
+  .rw-victim { font-size: 12px; color: var(--text); margin-bottom: 4px; line-height: 1.3; }
+
+  .rw-detail { display: flex; gap: 8px; flex-wrap: wrap; }
+
+  .rw-badge {
+    font-family: var(--font-ui);
+    font-size: 9px;
+    color: var(--text-dim);
+    background: rgba(39,77,96,0.9);
+    padding: 1px 6px;
+    border-radius: 1px;
+    border: 1px solid var(--border);
+  }
+
+  /* ── INDONESIA GRID ── */
+  .indonesia-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 0;
+    flex: 1;
+  }
+
+  .indonesia-grid .news-item { border-right: 1px solid var(--border); }
+  .indonesia-grid .news-item:nth-child(2n) { border-right: none; }
+
+  /* ── PANEL FOOTER / PAGER ── */
+  .panel-footer {
+    border-top: 1px solid var(--border);
+    background: var(--surface2);
+    padding: 8px 16px;
+    flex-shrink: 0;
+    min-height: 36px;
+  }
+
+  .pager { display: flex; align-items: center; justify-content: center; gap: 6px; }
+
+  .pager-btn {
+    background: transparent;
+    border: 1px solid var(--border-bright);
+    color: var(--text-dim);
+    font-family: var(--font-ui);
+    font-size: 10px;
+    padding: 3px 8px;
+    cursor: pointer;
+    border-radius: 2px;
+    transition: all .15s;
+    line-height: 1.4;
+  }
+
+  .pager-btn:hover:not(:disabled) { border-color: var(--accent); color: var(--accent); }
+  .pager-btn:disabled { opacity: .3; cursor: default; }
+
+  .pager-info {
+    font-family: var(--font-ui);
+    font-size: 10px;
+    color: var(--text-dim);
+    letter-spacing: 0.05em;
+    min-width: 80px;
+    text-align: center;
+  }
+
+  .pager-info strong { color: var(--accent); }
+
+  /* ── CVE TAB ── */
+  .cve-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 1px;
+    background: var(--border);
+    margin-top: 1px;
+  }
+
+  .cve-stat-box { background: var(--surface); padding: 20px 16px; display: flex; flex-direction: column; gap: 4px; }
+  .cve-stat-label { font-family: var(--font-ui); font-size: 9px; color: var(--text-dim); text-transform: uppercase; letter-spacing: 0.1em; }
+  .cve-stat-value { font-family: var(--font-ui); font-size: 28px; line-height: 1; }
+  .cve-stat-value.crit { color: var(--red); }
+  .cve-stat-value.high { color: var(--orange); }
+  .cve-stat-value.med  { color: var(--accent3); }
+  .cve-stat-value.info { color: var(--accent); }
+  .cve-stat-sub { font-family: var(--font-ui); font-size: 9px; color: var(--text-dim); }
+
+  .cve-table-wrapper { background: var(--surface); margin-top: 1px; overflow-x: auto; }
+
+  .cve-table { width: 100%; border-collapse: collapse; font-size: 13px; }
+
+  .cve-table th {
+    background: var(--surface2);
+    padding: 10px 14px;
+    text-align: left;
+    font-family: var(--font-ui);
+    font-size: 9px;
+    color: var(--text-dim);
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    border-bottom: 1px solid var(--border);
+    white-space: nowrap;
+  }
+
+  .cve-table td { padding: 10px 14px; border-bottom: 1px solid var(--border); vertical-align: middle; }
+  .cve-table tr:hover td { background: var(--surface2); cursor: pointer; }
+  .cve-th-sortable { cursor: pointer; user-select: none; white-space: nowrap; }
+  .cve-th-sortable:hover { color: var(--accent); }
+  .cve-sort-ind { font-size: 10px; opacity: 0.5; margin-left: 3px; }
+  .cve-th-sortable.sort-active .cve-sort-ind { opacity: 1; color: var(--accent); }
+
+  /* ── LOADING / EMPTY ── */
+  .empty-state { display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 40px 20px; color: var(--text-dim); gap: 8px; }
+  .empty-icon  { font-size: 24px; opacity: .3; }
+  .empty-text  { font-family: var(--font-ui); font-size: 11px; letter-spacing: 0.05em; }
+
+  .loading-state { display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 40px 20px; color: var(--text-dim); gap: 8px; }
+  .loading-spinner { width: 20px; height: 20px; border: 2px solid var(--border-bright); border-top-color: var(--accent); border-radius: 50%; animation: spin .7s linear infinite; }
+  .loading-text { font-family: var(--font-ui); font-size: 11px; letter-spacing: 0.05em; }
+
+  /* ── ARTICLE MODAL ── */
+  .modal-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(4, 10, 20, 0.78);
+    z-index: 9800;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+    opacity: 0;
+    visibility: hidden;
+    pointer-events: none;
+    transition: opacity .16s ease, visibility .16s ease;
+  }
+
+  .modal-overlay.open {
+    opacity: 1;
+    visibility: visible;
+    pointer-events: auto;
+  }
+
+  .modal-overlay.auth-gate {
+    background: rgba(4, 10, 20, 0.82);
+  }
+
+  .modal-card {
+    background: var(--surface);
+    border: 1px solid var(--border-bright);
+    border-radius: 3px;
+    width: 100%;
+    max-width: 680px;
+    max-height: 82vh;
+    display: flex;
+    flex-direction: column;
+    box-shadow: 0 0 60px rgba(47,129,247,0.07), 0 20px 60px rgba(0,0,0,0.6);
+    transform: translateY(12px);
+    transition: transform .2s;
+  }
+
+  .modal-overlay.open .modal-card { transform: translateY(0); }
+
+  .modal-head {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    padding: 14px 18px 10px;
+    border-bottom: 1px solid var(--border);
+    background: var(--surface2);
+    flex-shrink: 0;
+  }
+
+  .modal-type-dot {
+    width: 8px; height: 8px;
+    border-radius: 50%;
+    margin-top: 5px;
+    flex-shrink: 0;
+  }
+
+  .modal-title {
+    font-size: 15px;
+    font-weight: 700;
+    color: var(--text-bright);
+    line-height: 1.4;
+    flex: 1;
+  }
+
+  .modal-close {
+    background: none;
+    border: none;
+    color: var(--text-dim);
+    font-size: 18px;
+    cursor: pointer;
+    padding: 0 2px;
+    line-height: 1;
+    flex-shrink: 0;
+    transition: color .15s;
+  }
+
+  .modal-close:hover { color: var(--red); }
+
+  .modal-meta-bar {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 8px 18px;
+    border-bottom: 1px solid var(--border);
+    flex-wrap: wrap;
+    flex-shrink: 0;
+  }
+
+  .modal-meta-item {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    font-family: var(--font-ui);
+    font-size: 10px;
+    color: var(--text-dim);
+  }
+
+  .modal-meta-item .label {
+    color: var(--text-dim);
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    font-size: 9px;
+  }
+
+  .modal-meta-item .value { color: var(--text); }
+
+  .modal-body {
+    overflow-y: auto;
+    flex: 1;
+    padding: 14px 18px;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
+
+  .modal-body::-webkit-scrollbar { width: 3px; }
+  .modal-body::-webkit-scrollbar-thumb { background: var(--border-bright); }
+
+  .modal-section-label {
+    font-family: var(--font-ui);
+    font-size: 9px;
+    color: var(--text-dim);
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    margin-bottom: 8px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .modal-section-label::after {
+    content: '';
+    flex: 1;
+    height: 1px;
+    background: var(--border);
+  }
+
+  .modal-tags { display: flex; flex-wrap: wrap; gap: 6px; }
+
+  .modal-tag {
+    font-family: var(--font-ui);
+    font-size: 10px;
+    padding: 3px 8px;
+    border-radius: 2px;
+    border: 1px solid var(--border-bright);
+    background: var(--surface2);
+    color: var(--text);
+  }
+
+  .modal-tag.accent  { border-color: rgba(47,129,247,0.3);  color: var(--accent);  background: rgba(47,129,247,0.06); }
+  .modal-tag.red     { border-color: rgba(218,54,51,0.3);  color: var(--red);    background: rgba(218,54,51,0.06); }
+  .modal-tag.green   { border-color: rgba(61,201,175,0.3); color: var(--green);  background: rgba(61,201,175,0.06); }
+  .modal-tag.yellow  { border-color: rgba(88,166,255,0.3); color: var(--accent3);background: rgba(88,166,255,0.06); }
+
+  .ttp-table { width: 100%; border-collapse: collapse; }
+
+  .ttp-table th {
+    text-align: left;
+    font-family: var(--font-ui);
+    font-size: 9px;
+    color: var(--text-dim);
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    padding: 6px 10px;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .ttp-table td {
+    padding: 7px 10px;
+    border-bottom: 1px solid var(--border);
+    font-size: 12px;
+    vertical-align: middle;
+  }
+
+  .ttp-table tr:last-child td { border-bottom: none; }
+
+  .ttp-id {
+    font-family: var(--font-ui);
+    font-size: 11px;
+    color: var(--accent);
+    letter-spacing: 0.05em;
+    white-space: nowrap;
+  }
+
+  .ttp-name { color: var(--text); }
+
+  .d3fend-btn {
+    font-family: var(--font-ui);
+    font-size: 9px;
+    color: var(--accent3);
+    background: rgba(88,166,255,0.08);
+    border: 1px solid rgba(88,166,255,0.25);
+    border-radius: 3px;
+    padding: 2px 6px;
+    cursor: pointer;
+    white-space: nowrap;
+  }
+  .d3fend-btn:hover { background: rgba(88,166,255,0.18); }
+
+  .d3fend-panel {
+    background: var(--surface2);
+    border-radius: 4px;
+    padding: 8px 10px;
+    font-family: var(--font-ui);
+    font-size: 10px;
+  }
+
+  .d3fend-pill {
+    display: inline-block;
+    font-family: var(--font-ui);
+    font-size: 9px;
+    color: var(--accent3);
+    background: rgba(88,166,255,0.08);
+    border: 1px solid rgba(88,166,255,0.2);
+    border-radius: 3px;
+    padding: 2px 7px;
+    margin: 2px 3px 2px 0;
+    text-decoration: none;
+    cursor: pointer;
+  }
+  .d3fend-pill:hover { background: rgba(88,166,255,0.22); color: var(--accent3); }
+
+  .modal-foot {
+    padding: 10px 18px;
+    border-top: 1px solid var(--border);
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    gap: 8px;
+    flex-shrink: 0;
+    background: var(--surface2);
+  }
+
+  .btn-open-article {
+    background: var(--accent);
+    color: #000;
+    border: none;
+    font-family: var(--font-ui);
+    font-size: 11px;
+    letter-spacing: 0.1em;
+    padding: 7px 18px;
+    cursor: pointer;
+    text-transform: uppercase;
+    border-radius: 2px;
+    text-decoration: none;
+    display: inline-block;
+    transition: all .2s;
+  }
+
+  .btn-open-article:hover { background: #fff; }
+
+  .btn-close-modal {
+    background: transparent;
+    color: var(--text-dim);
+    border: 1px solid var(--border-bright);
+    font-family: var(--font-ui);
+    font-size: 11px;
+    padding: 6px 14px;
+    cursor: pointer;
+    border-radius: 2px;
+    transition: all .2s;
+  }
+
+  .btn-close-modal:hover { color: var(--text); border-color: var(--text-dim); }
+
+  /* ── CVE DETAIL MODAL ── */
+  .cve-ticket-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px 16px; }
+  .cve-ticket-grid .full { grid-column: 1 / -1; }
+  .cve-ticket-field label { display: block; font-family: var(--font-ui); font-size: 9px; color: var(--text-dim); text-transform: uppercase; letter-spacing: .06em; margin-bottom: 3px; }
+  .cve-ticket-field input, .cve-ticket-field select, .cve-ticket-field textarea { width: 100%; background: var(--surface2); border: 1px solid var(--border); color: var(--text-bright); font-family: var(--font-ui); font-size: 11px; padding: 5px 8px; border-radius: 3px; box-sizing: border-box; }
+  .cve-ticket-field textarea { resize: vertical; height: 60px; }
+  .cve-ticket-field input[type=checkbox] { width: auto; }
+  .cve-ack-banner { display: flex; align-items: center; gap: 10px; padding: 10px 14px; background: rgba(61,201,175,0.08); border: 1px solid rgba(61,201,175,0.3); border-radius: 4px; margin-bottom: 14px; font-family: var(--font-ui); font-size: 11px; color: var(--green); }
+  .cve-detail-section {
+    padding: 10px 18px;
+    border-bottom: 1px solid var(--border);
+  }
+  .cve-detail-section:last-child { border-bottom: none; }
+  .cve-detail-label {
+    font-family: var(--font-ui);
+    font-size: 10px;
+    letter-spacing: 0.12em;
+    color: var(--text-dim);
+    text-transform: uppercase;
+    margin-bottom: 5px;
+  }
+  .cve-detail-value {
+    font-size: 12px;
+    color: var(--text-bright);
+    line-height: 1.55;
+  }
+  .cve-poc-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    background: rgba(218,54,51,0.12);
+    border: 1px solid rgba(218,54,51,0.4);
+    color: var(--red);
+    font-family: var(--font-ui);
+    font-size: 10px;
+    letter-spacing: 0.1em;
+    padding: 3px 8px;
+    border-radius: 2px;
+    font-weight: 700;
+  }
+  .cve-ref-link {
+    display: block;
+    color: var(--accent);
+    font-size: 12px;
+    text-decoration: none;
+    margin-bottom: 4px;
+    word-break: break-all;
+  }
+  .cve-ref-link:hover { text-decoration: underline; }
+  .cve-ref-tag {
+    display: inline-block;
+    font-family: var(--font-ui);
+    font-size: 9px;
+    color: var(--text-dim);
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    padding: 1px 5px;
+    border-radius: 2px;
+    margin-left: 6px;
+    vertical-align: middle;
+  }
+  .cve-cvss {
+    font-family: var(--font-ui);
+    font-size: 11px;
+    color: var(--accent3);
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    padding: 6px 10px;
+    border-radius: 2px;
+    display: inline-block;
+    letter-spacing: 0.04em;
+  }
+
+  .btn-confirm-ok {
+    background: var(--red);
+    color: #fff;
+    border: none;
+    font-family: var(--font-ui);
+    font-size: 11px;
+    letter-spacing: 0.1em;
+    padding: 7px 20px;
+    cursor: pointer;
+    text-transform: uppercase;
+    border-radius: 2px;
+    transition: all .2s;
+  }
+
+  .btn-confirm-ok:hover { background: #e85552; box-shadow: 0 0 14px rgba(218,54,51,0.45); }
+
+  /* ── HEATMAP ── */
+  .heatmap-wrap { overflow-x: auto; margin-top: 16px; }
+  .heatmap-table { border-collapse: collapse; font-family: var(--font-ui); font-size: 10px; white-space: nowrap; }
+  .heatmap-table th { padding: 4px 6px; color: var(--text-dim); font-weight: 400; text-align: left; border-bottom: 1px solid var(--border); }
+  .heatmap-table th.ttp-col { writing-mode: vertical-lr; transform: rotate(180deg); max-width: 28px; font-size: 9px; padding: 6px 3px; }
+  .heatmap-table td.row-label { padding: 3px 10px 3px 0; color: var(--text); max-width: 160px; overflow: hidden; text-overflow: ellipsis; }
+  .heatmap-cell { width: 24px; height: 20px; text-align: center; cursor: default; border-radius: 2px; font-size: 9px; line-height: 20px; }
+  .heatmap-cell[data-v="0"] { background: transparent; }
+
+  /* ── RANSOMWARE TREEMAP ── */
+  .rw-tm-ranges { display: flex; gap: 4px; }
+  .rw-tm-ranges button {
+    font-family: var(--font-ui); font-size: 10px; padding: 3px 9px;
+    background: transparent; border: 1px solid var(--border); color: var(--text-dim);
+    border-radius: 2px; cursor: pointer;
+  }
+  .rw-tm-ranges button:hover { border-color: var(--border-bright); color: var(--text); }
+  .rw-tm-ranges button.active { background: rgba(47,129,247,0.15); border-color: var(--accent); color: var(--accent); }
+  .rw-tm-legend { display: flex; align-items: center; gap: 6px; font-family: var(--font-ui); font-size: 9px; color: var(--text-dim); }
+  .rw-tm-legend .rw-tm-legend-cell { padding: 2px 6px; border-radius: 2px; color: #fff; font-size: 9px; }
+  .rw-tm-wrap { border-radius: 4px; overflow: hidden; }
+  .rw-tile {
+    position: absolute; box-sizing: border-box; border: 1px solid rgba(13,17,23,0.55);
+    display: flex; flex-direction: column; align-items: center; justify-content: center;
+    text-align: center; overflow: hidden; cursor: pointer; color: #fff;
+    font-family: var(--font-ui); transition: filter .15s;
+  }
+  .rw-tile:hover { filter: brightness(1.15); }
+  .rw-tile-ticker { font-weight: 700; letter-spacing: .02em; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 100%; }
+  .rw-tile-pct { opacity: .9; margin-top: 2px; }
+  .rw-tile-count { opacity: .8; margin-top: 1px; }
+  .rw-tm-empty { display:flex;align-items:center;justify-content:center;height:100%;color:var(--text-dim);font-family:var(--font-ui);font-size:11px; }
+
+  /* ── RANSOMWARE GROUP DETAIL MODAL ── */
+  .rw-modal-header { display:flex; align-items:center; gap:14px; margin-bottom:16px; }
+  .rw-modal-avatar { width:44px; height:44px; border-radius:10px; display:flex; align-items:center; justify-content:center; font-family:var(--font-ui); font-weight:700; font-size:15px; color:#fff; flex-shrink:0; }
+  .rw-modal-title { flex:1; min-width:0; }
+  .rw-modal-title h2 { margin:0 0 2px; font-family:var(--font-ui); font-size:16px; color:var(--text-bright); }
+  .rw-modal-title p { margin:0; font-family:var(--font-ui); font-size:11px; color:var(--text-dim); }
+  .rw-modal-stats { display:grid; grid-template-columns:repeat(auto-fit,minmax(110px,1fr)); gap:10px; margin-bottom:18px; }
+  .rw-modal-stat { background:var(--surface2); border:1px solid var(--border); border-radius:4px; padding:8px 10px; }
+  .rw-modal-stat-label { font-family:var(--font-ui); font-size:9px; color:var(--text-dim); text-transform:uppercase; letter-spacing:.05em; margin-bottom:4px; }
+  .rw-modal-stat-value { font-family:var(--font-ui); font-size:13px; color:var(--text); overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
+  .rw-modal-section { margin-bottom:16px; }
+  .rw-modal-section-title { font-family:var(--font-ui); font-size:10px; color:var(--text-dim); text-transform:uppercase; letter-spacing:.06em; margin-bottom:8px; }
+  .rw-modal-card { background:var(--surface2); border:1px solid var(--border); border-radius:4px; padding:12px; }
+  .rw-modal-grid { display:grid; grid-template-columns:1fr 1fr; gap:14px; }
+  @media (max-width:600px) { .rw-modal-grid { grid-template-columns:1fr; } }
+  .rw-tm-chart-wrap svg { display:block; width:100%; }
+  .rw-rank-row { display:flex; align-items:center; gap:8px; padding:4px 0; }
+  .rw-rank-label { flex:0 0 34%; font-family:var(--font-ui); font-size:11px; color:var(--text); overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
+  .rw-rank-track { flex:1; height:6px; background:rgba(139,148,158,0.15); border-radius:3px; overflow:hidden; }
+  .rw-rank-fill { height:100%; background:#DA3633; border-radius:3px; }
+  .rw-rank-value { flex:0 0 30px; text-align:right; font-family:var(--font-ui); font-size:11px; color:var(--text-dim); }
+  .rw-victims-table { width:100%; border-collapse:collapse; font-family:var(--font-ui); font-size:11px; }
+  .rw-victims-table th { text-align:left; padding:7px 10px; color:var(--text-dim); font-weight:400; border-bottom:1px solid var(--border); }
+  .rw-victims-table td { padding:7px 10px; border-bottom:1px solid var(--border); color:var(--text); max-width:160px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
+  .rw-victims-table tbody tr:last-child td { border-bottom:none; }
+  .rw-victims-table a { color:var(--red); text-decoration:none; }
+
+  /* ── PIR MULTI-SELECT ── */
+  .pir-ms { position:relative; }
+  .pir-ms-box { min-height:36px; background:var(--surface2); border:1px solid var(--border-bright); border-radius:3px; padding:4px 8px; display:flex; flex-wrap:wrap; gap:4px; align-items:center; cursor:pointer; }
+  .pir-ms-box:focus-within { border-color:var(--accent); }
+  .pir-ms-tag { display:flex; align-items:center; gap:4px; background:rgba(47,129,247,.12); border:1px solid rgba(47,129,247,.3); border-radius:2px; padding:2px 6px; font-family:var(--font-ui); font-size:10px; color:var(--accent); white-space:nowrap; }
+  .pir-ms-tag-x { cursor:pointer; opacity:.6; font-size:12px; line-height:1; }
+  .pir-ms-tag-x:hover { opacity:1; }
+  .pir-ms-placeholder { font-family:var(--font-ui); font-size:10px; color:var(--text-dim); padding:2px 0; }
+  .pir-ms-search { border:none; outline:none; background:transparent; color:var(--text); font-family:var(--font-ui); font-size:10px; width:120px; padding:2px 4px; }
+  .pir-ms-dropdown { display:none; position:absolute; top:calc(100% + 2px); left:0; right:0; background:var(--surface); border:1px solid var(--border-bright); border-radius:3px; z-index:10000; max-height:200px; overflow-y:auto; }
+  .pir-ms-dropdown.open { display:block; }
+  .sr-source-wrap { position:relative; }
+  .sr-source-dd { display:none; position:absolute; top:calc(100% + 2px); left:0; right:0;
+    background:var(--surface); border:1px solid var(--border-bright); border-radius:3px;
+    z-index:10100; max-height:200px; overflow-y:auto; }
+  .sr-source-dd.open { display:block; }
+  .sr-source-dd li { list-style:none; padding:6px 10px; font-family:var(--font-ui);
+    font-size:11px; color:var(--text); cursor:pointer; border-bottom:1px solid var(--border); }
+  .sr-source-dd li:last-child { border-bottom:none; }
+  .sr-source-dd li:hover, .sr-source-dd li.sr-dd-active { background:var(--surface2); color:var(--text-bright); }
+  .sr-source-dd li.sr-dd-empty { color:var(--text-dim); cursor:default; font-style:italic; }
+  .pir-ms-opt { display:flex; align-items:center; gap:8px; padding:6px 10px; cursor:pointer; font-size:12px; color:var(--text); }
+  .pir-ms-opt:hover { background:var(--surface2); }
+  .pir-ms-opt.selected { color:var(--accent); }
+  .pir-ms-opt input[type=checkbox] { accent-color:var(--accent); cursor:pointer; }
+  .pir-ms-no-opt { padding:8px 10px; font-family:var(--font-ui); font-size:10px; color:var(--text-dim); }
+
+  /* ── PIR ── */
+  .pir-list { display: flex; flex-direction: column; gap: 8px; margin-top: 12px; }
+  .pir-card { background: var(--surface); border: 1px solid var(--border); border-radius: 4px; padding: 14px 16px; display: flex; align-items: flex-start; gap: 14px; }
+  .pir-badge { font-family: var(--font-ui); font-size: 11px; font-weight: 700; padding: 2px 8px; border-radius: 2px; flex-shrink: 0; }
+  .pir-badge.P1 { background: #3A1F1F; color: #DA3633; border: 1px solid #DA3633; }
+  .pir-badge.P2 { background: #1B2E45; color: var(--accent3); border: 1px solid rgba(88,166,255,0.4); }
+  .pir-badge.P3 { background: rgba(139,148,158,0.2); color: var(--text-dim); border: 1px solid var(--border); }
+  .pir-body { flex: 1; min-width: 0; }
+  .pir-title { font-size: 14px; font-weight: 600; color: var(--text-bright); margin-bottom: 3px; }
+  .pir-desc { font-size: 12px; color: var(--text-dim); margin-bottom: 6px; }
+  .pir-meta { display: flex; flex-wrap: wrap; gap: 8px; font-family: var(--font-ui); font-size: 10px; color: var(--text-dim); }
+  .pir-coverage { display: flex; flex-direction: column; align-items: flex-end; gap: 4px; flex-shrink: 0; }
+  .pir-cov-num { font-family: var(--font-ui); font-size: 20px; font-weight: 700; color: var(--accent); line-height: 1; }
+  .pir-cov-label { font-size: 10px; color: var(--text-dim); font-family: var(--font-ui); }
+  .pir-cov-bar { width: 80px; height: 4px; background: var(--border); border-radius: 2px; overflow: hidden; }
+  .pir-cov-fill { height: 100%; background: var(--accent); border-radius: 2px; transition: width .4s; }
+  .pir-actions { display: flex; gap: 6px; flex-shrink: 0; }
+  .pir-btn { background: transparent; border: 1px solid var(--border); color: var(--text-dim); font-family: var(--font-ui); font-size: 10px; padding: 4px 10px; border-radius: 2px; cursor: pointer; transition: all .2s; }
+  .pir-btn:hover { border-color: var(--accent); color: var(--accent); }
+  .pir-btn.del:hover { border-color: var(--red); color: var(--red); }
+  .pir-criteria-tags { display: flex; flex-wrap: wrap; gap: 4px; }
+  .pir-tag { font-size: 10px; background: var(--surface2); border: 1px solid var(--border); border-radius: 2px; padding: 1px 6px; color: var(--text-dim); font-family: var(--font-ui); }
+  .pir-lbl { display: block; font-family: var(--font-ui); font-size: 10px; color: var(--text-dim); text-transform: uppercase; letter-spacing: .06em; margin-bottom: 5px; }
+  .pir-gap-badge { display:inline-block; font-family:var(--font-ui); font-size:10px; font-weight:700; padding:1px 7px; border-radius:2px; background:#2B2500; color:var(--orange); border:1px solid rgba(227,179,65,.35); margin-left:6px; }
+  .rfi-filter-btn { font-family:var(--font-ui); font-size:10px; padding:3px 10px; border-radius:2px; border:1px solid var(--border); background:transparent; color:var(--text-dim); cursor:pointer; text-transform:uppercase; letter-spacing:.05em; transition:all .15s; }
+  .rfi-filter-btn:hover { color:var(--text); border-color:var(--border-bright); }
+  .rfi-filter-btn.active { background:#1B2E45; border-color:var(--accent3); color:var(--accent3); }
+
+  /* ── EXEC DASHBOARD ── */
+  .exec-kpis { display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap: 12px; margin-bottom: 20px; }
+  .exec-kpi { background: var(--surface); border: 1px solid var(--border); border-radius: 4px; padding: 14px 16px; }
+  .exec-kpi-val { font-family: var(--font-ui); font-size: 28px; font-weight: 700; color: var(--accent); line-height: 1; }
+  .exec-kpi-label { font-size: 11px; color: var(--text-dim); margin-top: 4px; text-transform: uppercase; letter-spacing: .05em; }
+  .exec-kpi-trend { font-family: var(--font-ui); font-size: 10px; margin-top: 5px; min-height: 14px; }
+  .exec-section { margin-top: 24px; }
+  .exec-section-title { font-family: var(--font-ui); font-size: 11px; color: var(--text-dim); text-transform: uppercase; letter-spacing: .08em; margin-bottom: 12px; border-bottom: 1px solid var(--border); padding-bottom: 6px; }
+  .exec-charts-row { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-top: 12px; }
+  .exec-chart-card { background: var(--surface); border: 1px solid var(--border); border-radius: 4px; padding: 16px; min-width: 0; }
+  .exec-chart-title { font-family: var(--font-ui); font-size: 11px; color: var(--text-dim); margin-bottom: 10px; }
+  .cve-exposure-table { width: 100%; border-collapse: collapse; font-size: 12px; }
+  .cve-exposure-table th { text-align: left; padding: 6px 8px; color: var(--text-dim); font-family: var(--font-ui); font-size: 10px; border-bottom: 1px solid var(--border); }
+  .cve-exposure-table td { padding: 6px 8px; border-bottom: 1px solid var(--border); }
+  .cve-sev { font-family: var(--font-ui); font-size: 10px; padding: 1px 6px; border-radius: 2px; }
+  .cve-sev.crit { background: #3A1F1F; color: #DA3633; }
+  .cve-sev.high { background: rgba(227,179,65,0.2); color: var(--orange); }
+  .cve-sev.med  { background: #1B2E45; color: var(--accent3); }
+  .ta-leaderboard { display: flex; flex-direction: column; gap: 6px; }
+  .ta-leader-row { display: flex; align-items: center; gap: 10px; }
+  .ta-leader-name { flex: 1; font-size: 13px; color: var(--text); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .ta-leader-bar { flex: 2; height: 6px; background: var(--border); border-radius: 3px; overflow: hidden; }
+  .ta-leader-fill { height: 100%; background: rgba(218,54,51,0.6); border-radius: 3px; }
+  .ta-leader-count { font-family: var(--font-ui); font-size: 11px; color: var(--text-dim); min-width: 32px; text-align: right; }
+
+  /* ── FOOTER ── */
+  .footer {
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 12px 0 0; margin-top: 2px; border-top: 1px solid var(--border);
+  }
+
+  .footer-left { font-family: var(--font-ui); font-size: 10px; color: var(--text-dim); display: flex; align-items: center; gap: 16px; }
+  .footer-right { font-family: var(--font-ui); font-size: 10px; color: var(--text-dim); }
+
+  /* stagger */
+  .news-item:nth-child(1){animation-delay:.02s} .news-item:nth-child(2){animation-delay:.04s}
+  .news-item:nth-child(3){animation-delay:.06s} .news-item:nth-child(4){animation-delay:.08s}
+  .news-item:nth-child(5){animation-delay:.10s} .news-item:nth-child(6){animation-delay:.12s}
+
+  .refresh-select {
+    background: var(--surface2);
+    border: 1px solid var(--border-bright);
+    color: var(--text-dim);
+    font-family: var(--font-ui);
+    font-size: 10px;
+    padding: 3px 8px;
+    border-radius: 2px;
+    outline: none;
+    cursor: pointer;
+    appearance: none;
+    -webkit-appearance: none;
+    transition: border-color .2s, color .2s;
+  }
+  .refresh-select:hover, .refresh-select:focus { border-color: var(--accent); color: var(--text); }
+
+  .refresh-countdown {
+    font-family: var(--font-ui);
+    font-size: 10px;
+    color: var(--accent);
+    letter-spacing: 0.05em;
+    min-width: 44px;
+    text-align: right;
+  }
+
+  /* ── DASHBOARD SECTION LABEL ── */
+  .dash-section-label {
+    font-family: var(--font-ui);
+    font-size: 9px;
+    color: var(--text-dim);
+    text-transform: uppercase;
+    letter-spacing: 0.15em;
+    padding: 10px 20px;
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-top: none;
+    margin-top: 1px;
+    display: flex;
+    align-items: center;
+    gap: 14px;
+  }
+
+  .dash-section-label::before { content: '//'; color: var(--accent); font-size: 10px; letter-spacing: 0; }
+  .dash-section-label::after  { content: ''; flex: 1; height: 1px; background: var(--border-bright); }
+
+  /* ── THREAT ACTOR ROOM ── */
+
+  .ta-submenu {
+    display: flex;
+    align-items: center;
+    gap: 0;
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-bottom: none;
+  }
+
+  .ta-submenu-btn {
+    background: transparent;
+    border: none;
+    border-right: 1px solid var(--border);
+    color: var(--text-dim);
+    font-family: var(--font-ui);
+    font-size: 10px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    padding: 9px 20px;
+    cursor: pointer;
+    transition: color .15s, background .15s;
+  }
+
+  .ta-submenu-btn:hover { color: var(--text); background: rgba(255,255,255,0.03); }
+
+  .ta-submenu-btn.active {
+    color: var(--accent);
+    background: var(--surface);
+    border-bottom: 2px solid var(--accent);
+  }
+
+  .ta-submenu-count {
+    display: inline-block;
+    margin-left: 6px;
+    font-size: 9px;
+    color: var(--text-dim);
+    background: var(--surface);
+    border: 1px solid var(--border-bright);
+    padding: 1px 6px;
+    border-radius: 10px;
+  }
+
+  .ta-submenu-btn.active .ta-submenu-count { color: var(--accent); border-color: rgba(47,129,247,0.3); }
+
+  .ta-restore-btn {
+    background: transparent;
+    border: 1px solid rgba(61,201,175,0.25);
+    color: var(--green);
+    font-family: var(--font-ui);
+    font-size: 9px;
+    padding: 3px 10px;
+    cursor: pointer;
+    border-radius: 2px;
+    letter-spacing: 0.06em;
+    transition: all .15s;
+  }
+
+  .ta-restore-btn:hover { background: rgba(61,201,175,0.1); border-color: var(--green); }
+
+  .ta-watch-btn {
+    background: transparent;
+    border: 1px solid rgba(47,129,247,0.25);
+    color: var(--accent);
+    font-family: var(--font-ui);
+    font-size: 9px;
+    padding: 3px 10px;
+    cursor: pointer;
+    border-radius: 2px;
+    letter-spacing: 0.06em;
+    transition: all .15s;
+    margin-right: 4px;
+  }
+  .ta-watch-btn:hover { background: rgba(47,129,247,0.1); border-color: var(--accent); }
+  .ta-watch-btn.watched { border-color: rgba(47,129,247,0.6); color: var(--accent); }
+
+  .ta-bar {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-top: none;
+    padding: 12px 20px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    flex-wrap: wrap;
+  }
+
+  .ta-bar-left  { display: flex; align-items: center; gap: 8px; flex: 1; flex-wrap: wrap; }
+  .ta-bar-right { display: flex; align-items: center; gap: 8px; }
+
+  .ta-status {
+    font-family: var(--font-ui);
+    font-size: 10px;
+    padding: 3px 10px;
+    border-radius: 2px;
+    opacity: 0;
+    transition: opacity .3s;
+    letter-spacing: 0.04em;
+  }
+
+  .ta-status.ok  { color: var(--green); border: 1px solid rgba(61,201,175,0.3);  background: rgba(61,201,175,0.08); }
+  .ta-status.err { color: var(--red);   border: 1px solid rgba(218,54,51,0.3);   background: rgba(218,54,51,0.08);  }
+  .ta-status.show { opacity: 1; }
+
+  .ta-table-wrap {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-top: none;
+    overflow-x: auto;
+  }
+
+  .ta-table { width: 100%; border-collapse: collapse; }
+
+  .ta-th {
+    background: var(--surface2);
+    padding: 10px 16px;
+    text-align: left;
+    font-family: var(--font-ui);
+    font-size: 9px;
+    color: var(--text-dim);
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    border-bottom: 1px solid var(--border);
+    white-space: nowrap;
+  }
+
+  .ta-th.sortable { cursor: pointer; user-select: none; transition: color .15s; }
+  .ta-th.sortable:hover { color: var(--text); }
+  .ta-th.sort-active { color: var(--accent); }
+
+  .sort-ind {
+    display: inline-block;
+    margin-left: 5px;
+    font-size: 10px;
+    opacity: 0.45;
+    transition: opacity .15s;
+  }
+
+  .ta-th.sort-active .sort-ind { opacity: 1; color: var(--accent); }
+  .ta-th.sortable:hover .sort-ind { opacity: 0.8; }
+
+  .ta-td {
+    padding: 10px 16px;
+    border-bottom: 1px solid var(--border);
+    font-size: 13px;
+    color: var(--text);
+    vertical-align: middle;
+  }
+
+  .ta-table tbody tr:hover .ta-td { background: var(--surface2); }
+
+  .ta-num  { font-family: var(--font-ui); font-size: 10px; color: var(--text-dim); width: 50px; }
+  .ta-name { font-weight: 600; color: var(--text-bright); letter-spacing: 0.02em; }
+  .ta-date { font-family: var(--font-ui); font-size: 11px; color: var(--text-dim); white-space: nowrap; }
+
+  .ta-source-badge {
+    font-family: var(--font-ui);
+    font-size: 9px;
+    padding: 2px 8px;
+    border-radius: 2px;
+    background: rgba(47,129,247,0.08);
+    border: 1px solid rgba(47,129,247,0.2);
+    color: var(--accent);
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+  }
+
+  .ta-delete-btn {
+    background: transparent;
+    border: 1px solid rgba(218,54,51,0.25);
+    color: var(--red);
+    font-family: var(--font-ui);
+    font-size: 9px;
+    padding: 3px 10px;
+    cursor: pointer;
+    border-radius: 2px;
+    letter-spacing: 0.06em;
+    transition: all .15s;
+  }
+
+  .ta-delete-btn:hover { background: rgba(218,54,51,0.1); border-color: var(--red); }
+
+  .ta-merge-btn {
+    background: transparent;
+    border: 1px solid rgba(240,180,60,0.3);
+    color: var(--accent3);
+    font-family: var(--font-ui);
+    font-size: 9px;
+    padding: 3px 10px;
+    cursor: pointer;
+    border-radius: 2px;
+    letter-spacing: 0.06em;
+    transition: all .15s;
+    margin-right: 4px;
+  }
+
+  .ta-merge-btn:hover { background: rgba(240,180,60,0.1); border-color: var(--accent3); }
+
+  .merge-target-row:hover { background: var(--surface2); }
+
+  /* ── Watchlist card grid ── */
+  .ta-sort-bar {
+    display: flex; align-items: center; gap: 8px;
+    padding: 8px 0 12px;
+  }
+  .ta-sort-btn {
+    background: none; border: 1px solid var(--border); color: var(--text-dim);
+    font-family: var(--font-ui); font-size: 10px; letter-spacing: .06em;
+    padding: 3px 10px; border-radius: 3px; cursor: pointer; transition: all .15s;
+  }
+  .ta-sort-btn:hover { color: var(--text); border-color: rgba(47,129,247,.4); }
+  .ta-sort-btn.sort-active { color: var(--accent); border-color: var(--accent); }
+
+  .taw-card-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 14px;
+    min-height: 80px;
+  }
+  .taw-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 16px 18px;
+    display: flex; flex-direction: column; gap: 10px;
+    transition: border-color .2s, box-shadow .2s;
+    position: relative;
+  }
+  .taw-card:hover { border-color: rgba(47,129,247,.35); box-shadow: 0 0 12px rgba(47,129,247,.08); }
+  .taw-card-name {
+    font-size: 13px; font-weight: 700; color: var(--text-bright);
+    letter-spacing: .03em; line-height: 1.3; flex: 1;
+  }
+  .taw-card-meta {
+    font-family: var(--font-ui); font-size: 10px; color: var(--text-dim);
+    display: flex; align-items: center; gap: 6px; flex-wrap: wrap;
+  }
+  .taw-card-badge {
+    display: inline-block; padding: 2px 7px; border-radius: 3px; font-size: 9px;
+    font-family: var(--font-ui); letter-spacing: .07em; font-weight: 600;
+  }
+  .taw-card-badge.has-profile {
+    background: #102015; color: #3DC9AF; border: 1px solid #3DC9AF;
+  }
+  .taw-card-badge.no-profile {
+    background: rgba(139,148,158,.15); color: var(--text-dim); border: 1px solid var(--border);
+  }
+  .taw-card-actions { display: flex; gap: 8px; flex-wrap: wrap; }
+  .taw-btn-ai {
+    flex: 1; background: rgba(47,129,247,.08); border: 1px solid rgba(47,129,247,.35);
+    color: var(--accent); font-family: var(--font-ui); font-size: 10px;
+    letter-spacing: .06em; padding: 5px 10px; border-radius: 3px; cursor: pointer;
+    transition: all .15s; white-space: nowrap;
+  }
+  .taw-btn-ai:hover:not(:disabled) { background: rgba(47,129,247,.18); box-shadow: 0 0 8px rgba(47,129,247,.2); }
+  .taw-btn-ai:disabled { opacity: .45; cursor: not-allowed; }
+  .taw-btn-view {
+    flex: 1; background: #102015; border: 1px solid rgba(61,201,175,.3);
+    color: #3DC9AF; font-family: var(--font-ui); font-size: 10px;
+    letter-spacing: .06em; padding: 5px 10px; border-radius: 3px; cursor: pointer;
+    transition: all .15s; white-space: nowrap;
+  }
+  .taw-btn-view:hover { background: rgba(61,201,175,.18); }
+  .taw-btn-mm {
+    flex: 1; background: rgba(110,124,255,.08); border: 1px solid rgba(110,124,255,.3);
+    color: #6E7CFF; font-family: var(--font-ui); font-size: 10px;
+    letter-spacing: .06em; padding: 5px 10px; border-radius: 3px; cursor: pointer;
+    transition: all .15s; white-space: nowrap;
+  }
+  .taw-btn-mm:hover { background: rgba(110,124,255,.18); }
+  .taw-btn-articles {
+    width: 100%; background: rgba(255,255,255,.03); border: 1px solid var(--border);
+    color: var(--text-dim); font-family: var(--font-ui); font-size: 10px;
+    letter-spacing: .05em; padding: 5px 10px; border-radius: 3px; cursor: pointer;
+    text-align: center; transition: background .15s, color .15s, border-color .15s;
+  }
+  .taw-btn-articles:hover:not(:disabled) { background: rgba(47,129,247,.08); color: var(--accent); border-color: rgba(47,129,247,.3); }
+  .taw-btn-articles:disabled { opacity: .4; cursor: default; }
+
+  /* ── TA Profile Modal ── */
+  #ta-profile-modal { display:none; position:fixed; inset:0; z-index:9100; overflow-y:auto; padding:24px 16px; }
+  #ta-profile-modal .modal-backdrop {
+    position:fixed; inset:0; background:rgba(4,10,20,.78);
+  }
+  #ta-profile-modal .modal-box {
+    position:relative; z-index:1; max-width:860px; margin:0 auto;
+    background:var(--surface); border:1px solid var(--border); border-radius:8px;
+    padding:28px 32px; color:var(--text);
+  }
+  .tap-header { display:flex; align-items:flex-start; justify-content:space-between; gap:12px; margin-bottom:22px; }
+  .tap-title { font-size:18px; font-weight:700; color:var(--accent); letter-spacing:.04em; }
+  .tap-close { background:none; border:none; color:var(--text-dim); font-size:20px; cursor:pointer; line-height:1; padding:0 4px; }
+  .tap-close:hover { color:var(--text); }
+  .tap-meta-row {
+    display:flex; gap:10px; flex-wrap:wrap; margin-bottom:20px;
+    font-family:var(--font-ui); font-size:10px;
+  }
+  .tap-chip {
+    padding:3px 9px; border-radius:3px; border:1px solid var(--border);
+    color:var(--text-dim); background:var(--surface2);
+  }
+  .tap-chip.green { color:#3DC9AF; border-color:rgba(61,201,175,.35); background:#102015; }
+  .tap-chip.amber { color:#E3B341; border-color:rgba(227,179,65,.35); background:#2B2500; }
+  .tap-chip.red   { color:var(--red); border-color:rgba(218,54,51,.35); background:#3A1F1F; }
+  .tap-chip.blue  { color:var(--accent); border-color:rgba(47,129,247,.35); background:rgba(47,129,247,.08); }
+  .tap-group { margin-bottom:28px; }
+  .tap-group-title {
+    font-family:var(--font-ui); font-size:12px; font-weight:700; letter-spacing:.18em;
+    color:var(--text-bright); text-transform:uppercase; margin-bottom:16px;
+    padding:8px 12px; background:var(--surface2); border-left:3px solid var(--accent); border-radius:2px;
+  }
+  .tap-group-title.tactical { border-left-color:#E3B341; }
+  .tap-section { margin-bottom:20px; }
+  .tap-section-title {
+    font-family:var(--font-ui); font-size:10px; letter-spacing:.1em;
+    color:var(--accent3); text-transform:uppercase; margin-bottom:8px;
+    padding-bottom:6px; border-bottom:1px solid var(--border);
+  }
+  .tap-grid { display:grid; grid-template-columns:1fr 1fr; gap:8px 16px; }
+  .tap-kv { display:flex; flex-direction:column; gap:2px; }
+  .tap-key { font-family:var(--font-ui); font-size:9px; color:var(--text-dim); letter-spacing:.07em; }
+  .tap-val { font-size:12px; color:var(--text-bright); }
+  .tap-tags { display:flex; flex-wrap:wrap; gap:5px; }
+  .tap-tag {
+    font-family:var(--font-ui); font-size:10px; padding:2px 8px;
+    border-radius:3px; background:var(--surface2); border:1px solid var(--border); color:var(--text-dim);
+  }
+  .tap-table { width:100%; border-collapse:collapse; font-size:11px; }
+  .tap-table th { text-align:left; font-family:var(--font-ui); font-size:9px; color:var(--text-dim); padding:5px 8px; border-bottom:1px solid var(--border); }
+  .tap-table td { padding:6px 8px; border-bottom:1px solid rgba(255,255,255,.04); color:var(--text); vertical-align:top; }
+  .tap-table tr:last-child td { border-bottom:none; }
+  .tap-regen { margin-top:4px; background:rgba(47,129,247,.08); border:1px solid rgba(47,129,247,.3); color:var(--accent); font-family:var(--font-ui); font-size:10px; padding:6px 14px; border-radius:3px; cursor:pointer; }
+  .tap-regen:hover { background:rgba(47,129,247,.18); }
+  .tap-mindmap { margin-top:4px; background:rgba(110,124,255,.08); border:1px solid rgba(110,124,255,.3); color:#6E7CFF; font-family:var(--font-ui); font-size:10px; padding:6px 14px; border-radius:3px; cursor:pointer; }
+  .tap-mindmap:hover { background:rgba(110,124,255,.18); }
+
+  .ta-table-footer {
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-top: none;
+    padding: 8px 16px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  .ta-total {
+    font-family: var(--font-ui);
+    font-size: 10px;
+    color: var(--text-dim);
+    letter-spacing: 0.05em;
+  }
+
+  @media(max-width:900px){ .news-grid-row{grid-template-columns:1fr 1fr} .cve-grid{grid-template-columns:repeat(2,1fr)} .indonesia-grid{grid-template-columns:1fr} }
+  @media(max-width:600px){ .news-grid-row{grid-template-columns:1fr} .filter-bar{gap:8px} .dash-charts-row,.dash-charts-row.thirds,.exec-charts-row,.indonesia-grid{grid-template-columns:1fr} }
+
+  /* ── DASHBOARD ── */
+  .dash-stats {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 1px;
+    background: var(--border);
+    margin-top: 1px;
+  }
+
+  .dash-stat-box {
+    background: var(--surface);
+    padding: 20px 20px 16px;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+  }
+
+  .dash-stat-label {
+    font-family: var(--font-ui);
+    font-size: 9px;
+    color: var(--text-dim);
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+  }
+
+  .dash-stat-value {
+    font-family: var(--font-ui);
+    font-size: 36px;
+    line-height: 1.1;
+    color: var(--accent);
+  }
+
+  .dash-stat-value.v2 { color: var(--accent3); }
+  .dash-stat-value.v3 { color: var(--red); }
+  .dash-stat-value.v4 { color: var(--green); }
+
+  .dash-stat-sub {
+    font-family: var(--font-ui);
+    font-size: 9px;
+    color: var(--text-dim);
+  }
+
+  .dash-charts-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1px;
+    background: var(--border);
+    margin-top: 1px;
+  }
+
+  .dash-charts-row.full {
+    grid-template-columns: 1fr;
+  }
+
+  .dash-charts-row.thirds {
+    grid-template-columns: 1fr 1fr 1fr;
+  }
+
+  .chart-card {
+    background: var(--surface);
+    padding: 18px 20px 16px;
+    min-width: 0;
+  }
+
+  .chart-title {
+    font-family: var(--font-ui);
+    font-size: 9px;
+    color: var(--text-dim);
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    margin-bottom: 14px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .chart-title::after {
+    content: '';
+    flex: 1;
+    height: 1px;
+    background: var(--border);
+  }
+
+  .chart-canvas-wrap {
+    position: relative;
+  }
+
+  /* ── INTELLIGENCE TAB ── */
+  .admiral-grade {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 26px; height: 26px;
+    border-radius: 3px;
+    font-family: var(--font-ui);
+    font-size: 14px;
+    font-weight: 700;
+    letter-spacing: 0;
+  }
+  .admiral-A { background: rgba(61,201,175,0.15); border: 1px solid rgba(61,201,175,0.4); color: var(--green); }
+  .admiral-B { background: rgba(47,129,247,0.10);  border: 1px solid rgba(47,129,247,0.3);  color: var(--accent); }
+  .admiral-C { background: rgba(88,166,255,0.12); border: 1px solid rgba(88,166,255,0.3); color: var(--accent3); }
+  .admiral-D { background: rgba(227,179,65,0.12); border: 1px solid rgba(227,179,65,0.3); color: var(--orange); }
+  .admiral-E { background: rgba(218,54,51,0.12);  border: 1px solid rgba(218,54,51,0.3);  color: var(--red); }
+  .admiral-F { background: rgba(139,148,158,0.15); border: 1px solid rgba(139,148,158,0.3); color: var(--text-dim); }
+
+  .sr-inline-badge {
+    display: inline-block;
+    margin-left: 4px;
+    padding: 0 4px;
+    border-radius: 3px;
+    font-family: var(--font-ui);
+    font-size: 10px;
+    font-weight: 700;
+    vertical-align: middle;
+    background: rgba(47,129,247,0.15);
+    border: 1px solid rgba(47,129,247,0.3);
+    color: var(--accent);
+    cursor: help;
+  }
+
+  .cluster-card {
+    border-bottom: 1px solid var(--border);
+    padding: 0;
+    overflow: hidden;
+  }
+  .cluster-card:last-child { border-bottom: none; }
+  .cluster-header {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 12px 16px;
+    cursor: pointer;
+    transition: background .15s;
+    user-select: none;
+  }
+  .cluster-header:hover { background: var(--surface2); }
+  .cluster-expand { color: var(--text-dim); font-size: 10px; flex-shrink: 0; transition: transform .2s; }
+  .cluster-expand.open { transform: rotate(90deg); }
+  .cluster-title { flex: 1; font-size: 13px; font-weight: 600; color: var(--text-bright); line-height: 1.4; }
+  .cluster-badges { display: flex; align-items: center; gap: 8px; flex-shrink: 0; }
+  .cluster-badge {
+    font-family: var(--font-ui);
+    font-size: 9px;
+    padding: 2px 7px;
+    border-radius: 2px;
+    border: 1px solid var(--border-bright);
+    color: var(--text-dim);
+    white-space: nowrap;
+  }
+  .cluster-badge.conf-high   { border-color: rgba(61,201,175,0.4); color: var(--green);  background: rgba(61,201,175,0.08); }
+  .cluster-badge.conf-medium { border-color: rgba(47,129,247,0.3);  color: var(--accent); background: rgba(47,129,247,0.06); }
+  .cluster-badge.conf-low    { border-color: rgba(88,166,255,0.3); color: var(--accent3);background: rgba(88,166,255,0.06); }
+  .cluster-body {
+    display: none;
+    border-top: 1px solid var(--border);
+    background: rgba(3,23,22,0.5);
+  }
+  .cluster-body.open { display: block; }
+  .cluster-article-row {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 9px 16px 9px 36px;
+    border-bottom: 1px solid var(--border);
+    text-decoration: none;
+    transition: background .1s;
+  }
+  .cluster-article-row:last-child { border-bottom: none; }
+  .cluster-article-row:hover { background: var(--surface2); }
+  .cluster-art-title { flex: 1; font-size: 12px; color: var(--text); line-height: 1.4; }
+  .cluster-art-title:hover { color: var(--accent); }
+  .cluster-art-source {
+    font-family: var(--font-ui);
+    font-size: 9px;
+    color: var(--text-dim);
+    background: rgba(3,47,48,0.8);
+    border: 1px solid var(--border);
+    padding: 1px 6px;
+    border-radius: 1px;
+    white-space: nowrap;
+  }
+  .cluster-art-date { font-family: var(--font-ui); font-size: 9px; color: var(--text-dim); white-space: nowrap; }
+  .cluster-sparkline { display: inline-block; vertical-align: middle; flex-shrink: 0; }
+  .cluster-badge.spike-alert { border-color: rgba(88,166,255,0.5); color: var(--accent3); background: rgba(88,166,255,0.08); }
+  .cluster-badge.re-emerged  { border-color: rgba(218,54,51,0.4);  color: var(--red);     background: rgba(218,54,51,0.08); }
+  .cluster-card.single-source { opacity: 0.38; }
+  .cluster-card.single-source:hover { opacity: 0.6; }
+
+  .spike-section-label {
+    font-family: var(--font-ui);
+    font-size: 9px;
+    color: var(--text-dim);
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    padding: 10px 16px;
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-top: none;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  .spike-section-label::before { content: '//'; color: var(--accent); font-size: 9px; letter-spacing: 0; }
+
+  .spike-row {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 10px 16px;
+    border-bottom: 1px solid var(--border);
+    background: var(--surface);
+    animation: fadeSlideIn .2s ease both;
+  }
+  .spike-row:hover { background: var(--surface2); }
+  .spike-entity { flex: 1; font-size: 13px; font-weight: 600; color: var(--text-bright); }
+  .spike-meta { font-family: var(--font-ui); font-size: 9px; color: var(--text-dim); white-space: nowrap; }
+  .spike-badge {
+    font-family: var(--font-ui);
+    font-size: 9px;
+    padding: 2px 8px;
+    border-radius: 2px;
+    white-space: nowrap;
+  }
+  .spike-badge.high   { background: rgba(218,54,51,0.12); border: 1px solid rgba(218,54,51,0.4); color: var(--red); }
+  .spike-badge.medium { background: rgba(88,166,255,0.1); border: 1px solid rgba(88,166,255,0.3); color: var(--accent3); }
+  .spike-zscore {
+    font-family: var(--font-ui);
+    font-size: 13px;
+    min-width: 55px;
+    text-align: right;
+  }
+  .spike-zscore.high   { color: var(--red); }
+  .spike-zscore.medium { color: var(--accent3); }
+
+  .intel-empty {
+    display: flex; flex-direction: column; align-items: center; justify-content: center;
+    padding: 40px 20px; color: var(--text-dim); gap: 8px;
+    font-family: var(--font-ui); font-size: 11px; letter-spacing: 0.05em;
+  }
+</style>
+<link rel="stylesheet" href="/static/css/theme.css">
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.min.js"></script>
+<script src="/static/js/ui/icons.js"></script>
+<script src="/static/js/ui/cti-select.js"></script>
+</head>
+<body>
+<script>
+(function () {
+  var h = window.location.hash;
+  if (h.startsWith('#token=')) {
+    localStorage.setItem('cti_jwt', h.slice(7));
+    history.replaceState(null, '', window.location.pathname + window.location.search);
+  }
+  var ssoErr = new URLSearchParams(window.location.search).get('error');
+  if (ssoErr === 'sso_failed') {
+    window._ssoPrefillError = 'SSO login failed. Please try again or use local credentials.';
+  }
+})();
+</script>
+
+<!-- ══════════ ARTICLE MODAL ══════════ -->
+<div class="modal-overlay" id="modal-overlay" onclick="handleOverlayClick(event)">
+  <div class="modal-card" id="modal-card">
+    <div class="modal-head">
+      <span class="modal-type-dot" id="modal-type-dot"></span>
+      <div class="modal-title" id="modal-title"></div>
+      <button class="modal-close" onclick="closeModal()" title="Close"><i data-ic="x"></i></button>
+    </div>
+    <div class="modal-meta-bar" id="modal-meta-bar"></div>
+    <div class="modal-body" id="modal-body"></div>
+    <div class="modal-foot">
+      <button class="btn-close-modal" onclick="closeModal()">Close</button>
+      <button class="btn-apply" id="modal-newsletter-btn" onclick="queueForNewsletter()"
+              style="background:rgba(47,129,247,0.08);border-color:rgba(47,129,247,0.3);color:var(--accent);font-size:11px;padding:5px 14px">
+        + Newsletter
+      </button>
+      <button id="modal-ioc-export-btn" onclick="exportArticleIocsCsv()" style="display:none;background:rgba(227,179,65,0.08);border:1px solid rgba(227,179,65,0.3);color:var(--orange);font-family:var(--font-ui);font-size:11px;padding:5px 14px;border-radius:3px;cursor:pointer">
+        <i data-ic="download"></i> Export IOC CSV
+      </button>
+      <a class="btn-open-article" id="modal-article-link" href="#" target="_blank" rel="noopener noreferrer">Open Article <i data-ic="external-link"></i></a>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════ CONFIRM MODAL ══════════ -->
+<div class="modal-overlay" id="confirm-overlay" onclick="handleConfirmOverlayClick(event)">
+  <div class="modal-card" style="max-width:440px">
+    <div class="modal-head">
+      <span class="modal-type-dot" id="confirm-dot" style="background:var(--red);box-shadow:0 0 6px var(--red);margin-top:4px"></span>
+      <div class="modal-title" id="confirm-title">Confirm Action</div>
+      <button class="modal-close" onclick="closeConfirmModal()"><i data-ic="x"></i></button>
+    </div>
+    <div class="modal-body" id="confirm-body" style="gap:0;padding:22px 20px"></div>
+    <div class="modal-foot">
+      <button class="btn-close-modal" onclick="closeConfirmModal()">Cancel</button>
+      <button class="btn-confirm-ok" id="confirm-ok-btn" onclick="_confirmAction()">Remove</button>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════ CVE DETAIL MODAL ══════════ -->
+<div class="modal-overlay" id="cve-modal-overlay" onclick="handleCveModalOverlayClick(event)">
+  <div class="modal-card" style="max-width:680px;max-height:82vh">
+    <div class="modal-head">
+      <span class="modal-type-dot" id="cve-modal-dot"></span>
+      <div class="modal-title" id="cve-modal-title" style="font-size:15px"></div>
+      <button class="modal-close" onclick="closeCveModal()"><i data-ic="x"></i></button>
+    </div>
+    <div class="modal-meta-bar" id="cve-modal-meta" style="gap:6px;padding:8px 18px;flex-wrap:wrap"></div>
+    <!-- tab bar -->
+    <div style="display:flex;gap:0;border-bottom:1px solid var(--border);padding:0 20px">
+      <button id="cve-tab-details-btn" onclick="cveModalTab('details')"
+        style="background:none;border:none;border-bottom:2px solid var(--accent);color:var(--text-bright);font-family:var(--font-ui);font-size:11px;padding:8px 14px;cursor:pointer;margin-bottom:-1px">
+        Details
+      </button>
+      <button id="cve-tab-ticket-btn" onclick="cveModalTab('ticket')"
+        style="background:none;border:none;border-bottom:2px solid transparent;color:var(--text-dim);font-family:var(--font-ui);font-size:11px;padding:8px 14px;cursor:pointer;margin-bottom:-1px">
+        Ticket <span id="cve-tab-ticket-badge" style="display:none;background:rgba(61,201,175,0.15);border:1px solid rgba(61,201,175,0.4);color:var(--green);font-size:9px;padding:1px 5px;border-radius:2px;margin-left:4px">ACK</span>
+      </button>
+    </div>
+    <div class="modal-body" id="cve-modal-body"></div>
+    <div class="modal-body" id="cve-modal-ticket-body" style="display:none"></div>
+    <div class="modal-foot">
+      <button class="btn-close-modal" onclick="closeCveModal()">Close</button>
+      <button id="cve-mindmap-btn" onclick="generateCveMindmap()" style="background:#1A243A;border:1px solid #6E7CFF;color:#6E7CFF;font-family:var(--font-ui);font-size:11px;padding:6px 14px;cursor:pointer;border-radius:3px"><i data-ic="git-merge"></i> Mind Map</button>
+      <button id="cve-ack-btn" class="btn-apply" style="background:#102015;border-color:rgba(61,201,175,0.5);color:var(--green)" onclick="acknowledgeCve()">
+        Acknowledge
+      </button>
+      <a class="btn-open-article" id="cve-modal-nvd-link" href="#" target="_blank" rel="noopener noreferrer">View on NVD <i data-ic="external-link"></i></a>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════ CVE DRAFT EMAIL MODAL ══════════ -->
+<div class="modal-overlay" id="cve-email-modal-overlay" onclick="if(event.target===this) closeCveEmailModal()">
+  <div class="modal-card" style="max-width:460px">
+    <div class="modal-head">
+      <div class="modal-title" style="font-size:15px"><i data-ic="mail"></i> Draft CVE Notification Email</div>
+      <button class="modal-close" onclick="closeCveEmailModal()"><i data-ic="x"></i></button>
+    </div>
+    <div class="modal-body" style="padding:18px 20px">
+      <div style="margin-bottom:16px">
+        <div style="font-size:11px;color:var(--text-dim);text-transform:uppercase;margin-bottom:6px">Action</div>
+        <label style="display:flex;align-items:center;gap:8px;margin-bottom:6px;cursor:pointer">
+          <input type="radio" name="cve-email-mode" value="eml" checked> Generate .eml file (download, no send)
+        </label>
+        <label style="display:flex;align-items:center;gap:8px;cursor:pointer">
+          <input type="radio" name="cve-email-mode" value="send"> Send directly to recipients
+        </label>
+      </div>
+      <div style="margin-bottom:16px">
+        <div style="font-size:11px;color:var(--text-dim);text-transform:uppercase;margin-bottom:6px">Language</div>
+        <label style="display:flex;align-items:center;gap:8px;margin-bottom:6px;cursor:pointer">
+          <input type="radio" name="cve-email-lang" value="en" checked> English
+        </label>
+        <label style="display:flex;align-items:center;gap:8px;cursor:pointer">
+          <input type="radio" name="cve-email-lang" value="id"> Bahasa Indonesia
+        </label>
+      </div>
+      <div>
+        <div style="font-size:11px;color:var(--text-dim);text-transform:uppercase;margin-bottom:6px">Recipients (client newsletter list)</div>
+        <div id="cve-email-recipients-list" style="max-height:140px;overflow-y:auto;border:1px solid var(--border);border-radius:4px;padding:8px;font-size:12px">Loading…</div>
+      </div>
+    </div>
+    <div class="modal-foot">
+      <button class="btn-close-modal" onclick="closeCveEmailModal()">Cancel</button>
+      <button id="cve-email-confirm-btn" class="btn-apply" onclick="confirmCveEmailAction()">Confirm</button>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════ RANSOMWARE GROUP DETAIL MODAL ══════════ -->
+<div class="modal-overlay" id="rwtm-modal-overlay" onclick="if(event.target===this) closeRwTreemapModal()">
+  <div class="modal-card" style="max-width:720px;max-height:86vh">
+    <div class="modal-head" style="display:none"></div>
+    <div class="modal-body" id="rwtm-modal-body" style="padding:22px 24px;position:relative"></div>
+    <div class="modal-foot">
+      <button class="btn-close-modal" onclick="closeRwTreemapModal()">Close</button>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════ RANSOMWARE VICTIMS — FULL LIST MODAL ══════════ -->
+<div class="modal-overlay" id="rw-full-modal-overlay" onclick="if(event.target===this) closeRwVictimsFullModal()">
+  <div class="modal-card" style="max-width:900px;max-height:88vh">
+    <div class="modal-head">
+      <span class="modal-type-dot" style="background:var(--red);box-shadow:0 0 6px var(--red);margin-top:4px"></span>
+      <div class="modal-title">Ransomware Victims — Full List</div>
+      <button class="modal-close" onclick="closeRwVictimsFullModal()"><i data-ic="x"></i></button>
+    </div>
+    <div class="modal-meta-bar" style="gap:6px;flex-wrap:wrap">
+      <input type="text" class="filter-input" id="rwf-f-group"    placeholder="Group…"    style="width:140px;font-size:11px;padding:4px 8px" onkeydown="if(event.key==='Enter') loadRwVictimsFull(1)">
+      <input type="text" class="filter-input" id="rwf-f-country"  placeholder="Country…"  style="width:140px;font-size:11px;padding:4px 8px" onkeydown="if(event.key==='Enter') loadRwVictimsFull(1)">
+      <input type="text" class="filter-input" id="rwf-f-industry" placeholder="Industry…" style="width:140px;font-size:11px;padding:4px 8px" onkeydown="if(event.key==='Enter') loadRwVictimsFull(1)">
+      <button class="btn-apply" style="font-size:10px;padding:4px 10px" onclick="loadRwVictimsFull(1)">Filter</button>
+      <span id="rwf-count" style="margin-left:auto;font-family:var(--font-ui);font-size:10px;color:var(--text-dim)"></span>
+    </div>
+    <div class="modal-body" id="rw-full-modal-body" style="padding:0;overflow:auto"></div>
+    <div class="modal-foot">
+      <span id="rwf-pager" style="margin-right:auto;font-family:var(--font-ui);font-size:11px;color:var(--text-dim)"></span>
+      <button class="btn-close-modal" onclick="closeRwVictimsFullModal()">Close</button>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════ RANSOMWARE VICTIM EDIT MODAL ══════════ -->
+<div class="modal-overlay" id="rw-edit-modal-overlay" onclick="if(event.target===this) closeRwVictimEdit()">
+  <div class="modal-card" style="max-width:380px">
+    <div class="modal-head">
+      <span class="modal-type-dot" style="background:var(--accent);box-shadow:0 0 6px var(--accent);margin-top:4px"></span>
+      <div class="modal-title" id="rw-edit-title">Edit Victim</div>
+      <button class="modal-close" onclick="closeRwVictimEdit()"><i data-ic="x"></i></button>
+    </div>
+    <div class="modal-body" style="padding:18px 20px;gap:12px">
+      <div>
+        <label style="font-family:var(--font-ui);font-size:10px;color:var(--text-dim);text-transform:uppercase;letter-spacing:.05em;display:block;margin-bottom:5px">Country</label>
+        <input type="text" class="filter-input" id="rw-edit-country" style="width:100%" placeholder="e.g. United States">
+      </div>
+      <div>
+        <label style="font-family:var(--font-ui);font-size:10px;color:var(--text-dim);text-transform:uppercase;letter-spacing:.05em;display:block;margin-bottom:5px">Industry</label>
+        <input type="text" class="filter-input" id="rw-edit-industry" style="width:100%" placeholder="e.g. Healthcare">
+      </div>
+    </div>
+    <div class="modal-foot">
+      <button class="btn-close-modal" onclick="closeRwVictimEdit()">Cancel</button>
+      <button class="btn-apply" onclick="saveRwVictimEdit()">Save</button>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════ NOTIFICATIONS MODAL ══════════ -->
+<div class="modal-overlay" id="notif-overlay" onclick="if(event.target===this)closeNotifModal()">
+  <div class="modal-card" style="max-width:480px">
+    <div class="modal-head">
+      <div style="font-family:var(--font-ui);font-size:12px;letter-spacing:.08em">NOTIFICATIONS</div>
+      <button class="modal-close" onclick="closeNotifModal()" style="margin-left:auto"><i data-ic="x"></i></button>
+    </div>
+    <div id="notif-list" style="overflow-y:auto"></div>
+    <div style="padding:10px 18px;border-top:1px solid var(--border);display:flex;gap:8px;justify-content:flex-end">
+      <button class="btn-apply" onclick="notifMarkAllRead()">Mark all read</button>
+      <button class="btn-apply" onclick="closeNotifModal()">Close</button>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════ AUTH MODAL ══════════ -->
+<div class="modal-overlay" id="auth-overlay" onclick="handleAuthOverlayClick(event)">
+  <div class="modal-card" style="max-width:400px">
+    <div class="modal-head">
+      <span class="modal-type-dot" style="background:var(--accent3);box-shadow:0 0 6px var(--accent3);margin-top:4px"></span>
+      <div class="modal-title">Authentication Required</div>
+      <button class="modal-close" id="auth-close-btn" onclick="closeAuthModal()"><i data-ic="x"></i></button>
+    </div>
+    <div class="modal-body" style="padding:22px 20px;gap:0">
+      <p id="auth-subtitle" style="font-size:12px;color:var(--text-dim);line-height:1.6;margin-bottom:16px;font-family:var(--font-ui)">
+        Sign in to perform this action.
+      </p>
+      <div id="auth-login-fields">
+        <div style="font-family:var(--font-ui);font-size:9px;color:var(--text-dim);text-transform:uppercase;letter-spacing:.1em;margin-bottom:6px">Username</div>
+        <input type="text" class="filter-input" id="auth-username-input"
+               placeholder="Username…"
+               style="width:100%;font-size:13px;padding:8px 12px;box-sizing:border-box;margin-bottom:12px"
+               onkeydown="if(event.key==='Enter')document.getElementById('auth-password-input').focus()">
+        <div style="font-family:var(--font-ui);font-size:9px;color:var(--text-dim);text-transform:uppercase;letter-spacing:.1em;margin-bottom:6px">Password</div>
+        <input type="password" class="filter-input" id="auth-password-input"
+               placeholder="Password…"
+               style="width:100%;font-size:13px;padding:8px 12px;box-sizing:border-box"
+               onkeydown="if(event.key==='Enter')_authSubmit()">
+      </div>
+      <div id="auth-analyst-row" style="display:none;margin-top:14px">
+        <div style="font-family:var(--font-ui);font-size:9px;color:var(--text-dim);text-transform:uppercase;letter-spacing:.1em;margin-bottom:6px">Analyst Name</div>
+        <input type="text" class="filter-input" id="auth-analyst-input"
+               placeholder="Your name…"
+               style="width:100%;font-size:13px;padding:8px 12px;box-sizing:border-box"
+               onkeydown="if(event.key==='Enter')_authSubmit()">
+      </div>
+      <div id="auth-error"
+           style="font-family:var(--font-ui);font-size:10px;color:var(--red);
+                  margin-top:10px;display:none;padding:6px 10px;border:1px solid rgba(218,54,51,0.3);
+                  background:rgba(218,54,51,0.06);border-radius:2px">
+      </div>
+    </div>
+    {% if oidc_enabled %}
+    <div style="display:flex;align-items:center;margin:0 20px;gap:8px">
+      <div style="flex:1;height:1px;background:var(--border)"></div>
+      <span style="font-family:var(--font-ui);font-size:9px;color:var(--text-dim);text-transform:uppercase;letter-spacing:.1em">or</span>
+      <div style="flex:1;height:1px;background:var(--border)"></div>
+    </div>
+    <div style="padding:14px 20px 0">
+      <a href="/auth/login"
+         id="sso-login-btn"
+         style="display:block;width:100%;padding:8px;background:transparent;
+                border:1px solid var(--accent);color:var(--accent);
+                text-align:center;text-decoration:none;border-radius:2px;
+                font-family:var(--font-ui);font-size:11px;
+                text-transform:uppercase;letter-spacing:.08em;box-sizing:border-box;
+                transition:background .15s,color .15s"
+         onmouseover="this.style.background='var(--accent)';this.style.color='#000'"
+         onmouseout="this.style.background='transparent';this.style.color='var(--accent)'">
+        Sign in with SSO
+      </a>
+    </div>
+    {% endif %}
+    <div class="modal-foot">
+      <button class="btn-close-modal" id="auth-cancel-btn" onclick="closeAuthModal()">Cancel</button>
+      <button class="btn-apply" style="font-size:11px;padding:7px 20px" onclick="_authSubmit()">Sign In</button>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════ SOURCE RELIABILITY ADD/EDIT MODAL ══════════ -->
+<div class="modal-overlay" id="sr-modal-overlay" onclick="if(event.target===this)closeSRModal()">
+  <div class="modal-card" style="max-width:560px">
+    <div class="modal-head">
+      <span class="modal-type-dot" id="sr-modal-dot" style="background:var(--accent);box-shadow:0 0 6px var(--accent);margin-top:4px"></span>
+      <div class="modal-title" id="sr-modal-title">Add Source Rating</div>
+      <button class="modal-close" onclick="closeSRModal()"><i data-ic="x"></i></button>
+    </div>
+    <div class="modal-body" style="gap:14px;padding:22px 20px">
+
+      <div id="sr-modal-err" style="display:none;font-family:var(--font-ui);font-size:10px;
+           color:var(--red);padding:6px 10px;border:1px solid rgba(218,54,51,0.3);
+           background:rgba(218,54,51,0.06);border-radius:2px"></div>
+
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px">
+        <div>
+          <div style="font-family:var(--font-ui);font-size:9px;color:var(--text-dim);
+                      text-transform:uppercase;letter-spacing:.1em;margin-bottom:6px">Source Name *</div>
+          <div class="sr-source-wrap">
+            <input type="text" class="filter-input" id="sr-input-source"
+                   placeholder="Click to pick a source…" style="width:100%;font-size:13px;padding:7px 10px"
+                   autocomplete="off" oninput="srSourceFilter()" onfocus="srSourceOpen()" onkeydown="srSourceKey(event)">
+            <ul class="sr-source-dd" id="sr-source-dd"></ul>
+          </div>
+        </div>
+        <div id="sr-analyst-row" style="display:none">
+          <div style="font-family:var(--font-ui);font-size:9px;color:var(--text-dim);
+                      text-transform:uppercase;letter-spacing:.1em;margin-bottom:6px">Added By</div>
+          <input type="text" class="filter-input" id="sr-input-analyst" disabled
+                 style="width:100%;font-size:13px;padding:7px 10px">
+        </div>
+      </div>
+
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px">
+        <div>
+          <div style="font-family:var(--font-ui);font-size:9px;color:var(--text-dim);
+                      text-transform:uppercase;letter-spacing:.1em;margin-bottom:6px">Reliability Grade *</div>
+          <select class="filter-select" id="sr-input-grade" style="width:100%;padding:7px 28px 7px 10px">
+            <option value="">Select grade…</option>
+            <option value="A">A — Completely reliable</option>
+            <option value="B">B — Usually reliable</option>
+            <option value="C">C — Fairly reliable</option>
+            <option value="D">D — Not usually reliable</option>
+            <option value="E">E — Unreliable</option>
+            <option value="F">F — Cannot be judged</option>
+          </select>
+        </div>
+        <div>
+          <div style="font-family:var(--font-ui);font-size:9px;color:var(--text-dim);
+                      text-transform:uppercase;letter-spacing:.1em;margin-bottom:6px">Credibility Code *</div>
+          <select class="filter-select" id="sr-input-code" style="width:100%;padding:7px 28px 7px 10px">
+            <option value="">Select code…</option>
+            <option value="1">1 — Confirmed by other sources</option>
+            <option value="2">2 — Probably true</option>
+            <option value="3">3 — Possibly true</option>
+            <option value="4">4 — Doubtful</option>
+            <option value="5">5 — Improbable</option>
+            <option value="6">6 — Cannot be judged</option>
+          </select>
+        </div>
+      </div>
+
+      <div id="sr-suggest-row">
+        <button class="btn-close-modal" style="width:100%;font-size:11px;padding:7px 10px" id="sr-suggest-btn"
+                onclick="srSuggestRating()">Suggest via LLM</button>
+      </div>
+
+      <div>
+        <div style="font-family:var(--font-ui);font-size:9px;color:var(--text-dim);
+                    text-transform:uppercase;letter-spacing:.1em;margin-bottom:6px">Notes</div>
+        <textarea class="filter-input" id="sr-input-notes" rows="3"
+                  placeholder="Optional analyst notes, rationale, links…"
+                  style="width:100%;font-size:12px;padding:7px 10px;resize:vertical;
+                         font-family:var(--font-ui);line-height:1.5"></textarea>
+      </div>
+
+      <!-- Live admiralty code preview -->
+      <div style="display:flex;align-items:center;gap:10px;margin-top:2px">
+        <span style="font-family:var(--font-ui);font-size:9px;color:var(--text-dim);text-transform:uppercase;letter-spacing:.1em">Admiralty Code Preview:</span>
+        <span id="sr-code-preview" style="font-family:var(--font-ui);font-size:20px;color:var(--text-dim)">—</span>
+      </div>
+
+      <div id="sr-suggest-reasoning" style="display:none;font-family:var(--font-ui);font-size:10px;
+           color:var(--text-dim);padding:8px 10px;border:1px solid var(--border);border-radius:2px;line-height:1.6"></div>
+
+    </div>
+    <div class="modal-foot">
+      <button class="btn-close-modal" onclick="closeSRModal()">Cancel</button>
+      <button class="btn-apply" style="font-size:11px;padding:7px 20px" onclick="srModalSubmit()" id="sr-modal-submit-btn">Save</button>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════ CHANGELOG MODAL ══════════ -->
+<div class="modal-overlay" id="cl-overlay" onclick="if(event.target===this)closeChangelog()">
+  <div class="modal-card" style="max-width:660px">
+    <div class="modal-head">
+      <span class="modal-type-dot" style="background:var(--accent);box-shadow:0 0 6px var(--accent);margin-top:4px"></span>
+      <div class="modal-title" id="cl-title">Release History</div>
+      <button class="modal-close" onclick="closeChangelog()"><i data-ic="x"></i></button>
+    </div>
+    <div class="modal-body" id="cl-body" style="flex-direction:column;gap:0;padding:20px"></div>
+    <div class="modal-foot">
+      <button class="btn-close-modal" id="cl-back-btn" onclick="clShowList()" style="display:none"><i data-ic="arrow-left"></i> Back</button>
+      <button class="btn-close-modal" onclick="closeChangelog()">Close</button>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════ TTP DRILL-DOWN MODAL ══════════ -->
+<div class="modal-overlay" id="ttp-drill-overlay" onclick="if(event.target===this)closeTtpDrill()">
+  <div class="modal-card" style="max-width:680px">
+    <div class="modal-head">
+      <span class="modal-type-dot" style="background:var(--accent);box-shadow:0 0 6px var(--accent);margin-top:4px"></span>
+      <div class="modal-title" id="ttp-drill-title">Articles</div>
+      <button class="modal-close" onclick="closeTtpDrill()"><i data-ic="x"></i></button>
+    </div>
+    <div style="font-family:var(--font-ui);font-size:10px;color:var(--text-dim);padding:0 20px 12px;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:10px" id="ttp-drill-subtitle"></div>
+    <div id="ttp-drill-d3fend" style="display:none;padding:8px 20px 10px;border-bottom:1px solid var(--border)"></div>
+    <div class="modal-body" id="ttp-drill-body" style="flex-direction:column;gap:0;padding:0"></div>
+    <div class="modal-foot" id="ttp-drill-foot">
+      <button class="btn-close-modal" onclick="closeTtpDrill()">Close</button>
+      <span id="ttp-drill-count" style="font-family:var(--font-ui);font-size:10px;color:var(--text-dim)"></span>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════ SCRAPER ARTICLES MODAL ══════════ -->
+<div class="modal-overlay" id="scraper-articles-overlay" onclick="if(event.target===this)closeScraperArticlesModal()">
+  <div class="modal-card" style="max-width:760px">
+    <div class="modal-head">
+      <span class="modal-type-dot" style="background:var(--accent);box-shadow:0 0 6px var(--accent);margin-top:4px"></span>
+      <div class="modal-title" id="scraper-articles-title">Scraper Articles</div>
+      <button class="modal-close" onclick="closeScraperArticlesModal()"><i data-ic="x"></i></button>
+    </div>
+    <div style="font-family:var(--font-ui);font-size:10px;color:var(--text-dim);padding:8px 20px 10px;border-bottom:1px solid var(--border);display:flex;gap:16px;align-items:center" id="scraper-articles-subtitle">
+      <span id="scraper-articles-stats"></span>
+    </div>
+    <div style="display:flex;gap:0;border-bottom:1px solid var(--border);padding:0 20px">
+      <button id="scraper-tab-rejected" onclick="scraperSwitchTab('rejected')"
+        style="font-family:var(--font-ui);font-size:10px;padding:8px 12px;background:none;border:none;border-bottom:2px solid var(--red);color:var(--red);cursor:pointer">
+        Rejected <span id="scraper-rejected-count"></span>
+      </button>
+      <button id="scraper-tab-accepted" onclick="scraperSwitchTab('accepted')"
+        style="font-family:var(--font-ui);font-size:10px;padding:8px 12px;background:none;border:none;border-bottom:2px solid transparent;color:var(--text-dim);cursor:pointer">
+        Accepted <span id="scraper-accepted-count"></span>
+      </button>
+    </div>
+    <div class="modal-body" id="scraper-articles-body" style="flex-direction:column;gap:0;padding:0;max-height:420px;overflow-y:auto"></div>
+    <div class="modal-foot">
+      <button class="btn-close-modal" onclick="closeScraperArticlesModal()">Close</button>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════ TA PROFILE MODAL ══════════ -->
+<div id="taw-art-modal" style="display:none;position:fixed;inset:0;z-index:9200;overflow:hidden;">
+  <div class="modal-backdrop" onclick="tawCloseArticlesModal()" style="position:fixed;inset:0;background:rgba(4,10,20,.78);"></div>
+  <div style="position:relative;z-index:1;max-width:900px;margin:32px auto;background:var(--surface);border:1px solid var(--border);border-radius:8px;display:flex;flex-direction:column;max-height:calc(100vh - 64px);">
+    <div style="display:flex;align-items:center;justify-content:space-between;gap:12px;padding:18px 24px;border-bottom:1px solid var(--border);flex-shrink:0;">
+      <div>
+        <div style="font-size:11px;font-family:var(--font-ui);color:var(--text-dim);letter-spacing:.08em;margin-bottom:4px;">THREAT ACTOR — RELATED ARTICLES</div>
+        <div id="taw-art-modal-title" style="font-size:16px;font-weight:700;color:var(--accent);letter-spacing:.04em;">—</div>
+      </div>
+      <div style="display:flex;align-items:center;gap:12px;">
+        <span id="taw-art-modal-count" style="font-family:var(--font-ui);font-size:10px;color:var(--text-dim);">—</span>
+        <button class="modal-close" onclick="tawCloseArticlesModal()" title="Close"><i data-ic="x"></i></button>
+      </div>
+    </div>
+    <div id="taw-art-modal-body" style="overflow-y:auto;padding:16px 24px;flex:1;"></div>
+    <div id="taw-art-modal-pager" style="display:flex;align-items:center;justify-content:center;gap:12px;padding:12px 24px;border-top:1px solid var(--border);flex-shrink:0;"></div>
+  </div>
+</div>
+
+<div id="ta-profile-modal">
+  <div class="modal-backdrop" onclick="closeTAProfileModal()"></div>
+  <div class="modal-box">
+    <div class="tap-header">
+      <div>
+        <div class="tap-title" id="tap-actor-name">—</div>
+        <div style="font-family:var(--font-ui);font-size:10px;color:var(--text-dim);margin-top:4px">Threat Actor Profile</div>
+      </div>
+      <div style="display:flex;align-items:center;gap:10px">
+        <button class="tap-mindmap" onclick="mmOpenEditor('threat_actor',_tapCurrentActor,_tapCurrentActor)"><i data-ic="edit"></i> Edit Mindmap</button>
+        <button class="tap-regen" id="tap-regen-btn" onclick="taRegenProfile()"><i data-ic="refresh"></i> Regenerate</button>
+        <button class="tap-close" onclick="closeTAProfileModal()"><i data-ic="x"></i></button>
+      </div>
+    </div>
+    <div class="tap-meta-row" id="tap-meta-row"></div>
+    <div id="tap-body"></div>
+  </div>
+</div>
+
+<div class="app">
+
+  <div class="app-body">
+  <!-- LEFT SIDEBAR (Full-Height Corporate Navigation Shell) -->
+  <aside class="tabs">
+    <div class="sidebar-brand" onclick="switchTab('dashboard', document.querySelector('.tab'))">
+      <img src="/static/img/logo.png" alt="CTI Nexus" class="brand-logo">
+      <div class="sidebar-brand-text">
+        <div class="title">CTI Nexus</div>
+        <div class="sidebar-brand-sub">Threat Intelligence Platform</div>
+      </div>
+    </div>
+
+    <div class="sidebar-nav">
+      <div class="sidebar-group-label">Overview</div>
+      <button class="tab active" onclick="switchTab('dashboard',this)">
+        <svg class="tab-icon" viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg>
+        <span class="tab-label">Dashboard</span>
+      </button>
+      <button class="tab" onclick="switchTab('exec',this)">
+        <svg class="tab-icon" viewBox="0 0 24 24"><line x1="4" y1="20" x2="20" y2="20"/><rect x="6" y="12" width="3" height="8"/><rect x="11" y="7" width="3" height="13"/><rect x="16" y="3" width="3" height="17"/></svg>
+        <span class="tab-label">Exec Dashboard</span>
+      </button>
+      <button class="tab" onclick="switchTab('recap',this)">
+        <svg class="tab-icon" viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="17" rx="1"/><line x1="3" y1="9" x2="21" y2="9"/><line x1="7" y1="2" x2="7" y2="6"/><line x1="17" y1="2" x2="17" y2="6"/></svg>
+        <span class="tab-label">Daily Recap</span>
+      </button>
+
+      <div class="sidebar-group-label">Threat Feeds</div>
+      <button class="tab" onclick="switchTab('newsroom',this)">
+        <svg class="tab-icon" viewBox="0 0 24 24"><path d="M4 4h13a2 2 0 0 1 2 2v13a1 1 0 0 1-1 1H4z"/><path d="M19 6H4v14"/><line x1="8" y1="9" x2="15" y2="9"/><line x1="8" y1="13" x2="15" y2="13"/></svg>
+        <span class="tab-label">News Room</span>
+        <span class="tab-count" id="newsroom-count">—</span>
+      </button>
+      <button class="tab" onclick="switchTab('cvetracker',this)">
+        <svg class="tab-icon" viewBox="0 0 24 24"><path d="M12 3l8 3v6c0 5-3.4 8.7-8 9-4.6-.3-8-4-8-9V6z"/></svg>
+        <span class="tab-label">CVE Tracker</span>
+        <span class="tab-count" id="cve-count">—</span>
+      </button>
+      <button class="tab" onclick="switchTab('xintel',this)">
+        <svg class="tab-icon" viewBox="0 0 24 24"><line x1="5" y1="5" x2="19" y2="19"/><line x1="19" y1="5" x2="5" y2="19"/></svg>
+        <span class="tab-label">X Intel</span>
+        <span class="tab-count" id="xintel-count">—</span>
+      </button>
+
+      <div class="sidebar-group-label">Analysis &amp; Monitoring</div>
+      <button class="tab" onclick="switchTab('intelligence',this)">
+        <svg class="tab-icon" viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><line x1="21" y1="21" x2="16" y2="16"/></svg>
+        <span class="tab-label">Intelligence</span>
+        <span class="tab-count" id="intel-count"></span>
+      </button>
+      <button class="tab" onclick="switchTab('watch',this)">
+        <svg class="tab-icon" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><line x1="3" y1="12" x2="21" y2="12"/><path d="M12 3a15 15 0 0 1 0 18a15 15 0 0 1 0-18"/></svg>
+        <span class="tab-label">Watch</span>
+      </button>
+      <a class="tab" href="/intelgraph">
+        <svg class="tab-icon" viewBox="0 0 24 24"><circle cx="6" cy="6" r="2.5"/><circle cx="18" cy="6" r="2.5"/><circle cx="12" cy="18" r="2.5"/><line x1="8" y1="7" x2="16" y2="7"/><line x1="7" y1="8.3" x2="11" y2="16"/><line x1="17" y1="8.3" x2="13" y2="16"/></svg>
+        <span class="tab-label">IntelGraph</span>
+        <span class="sidebar-ext-ic"><i data-ic="arrow-up-right" data-size="12"></i></span>
+      </a>
+
+      <div class="sidebar-group-label sidebar-group-admin">Administration</div>
+      <button class="tab" id="tab-btn-usermgmt" style="display:none" onclick="switchTab('usermgmt',this)">
+        <svg class="tab-icon" viewBox="0 0 24 24"><circle cx="9" cy="8" r="3"/><path d="M3 20c0-3.3 2.7-6 6-6s6 2.7 6 6"/><circle cx="17" cy="9" r="2.3"/><path d="M15 14.2c2.4.4 4 2.4 4 5.8"/></svg>
+        <span class="tab-label">User Management</span>
+      </button>
+    </div>
+
+    <div class="sidebar-footer">
+      <div class="sidebar-status">
+        <span class="cti-status-dot cti-status-dot--online"></span>
+        <span>Platform Online</span>
+      </div>
+      <div class="version-badge" onclick="openChangelog()" title="View changelog">v{{ version }}</div>
+    </div>
+  </aside>
+
+  <div class="main-content">
+    <!-- WORKSPACE TOP HEADER -->
+    <div class="header">
+      <div class="header-left">
+        <div class="workspace-heading">
+          <div class="workspace-title" id="workspace-page-title">Dashboard</div>
+          <div class="workspace-subtitle" id="workspace-page-subtitle">Global Threat &amp; Intelligence Overview</div>
+        </div>
+      </div>
+      <div class="header-status">
+        <div class="header-control-group">
+          <span id="refresh-countdown" class="refresh-countdown"></span>
+          <select id="refresh-interval" class="refresh-select" onchange="setAutoRefresh()" title="Auto-refresh interval">
+            <option value="0">Auto: Off</option>
+            <option value="300">Auto: 5 min</option>
+            <option value="600">Auto: 10 min</option>
+            <option value="900">Auto: 15 min</option>
+          </select>
+        </div>
+
+        <!-- Client switcher: superadmin only -->
+        <div id="client-switcher-wrap" class="header-control-group" style="display:none;align-items:center;gap:8px;">
+          <span class="header-control-label">Client</span>
+          <select id="client-switcher-select"
+                  class="filter-select"
+                  onchange="onClientSwitch()"
+                  style="min-width:148px">
+          </select>
+        </div>
+
+        <button id="notif-bell" class="header-icon-btn" onclick="openNotifModal(false)" title="Notifications" style="display:none">
+          <i data-ic="bell" data-size="15"></i>
+          <span id="notif-badge" style="display:none"></span>
+        </button>
+
+        <div id="header-auth" class="header-auth-group">
+          <div id="header-user-wrap" style="position:relative;display:none;">
+            <span id="header-username"
+                  class="header-user-pill"
+                  onclick="toggleUserDropdown(event)"
+                  title="Account options"></span>
+            <div id="user-dropdown" class="header-user-menu" style="display:none;">
+              <button onclick="openSelfPwModal();closeUserDropdown()" class="header-user-menu-item">
+                <i data-ic="key" data-size="13"></i> Change Password
+              </button>
+              <button onclick="openNewsletterQueue()" class="header-user-menu-item">
+                <i data-ic="mail" data-size="13"></i> Newsletter Queue (<span id="header-queue-count">0</span>)
+              </button>
+              <button onclick="switchTab('apidocs',this)" title="API Documentation" class="header-user-menu-item">
+                <i data-ic="code" data-size="13"></i> API Documentation
+              </button>
+            </div>
+          </div>
+          <button id="header-login-btn" class="header-btn-signin" onclick="openLoginModal()">
+            Sign In
+          </button>
+          <button id="header-logout-btn" class="header-btn-signout" onclick="doLogout()" style="display:none">
+            Sign Out
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <div class="workspace-body">
+    <!-- FILTER BAR -->
+    <div class="filter-bar">
+      <span class="filter-label">Filter</span>
+      <div class="filter-group">
+        <input type="text" class="filter-input filter-input--search" id="filter-search" placeholder="Search titles…">
+        <div class="filter-date-range">
+          <span class="filter-sep">From</span>
+          <input type="date" class="filter-input filter-input--date" id="filter-date-start">
+          <span class="filter-sep">To</span>
+          <input type="date" class="filter-input filter-input--date" id="filter-date-end">
+        </div>
+        <select class="filter-select" id="filter-country"><option value="">All Countries</option></select>
+        <select class="filter-select" id="filter-industry"><option value="">All Industries</option></select>
+        <select class="filter-select" id="filter-actor"><option value="">All Threat Actors</option></select>
+      </div>
+      <div class="filter-actions">
+        <button class="btn-reset" onclick="resetFilters()">Reset</button>
+        <button class="btn-apply" onclick="applyFilters()">APPLY</button>
+      </div>
+    </div>
+
+    {% include 'partials/tab_dashboard.html' %}
+    {% include 'partials/tab_newsroom.html' %}
+    {% include 'partials/tab_cvetracker.html' %}
+    {% include 'partials/tab_intelligence.html' %}
+    {% include 'partials/tab_exec.html' %}
+    {% include 'partials/tab_xintel.html' %}
+    {% include 'partials/tab_recap.html' %}
+    {% include 'partials/tab_watch.html' %}
+    {% include 'partials/tab_usermgmt.html' %}
+    {% include 'partials/tab_apidocs.html' %}
+    </div>
+  </div>
+  </div>
+
+  <!-- ══ Force Change Password Modal ══ -->
+  <div class="modal-overlay" id="force-pw-overlay" style="z-index:10000">
+    <div class="modal-card" style="max-width:400px">
+      <div class="modal-head">
+        <span class="modal-type-dot" style="background:var(--orange);box-shadow:0 0 6px var(--orange);margin-top:4px"></span>
+        <div class="modal-title">Password Change Required</div>
+      </div>
+      <div class="modal-body" style="padding:22px 20px;gap:0">
+        <p style="font-size:12px;color:var(--text-dim);font-family:var(--font-ui);margin-bottom:16px;line-height:1.6">
+          Your password must be updated before you can continue. Please set a new password that meets the current policy.
+        </p>
+        <div style="display:flex;align-items:center;font-family:var(--font-ui);font-size:9px;color:var(--text-dim);text-transform:uppercase;letter-spacing:.1em;margin-bottom:6px">
+          New Password
+          <span class="pw-info-wrap" style="margin-left:5px"><span class="pw-info-btn">?</span><span class="pw-tooltip" id="pw-tooltip-force"></span></span>
+        </div>
+        <input type="password" class="filter-input" id="force-pw-input"
+               placeholder="New password…"
+               style="width:100%;font-size:13px;padding:8px 12px;box-sizing:border-box"
+               onkeydown="if(event.key==='Enter')doForcePwChange()">
+        <div id="force-pw-err"
+             style="font-family:var(--font-ui);font-size:10px;color:var(--red);
+                    margin-top:10px;display:none;padding:6px 10px;border:1px solid rgba(218,54,51,0.3);
+                    background:rgba(218,54,51,0.06);border-radius:2px"></div>
+      </div>
+      <div class="modal-foot">
+        <button class="btn-apply" style="font-size:11px;padding:7px 20px" onclick="doForcePwChange()">Update Password</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══ Self Change Password Modal ══ -->
+  <div class="modal-overlay" id="self-pw-overlay" onclick="if(event.target===this)closeSelfPwModal()">
+    <div class="modal-card" style="max-width:380px">
+      <div class="modal-head">
+        <span class="modal-type-dot" style="background:var(--accent);box-shadow:0 0 6px var(--accent);margin-top:4px"></span>
+        <div class="modal-title">Change Password</div>
+        <button class="modal-close" onclick="closeSelfPwModal()"><i data-ic="x"></i></button>
+      </div>
+      <div class="modal-body" style="padding:22px 20px;gap:0">
+        <div style="font-family:var(--font-ui);font-size:10px;color:var(--text-dim);margin-bottom:14px">
+          Changing password for: <span id="self-pw-username" style="color:var(--accent)"></span>
+        </div>
+        <div style="display:flex;align-items:center;font-family:var(--font-ui);font-size:9px;color:var(--text-dim);text-transform:uppercase;letter-spacing:.1em;margin-bottom:6px">
+          New Password
+          <span class="pw-info-wrap" style="margin-left:5px"><span class="pw-info-btn">?</span><span class="pw-tooltip" id="pw-tooltip-self"></span></span>
+        </div>
+        <input type="password" class="filter-input" id="self-pw-input"
+               placeholder="New password…"
+               style="width:100%;font-size:13px;padding:8px 12px;box-sizing:border-box;margin-bottom:10px"
+               onkeydown="if(event.key==='Enter')doSelfPwChange()">
+        <div id="self-pw-err"
+             style="font-family:var(--font-ui);font-size:10px;color:var(--red);
+                    display:none;padding:6px 10px;border:1px solid rgba(218,54,51,0.3);
+                    background:rgba(218,54,51,0.06);border-radius:2px"></div>
+      </div>
+      <div class="modal-foot">
+        <button class="btn-close-modal" onclick="closeSelfPwModal()">Cancel</button>
+        <button class="btn-apply" style="font-size:11px;padding:7px 20px" onclick="doSelfPwChange()">Update Password</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══ Reset Password Modal ══ -->
+  <div class="modal-overlay" id="um-reset-overlay" onclick="if(event.target===this)closeResetPwModal()">
+    <div class="modal-card" style="max-width:380px">
+      <div class="modal-head">
+        <span class="modal-type-dot" style="background:var(--accent3);box-shadow:0 0 6px var(--accent3);margin-top:4px"></span>
+        <div class="modal-title">Reset Password</div>
+        <button class="modal-close" onclick="closeResetPwModal()"><i data-ic="x"></i></button>
+      </div>
+      <div class="modal-body" style="padding:22px 20px;gap:0">
+        <p style="font-size:12px;color:var(--text-dim);font-family:var(--font-ui);margin-bottom:16px">
+          Set new password for <strong id="um-reset-username" style="color:var(--text-bright)"></strong>
+        </p>
+        <div style="display:flex;align-items:center;font-family:var(--font-ui);font-size:9px;color:var(--text-dim);text-transform:uppercase;letter-spacing:.1em;margin-bottom:6px">
+          New Password
+          <span class="pw-info-wrap"><span class="pw-info-btn">?</span><span class="pw-tooltip" id="pw-tooltip-dyn2"></span></span>
+        </div>
+        <input type="password" class="filter-input" id="um-reset-pw-input"
+               placeholder="New password…"
+               style="width:100%;font-size:13px;padding:8px 12px;box-sizing:border-box"
+               onkeydown="if(event.key==='Enter')doResetPassword()">
+        <div id="um-reset-pw-err"
+             style="font-family:var(--font-ui);font-size:10px;color:var(--red);
+                    margin-top:10px;display:none;padding:6px 10px;border:1px solid rgba(218,54,51,0.3);
+                    background:rgba(218,54,51,0.06);border-radius:2px"></div>
+      </div>
+      <div class="modal-foot">
+        <button class="btn-close-modal" onclick="closeResetPwModal()">Cancel</button>
+        <button class="btn-apply" style="font-size:11px;padding:7px 20px" onclick="doResetPassword()">Reset Password</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══ Edit User Role Modal ══ -->
+  <div class="modal-overlay" id="er-overlay" onclick="if(event.target===this)closeEditRoleModal()">
+    <div class="modal-card" style="max-width:360px">
+      <div class="modal-head">
+        <span class="modal-type-dot" style="background:var(--orange);box-shadow:0 0 6px var(--orange);margin-top:4px"></span>
+        <div class="modal-title">Change Role</div>
+        <button class="modal-close" onclick="closeEditRoleModal()"><i data-ic="x"></i></button>
+      </div>
+      <div class="modal-body" style="padding:22px 20px;gap:0">
+        <p style="font-family:var(--font-ui);font-size:11px;color:var(--text-dim);margin-bottom:16px">
+          User: <strong id="er-username" style="color:var(--text-bright)"></strong>
+        </p>
+        <div style="font-family:var(--font-ui);font-size:9px;color:var(--text-dim);text-transform:uppercase;letter-spacing:.1em;margin-bottom:6px">New Role</div>
+        <select class="filter-select" id="er-role-select" style="width:100%;font-size:12px;padding:7px 10px">
+          <option value="">Loading roles…</option>
+        </select>
+        <div id="er-err" style="display:none;font-family:var(--font-ui);font-size:10px;color:var(--red);margin-top:8px"></div>
+        <p style="font-family:var(--font-ui);font-size:10px;color:var(--text-dim);margin-top:12px;line-height:1.7">
+          Change takes effect on next login (JWT re-issued).
+        </p>
+      </div>
+      <div class="modal-foot">
+        <button class="btn-close-modal" onclick="closeEditRoleModal()">Cancel</button>
+        <button class="btn-apply" style="font-size:11px;padding:7px 20px" onclick="saveEditRole()">Save</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══ Edit User Clients Modal ══ -->
+  <div class="modal-overlay" id="ec-overlay" onclick="if(event.target===this)closeEditClientsModal()">
+    <div class="modal-card" style="max-width:440px">
+      <div class="modal-head">
+        <span class="modal-type-dot" style="background:var(--accent);box-shadow:0 0 6px var(--accent);margin-top:4px"></span>
+        <div class="modal-title">Edit Client Access</div>
+        <button class="modal-close" onclick="closeEditClientsModal()"><i data-ic="x"></i></button>
+      </div>
+      <div class="modal-body" style="padding:22px 20px;gap:0">
+        <p style="font-family:var(--font-ui);font-size:11px;color:var(--text-dim);margin-bottom:16px">
+          User: <strong id="ec-username" style="color:var(--text-bright)"></strong>
+        </p>
+        <div style="font-family:var(--font-ui);font-size:9px;color:var(--text-dim);text-transform:uppercase;letter-spacing:.1em;margin-bottom:8px">Client Access</div>
+        <div id="ec-clients-list" style="display:flex;flex-direction:column;gap:6px;max-height:220px;overflow-y:auto;padding:8px;border:1px solid var(--border);border-radius:2px;background:rgba(255,255,255,0.02)">
+          <span style="font-family:var(--font-ui);font-size:10px;color:var(--text-dim)">Loading clients…</span>
+        </div>
+        <div id="ec-err" style="display:none;font-family:var(--font-ui);font-size:10px;color:var(--red);margin-top:8px"></div>
+        <p style="font-family:var(--font-ui);font-size:10px;color:var(--text-dim);margin-top:12px;line-height:1.7">
+          User sees client switcher dropdown if assigned to 2+ clients.<br>
+          Changes take effect on next login (JWT re-issued).
+        </p>
+      </div>
+      <div class="modal-foot">
+        <button class="btn-close-modal" onclick="closeEditClientsModal()">Cancel</button>
+        <button class="btn-apply" style="font-size:11px;padding:7px 20px" onclick="saveEditClients()">Save</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══ Edit Client Tenant Modal ══ -->
+  <div class="modal-overlay" id="ect-overlay" onclick="if(event.target===this)umCloseEditClient()">
+    <div class="modal-card" style="max-width:520px">
+      <div class="modal-head">
+        <span class="modal-type-dot" style="background:var(--accent);box-shadow:0 0 6px var(--accent);margin-top:4px"></span>
+        <div class="modal-title">Edit Client Tenant</div>
+        <button class="modal-close" onclick="umCloseEditClient()"><i data-ic="x"></i></button>
+      </div>
+      <div class="modal-body" style="padding:22px 20px;gap:0;max-height:70vh;overflow-y:auto">
+        <p style="font-family:var(--font-ui);font-size:11px;color:var(--text-dim);margin-bottom:16px">
+          Client ID: <strong id="ect-client-id" style="color:var(--accent)"></strong>
+        </p>
+        <div style="margin-bottom:12px">
+          <div style="font-family:var(--font-ui);font-size:9px;color:var(--text-dim);text-transform:uppercase;letter-spacing:.1em;margin-bottom:6px">Display Name</div>
+          <input type="text" class="filter-input" id="ect-name"
+                 placeholder="Acme Corp"
+                 style="width:100%;font-size:12px;padding:8px 12px;box-sizing:border-box;font-family:var(--font-ui)"
+                 onkeydown="if(event.key==='Enter')umSaveEditClient()">
+        </div>
+        <div style="margin-bottom:12px">
+          <div style="font-family:var(--font-ui);font-size:9px;color:var(--text-dim);text-transform:uppercase;letter-spacing:.1em;margin-bottom:6px">Countries</div>
+          <div id="ect-countries-picker" style="border:1px solid var(--border);border-radius:2px;padding:8px;background:rgba(255,255,255,0.02)"></div>
+        </div>
+        <div style="margin-bottom:12px">
+          <div style="font-family:var(--font-ui);font-size:9px;color:var(--text-dim);text-transform:uppercase;letter-spacing:.1em;margin-bottom:6px">Sectors</div>
+          <div id="ect-sectors-picker" style="border:1px solid var(--border);border-radius:2px;padding:8px;background:rgba(255,255,255,0.02)"></div>
+        </div>
+        <div style="margin-bottom:12px">
+          <div style="font-family:var(--font-ui);font-size:9px;color:var(--text-dim);text-transform:uppercase;letter-spacing:.1em;margin-bottom:6px">Newsletter Recipients <span style="text-transform:none">(comma-separated emails)</span></div>
+          <input type="text" class="filter-input" id="ect-recipients"
+                 placeholder="alice@client.com, bob@client.com"
+                 style="width:100%;font-size:12px;padding:8px 12px;box-sizing:border-box;font-family:var(--font-ui)">
+        </div>
+        <div style="margin-bottom:12px">
+          <div style="font-family:var(--font-ui);font-size:9px;color:var(--text-dim);text-transform:uppercase;letter-spacing:.1em;margin-bottom:6px">Newsletter CSS</div>
+          <textarea class="filter-input" id="ect-css" rows="3" style="width:100%;box-sizing:border-box;font-family:var(--font-code);font-size:11px"></textarea>
+        </div>
+        <div style="margin-bottom:12px">
+          <div style="font-family:var(--font-ui);font-size:9px;color:var(--text-dim);text-transform:uppercase;letter-spacing:.1em;margin-bottom:6px">Newsletter Intro</div>
+          <textarea class="filter-input" id="ect-intro" rows="2" style="width:100%;box-sizing:border-box;font-size:11px"></textarea>
+        </div>
+        <div>
+          <div style="font-family:var(--font-ui);font-size:9px;color:var(--text-dim);text-transform:uppercase;letter-spacing:.1em;margin-bottom:6px">Newsletter Footer</div>
+          <textarea class="filter-input" id="ect-footer" rows="2" style="width:100%;box-sizing:border-box;font-size:11px"></textarea>
+        </div>
+        <div id="ect-err" style="display:none;font-family:var(--font-ui);font-size:10px;color:var(--red);margin-top:8px"></div>
+      </div>
+      <div class="modal-foot">
+        <button class="btn-close-modal" onclick="umCloseEditClient()">Cancel</button>
+        <button class="btn-apply" style="font-size:11px;padding:7px 20px" onclick="umSaveEditClient()">Save</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══ Add Role Modal ══ -->
+  <div class="modal-overlay" id="ar-overlay" onclick="if(event.target===this)umCloseAddRoleModal()">
+    <div class="modal-card" style="max-width:600px">
+      <div class="modal-head">
+        <span class="modal-type-dot" style="background:var(--green);box-shadow:0 0 6px var(--green);margin-top:4px"></span>
+        <div class="modal-title" id="ar-title">Add Custom Role</div>
+        <button class="modal-close" onclick="umCloseAddRoleModal()"><i data-ic="x"></i></button>
+      </div>
+      <div class="modal-body" style="padding:22px 20px;gap:0">
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:16px">
+          <div>
+            <div style="font-family:var(--font-ui);font-size:9px;color:var(--text-dim);text-transform:uppercase;letter-spacing:.1em;margin-bottom:6px">Role ID <span style="opacity:.6">(lowercase a-z 0-9 _ -)</span></div>
+            <input type="text" class="filter-input" id="ar-name" placeholder="e.g. read_only"
+                   style="width:100%;box-sizing:border-box;font-family:var(--font-code)">
+          </div>
+          <div>
+            <div style="font-family:var(--font-ui);font-size:9px;color:var(--text-dim);text-transform:uppercase;letter-spacing:.1em;margin-bottom:6px">Display Name</div>
+            <input type="text" class="filter-input" id="ar-display-name" placeholder="e.g. Read Only"
+                   style="width:100%;box-sizing:border-box">
+          </div>
+        </div>
+        <div style="font-family:var(--font-ui);font-size:9px;color:var(--text-dim);text-transform:uppercase;letter-spacing:.1em;margin-bottom:10px">Permissions</div>
+        <div id="ar-permissions-grid" style="display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:6px;max-height:300px;overflow-y:auto;padding-right:4px;margin-bottom:12px">
+          <div style="color:var(--text-dim);font-family:var(--font-ui);font-size:10px">Loading permissions…</div>
+        </div>
+        <div id="ar-err" style="display:none;font-family:var(--font-ui);font-size:10px;color:var(--red);padding:6px 10px;border:1px solid rgba(218,54,51,0.3);background:rgba(218,54,51,0.06);border-radius:2px"></div>
+      </div>
+      <div class="modal-foot">
+        <button class="btn-close-modal" onclick="umCloseAddRoleModal()">Cancel</button>
+        <button class="btn-apply" style="font-size:11px;padding:7px 20px" id="ar-save-btn" onclick="umSaveRole()">Create Role</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══ Exec-Idea Heatmap Drill Modal (T3-12) ══ -->
+  <div class="modal-overlay" id="exec-drill-overlay" onclick="if(event.target===this)closeExecDrill()">
+    <div class="modal-card" style="max-width:760px">
+      <div class="modal-head">
+        <div class="modal-title" id="exec-drill-title">Articles</div>
+        <button class="modal-close" onclick="closeExecDrill()"><i data-ic="x"></i></button>
+      </div>
+      <div style="font-family:var(--font-ui);font-size:10px;color:var(--text-dim);padding:0 20px 12px;border-bottom:1px solid var(--border)" id="exec-drill-subtitle"></div>
+      <div class="modal-body" id="exec-drill-body" style="flex-direction:column;gap:0;padding:0"></div>
+      <div class="modal-foot" id="exec-drill-foot">
+        <button class="btn-close-modal" onclick="closeExecDrill()">Close</button>
+        <span id="exec-drill-count" style="font-family:var(--font-ui);font-size:10px;color:var(--text-dim)"></span>
+      </div>
+    </div>
+  </div>
+
+
+  <!-- FOOTER -->
+  <div class="footer" style="justify-content:center; margin-bottom: 10px;">
+    <div style="font-family:var(--font-ui);font-size:11px;color:var(--text-dim)">
+      CTI Nexus &copy; <span id="footer-year"></span> &mdash; Internal Use Only
+    </div>
+  </div>
+
+</div>
+
+<script src="/static/js/newsletter_queue.js"></script>
+<script src="/static/js/newsroom/core.js"></script>
+<script src="/static/js/newsroom/modal.js"></script>
+<script src="/static/js/newsroom/render.js"></script>
+<script src="/static/js/newsroom/api.js"></script>
+<script src="/static/js/newsroom/cve.js"></script>
+<script src="/static/js/newsroom/techstack.js"></script>
+<script src="/static/js/newsroom/tabs.js"></script>
+<script src="/static/js/newsroom/usermgmt.js"></script>
+<script src="/static/js/newsroom/source_reliability.js"></script>
+<script src="/static/js/newsroom/intel.js"></script>
+<script src="/static/js/newsroom/dashboard.js"></script>
+<script>const _CTI_AUTH_REQUIRED = {{ 'true' if auth_required else 'false' }};</script>
+<script src="/static/js/newsroom/auth.js"></script>
+<script src="/static/js/newsroom/notifications.js"></script>
+<script src="/static/js/newsroom/ta.js"></script>
+<script src="/static/js/newsroom/autorefresh.js"></script>
+<script src="/static/js/newsroom/scraper.js"></script>
+<script src="/static/js/newsroom/changelog.js"></script>
+<script src="/static/js/newsroom/ttp.js"></script>
+<script src="/static/js/newsroom/attack_db.js"></script>
+<script src="/static/js/newsroom/exec.js"></script>
+<script src="/static/js/newsroom/ransomware_treemap.js"></script>
+<script src="/static/js/newsroom/pir.js"></script>
+<script src="/static/js/newsroom/xintel.js"></script>
+<script src="/static/js/newsroom/ioc_mgmt.js"></script>
+<script src="/static/js/newsroom/clusters.js"></script>
+<script src="/static/js/newsroom/risk_matrix.js"></script>
+<script src="/static/js/newsroom/recap.js"></script>
+<script src="/static/js/newsroom/pkgvuln.js"></script>
+<script src="/static/js/newsroom/domainwatch.js"></script>
+<script src="/static/js/newsroom/brandwatch.js"></script>
+<script src="/static/js/newsroom/cisakev.js"></script>
+<script src="/static/js/newsroom/mindmap.js"></script>
+
+<!-- ══════════ EXECUTIVE BRIEF MODAL ══════════ -->
+<div id="exec-brief-modal" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.7);z-index:9999;overflow-y:auto;">
+  <div style="max-width:760px;margin:60px auto;background:var(--surface);border:1px solid var(--border);border-radius:6px;padding:32px;position:relative;">
+    <button class="modal-close" onclick="document.getElementById('exec-brief-modal').style.display='none'" style="position:absolute;top:12px;right:16px"><i data-ic="x"></i></button>
+    <div style="font-family:var(--font-ui);font-size:11px;color:var(--text-dim);text-transform:uppercase;letter-spacing:.08em;margin-bottom:16px;">Executive Intelligence Brief</div>
+    <div id="exec-brief-content" style="color:var(--text-primary);line-height:1.7;font-size:14px;white-space:pre-wrap;"></div>
+    <div id="exec-brief-meta" style="margin-top:16px;font-size:11px;color:var(--text-dim);"></div>
+    <button onclick="copyExecBrief()" style="margin-top:16px;background:#1A243A;border:1px solid #6E7CFF;color:#6E7CFF;font-family:var(--font-ui);font-size:11px;padding:6px 14px;cursor:pointer;border-radius:3px;">COPY TO CLIPBOARD</button>
+  </div>
+</div>
+
+</body>
+</html>

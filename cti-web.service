@@ -1,0 +1,15 @@
+[Unit]
+Description=ScraperNewsWeb Python Service
+After=network.target
+
+[Service]
+WorkingDirectory=/opt/ScraperNewsWeb
+ExecStart=/usr/bin/python3 /opt/ScraperNewsWeb/run.py
+Restart=always
+RestartSec=5
+StandardOutput=journal
+StandardError=journal
+SyslogIdentifier=scraper-news-web
+
+[Install]
+WantedBy=multi-user.target

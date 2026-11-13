@@ -1,0 +1,9 @@
+{
+  "name": "scraper-news-web",
+  "version": "1.0.0",
+  "description": "CTI Nexus Web Application",
+  "scripts": {
+    "dev": ".venv/bin/python run.py",
+    "start": ".venv/bin/python run.py"
+  }
+}

@@ -1,0 +1,154 @@
+  <div id="tab-dashboard" class="tab-panel active">
+
+    <!-- ── News Intelligence stat boxes ── -->
+    <div class="dash-stats dash-stats--3">
+      <div class="dash-stat-box">
+        <div class="dash-stat-label">Total Articles</div>
+        <div class="dash-stat-value" id="ds-total">—</div>
+        <div class="dash-stat-sub">In database</div>
+      </div>
+<div class="dash-stat-box">
+        <div class="dash-stat-label">Countries Mentioned</div>
+        <div class="dash-stat-value v3" id="ds-countries">—</div>
+        <div class="dash-stat-sub">Unique geographies</div>
+      </div>
+      <div class="dash-stat-box">
+        <div class="dash-stat-label">Threat Actors Tracked</div>
+        <div class="dash-stat-value v4" id="ds-actors">—</div>
+        <div class="dash-stat-sub">Known groups & APTs</div>
+      </div>
+    </div>
+
+    <!-- ── Threat Actor Intelligence section ── -->
+    <div class="dash-section-label">Threat Actor Intelligence</div>
+    <div class="dash-stats">
+      <div class="dash-stat-box">
+        <div class="dash-stat-label">Tracked APT Groups</div>
+        <div class="dash-stat-value v4" id="ds-ta-total">—</div>
+        <div class="dash-stat-sub">In Threat Actor Room</div>
+      </div>
+      <div class="dash-stat-box">
+        <div class="dash-stat-label">Whitelisted Groups</div>
+        <div class="dash-stat-value v3" id="ds-ta-wl">—</div>
+        <div class="dash-stat-sub">Removed from tracking</div>
+      </div>
+      <div class="dash-stat-box">
+        <div class="dash-stat-label">Manual Additions</div>
+        <div class="dash-stat-value v2" id="ds-ta-manual">—</div>
+        <div class="dash-stat-sub">Manually tracked groups</div>
+      </div>
+      <div class="dash-stat-box">
+        <div class="dash-stat-label">Covered in News</div>
+        <div class="dash-stat-value" id="ds-ta-innews">—</div>
+        <div class="dash-stat-sub">Tracked groups in articles</div>
+      </div>
+    </div>
+
+    <!-- ── News Intelligence section ── -->
+    <div class="dash-section-label">News Intelligence</div>
+
+    <!-- Row: Top Countries | News Type Breakdown -->
+    <div class="dash-charts-row">
+      <div class="chart-card">
+        <div class="chart-title">Top Mentioned Countries</div>
+        <div class="chart-canvas-wrap" style="height:300px">
+          <canvas id="chart-countries"></canvas>
+        </div>
+      </div>
+      <div class="chart-card">
+        <div class="chart-title">Articles by News Type</div>
+        <div class="chart-canvas-wrap" style="height:300px">
+          <canvas id="chart-newstype"></canvas>
+        </div>
+      </div>
+    </div>
+
+    <!-- Row: Timeline (full width) -->
+    <div class="dash-charts-row full">
+      <div class="chart-card">
+        <div class="chart-title">Articles Over Time</div>
+        <div class="chart-canvas-wrap" style="height:200px">
+          <canvas id="chart-timeline"></canvas>
+        </div>
+      </div>
+    </div>
+
+    <!-- Row: Threat Actors (full width) -->
+    <div class="dash-charts-row full">
+      <div class="chart-card">
+        <div class="chart-title">Top Threat Actors</div>
+        <div class="chart-canvas-wrap" style="height:280px">
+          <canvas id="chart-actors"></canvas>
+        </div>
+      </div>
+    </div>
+
+    <!-- Row: Industries | TTPs -->
+    <div class="dash-charts-row">
+      <div class="chart-card">
+        <div class="chart-title">Top Targeted Industries</div>
+        <div class="chart-canvas-wrap" style="height:280px">
+          <canvas id="chart-industries"></canvas>
+        </div>
+      </div>
+      <div class="chart-card">
+        <div class="chart-title">Top MITRE ATT&amp;CK TTPs</div>
+        <div class="chart-canvas-wrap" style="height:280px">
+          <canvas id="chart-ttps"></canvas>
+        </div>
+      </div>
+    </div>
+
+    <!-- ── Threat Actor Intelligence charts ── -->
+    <div class="dash-section-label">Threat Actor Room — Charts</div>
+    <div class="dash-charts-row">
+      <div class="chart-card">
+        <div class="chart-title">APT Groups by Source</div>
+        <div class="chart-canvas-wrap" style="height:260px">
+          <canvas id="chart-ta-source"></canvas>
+        </div>
+      </div>
+      <div class="chart-card">
+        <div class="chart-title">Tracked APT Groups — News Mentions</div>
+        <div class="chart-canvas-wrap" style="height:260px">
+          <canvas id="chart-ta-innews"></canvas>
+        </div>
+      </div>
+    </div>
+
+    <!-- ── Scraper Health ── -->
+    <div class="dash-section-label" style="margin-top:24px;">Scraper Health
+      <select id="health-days" class="filter-select" style="margin-left:12px;font-size:10px;width:auto" onchange="loadScraperHealth()">
+        <option value="7" selected>Last 7 days</option>
+        <option value="14">Last 14 days</option>
+        <option value="30">Last 30 days</option>
+      </select>
+    </div>
+    <div class="dash-stats" id="health-kpis">
+      <div class="dash-stat-box"><div class="dash-stat-label">Processed</div><div class="dash-stat-value" id="h-total">—</div><div class="dash-stat-sub">Articles seen</div></div>
+      <div class="dash-stat-box"><div class="dash-stat-label">Accepted</div><div class="dash-stat-value v3" id="h-accepted">—</div><div class="dash-stat-sub">Cyber-relevant</div></div>
+      <div class="dash-stat-box"><div class="dash-stat-label">Rejected</div><div class="dash-stat-value v4" id="h-rejected">—</div><div class="dash-stat-sub">Not cyber</div></div>
+      <div class="dash-stat-box"><div class="dash-stat-label">Accept Rate</div><div class="dash-stat-value v2" id="h-rate">—</div><div class="dash-stat-sub">% relevant</div></div>
+    </div>
+    <div class="dash-charts-row" style="margin-top:12px;">
+      <div class="chart-card">
+        <div class="chart-title">Daily Accepted Articles</div>
+        <div class="chart-canvas-wrap" style="height:180px"><canvas id="chart-health-daily"></canvas></div>
+      </div>
+      <div class="chart-card" style="overflow-y:auto;max-height:280px;">
+        <div class="chart-title">Per-Scraper Accept Rate</div>
+        <table style="width:100%;border-collapse:collapse;font-size:11px;" id="health-script-table">
+          <thead><tr>
+            <th style="text-align:left;padding:4px 6px;color:var(--text-dim);font-family:var(--font-ui);font-size:9px;border-bottom:1px solid var(--border)">Script</th>
+            <th style="padding:4px 6px;color:var(--text-dim);font-family:var(--font-ui);font-size:9px;border-bottom:1px solid var(--border)">Total</th>
+            <th style="padding:4px 6px;color:var(--text-dim);font-family:var(--font-ui);font-size:9px;border-bottom:1px solid var(--border)">Rate</th>
+            <th style="padding:4px 6px;color:var(--text-dim);font-family:var(--font-ui);font-size:9px;border-bottom:1px solid var(--border)">Last Run</th>
+          </tr></thead>
+          <tbody id="health-script-tbody"></tbody>
+        </table>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- ══════════ NEWS ROOM TAB ══════════ -->

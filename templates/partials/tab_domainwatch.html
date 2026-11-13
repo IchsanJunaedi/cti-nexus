@@ -1,0 +1,84 @@
+  <div id="watch-subtab-domain">
+
+    <!-- Stats row -->
+    <div id="dw-stats-grid" class="cve-grid" style="margin-bottom:14px">
+      <div class="cve-stat-box">
+        <div class="cve-stat-label">Domains Watched</div>
+        <div class="cve-stat-value info" id="dw-stat-domains">—</div>
+      </div>
+      <div class="cve-stat-box">
+        <div class="cve-stat-label">Registered</div>
+        <div class="cve-stat-value" id="dw-stat-registered">—</div>
+      </div>
+      <div class="cve-stat-box">
+        <div class="cve-stat-label">Live (HTTP/S)</div>
+        <div class="cve-stat-value" id="dw-stat-alive">—</div>
+      </div>
+      <div class="cve-stat-box">
+        <div class="cve-stat-label">Newly Registered</div>
+        <div class="cve-stat-value high" id="dw-stat-newly">—</div>
+      </div>
+      <div class="cve-stat-box">
+        <div class="cve-stat-label">At Risk</div>
+        <div class="cve-stat-value crit" id="dw-stat-risk">—</div>
+      </div>
+      <div class="cve-stat-box">
+        <div class="cve-stat-label">Unacknowledged</div>
+        <div class="cve-stat-value med" id="dw-stat-unacked">—</div>
+      </div>
+      <div class="cve-stat-box">
+        <div class="cve-stat-label">Parked</div>
+        <div class="cve-stat-value" style="color:var(--text-dim)" id="dw-stat-parked">—</div>
+      </div>
+    </div>
+
+    <!-- Add domain bar -->
+    <div style="display:flex;gap:8px;align-items:center;margin-bottom:12px;flex-wrap:wrap">
+      <input type="text" class="filter-input" id="dw-name-input" placeholder="Base domain, no TLD (e.g. example)…" style="width:260px"
+             onkeydown="if(event.key==='Enter')dwAddDomain()">
+      <button class="btn-apply" onclick="dwAddDomain()">+ Watch</button>
+      <span style="font-family:var(--font-ui);font-size:10px;color:var(--text-dim)">
+        Sweeps 800+ TLDs, flags newly-registered &amp; live domains.
+      </span>
+      <span id="dw-status" class="ta-status" style="margin-left:auto"></span>
+    </div>
+
+    <div class="cve-table-wrapper">
+      <table class="cve-table">
+        <thead>
+          <tr>
+            <th class="cve-table th" style="width:40px">#</th>
+            <th class="cve-table th">Domain</th>
+            <th class="cve-table th">Added</th>
+            <th class="cve-table th">Last Scan</th>
+            <th class="cve-table th">TLDs Hit</th>
+            <th class="cve-table th">Registered</th>
+            <th class="cve-table th">Live</th>
+            <th class="cve-table th">Parked</th>
+            <th class="cve-table th">Newly Reg.</th>
+            <th class="cve-table th">At Risk</th>
+            <th class="cve-table th">Actions</th>
+          </tr>
+        </thead>
+        <tbody id="dw-tbody"></tbody>
+      </table>
+    </div>
+    <div id="dw-pager"></div>
+
+    <!-- Results modal -->
+    <div id="dw-results-modal" class="modal-overlay" onclick="if(event.target===this)dwCloseResultsModal()">
+      <div class="modal-box" style="max-width:960px;max-height:85vh;overflow-y:auto">
+        <button class="modal-close" onclick="dwCloseResultsModal()"><i data-ic="x"></i></button>
+        <div style="padding:18px 18px 0;display:flex;gap:14px;justify-content:flex-end" id="dw-results-modal-toolbar">
+          <label style="display:flex;align-items:center;gap:5px;font-family:var(--font-ui);font-size:10px;color:var(--text-dim);cursor:pointer;white-space:nowrap">
+            <input type="checkbox" id="dw-hide-parked-filter" onchange="dwReloadResults()"> Hide Parked
+          </label>
+          <label style="display:flex;align-items:center;gap:5px;font-family:var(--font-ui);font-size:10px;color:var(--orange);cursor:pointer;white-space:nowrap">
+            <input type="checkbox" id="dw-unacked-filter" onchange="dwReloadResults()"> Unacked Only
+          </label>
+        </div>
+        <div id="dw-results-modal-body" style="padding:0 18px 18px;font-size:12px"></div>
+      </div>
+    </div>
+
+  </div>

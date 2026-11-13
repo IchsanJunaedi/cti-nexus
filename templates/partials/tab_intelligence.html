@@ -1,0 +1,1043 @@
+  <div id="tab-intelligence" class="tab-panel">
+
+
+    <!-- ══ Group Navigation ══ -->
+    <div class="ta-submenu" style="border-bottom:1px solid var(--border);margin-bottom:14px">
+      <button class="ta-submenu-btn active" id="intelgrp-landscape-btn" onclick="intelSwitchGroup('landscape')">Threat Landscape</button>
+      <button class="ta-submenu-btn" id="intelgrp-attack-btn" onclick="intelSwitchGroup('attack')">ATT&amp;CK</button>
+      <button class="ta-submenu-btn" id="intelgrp-requirements-btn" onclick="intelSwitchGroup('requirements')">Requirements</button>
+      <button class="ta-submenu-btn" id="intelgrp-threatactors-btn" onclick="intelSwitchGroup('threatactors')">Threat Actors</button>
+      <button class="ta-submenu-btn" id="intelgrp-iocmgmt-btn" onclick="intelSwitchGroup('iocmgmt')">IOC Management</button>
+      <button class="ta-submenu-btn" id="intelgrp-sourcerel-btn" onclick="intelSwitchGroup('sourcerel')">Source Reliability</button>
+    </div>
+
+    <!-- ══════════ THREAT LANDSCAPE GROUP ══════════ -->
+    <div id="intelgrp-landscape" class="intel-group">
+
+      <div class="ta-submenu" style="border-bottom:1px solid var(--border);margin-bottom:14px">
+        <button class="ta-submenu-btn active" id="intel-clusters-btn" onclick="intelSwitchViewAndLoad('clusters')">
+          News Clusters <span class="ta-submenu-count" id="intel-clusters-count">—</span>
+        </button>
+        <button class="ta-submenu-btn" id="intel-spikes-btn" onclick="intelSwitchViewAndLoad('spikes')">
+          Early Warning <span class="ta-submenu-count" id="intel-spikes-count" style="background:rgba(218,54,51,0.1);border-color:rgba(218,54,51,0.3);color:var(--red)">—</span>
+        </button>
+        <button class="ta-submenu-btn" id="intel-campaigns-btn" onclick="intelSwitchViewAndLoad('campaigns')">
+          Campaign Clusters <span class="ta-submenu-count" id="intel-campaigns-count">—</span>
+        </button>
+        <button class="ta-submenu-btn" id="intel-riskmatrix-btn" onclick="intelSwitchViewAndLoad('riskmatrix')">
+          Risk Matrix
+        </button>
+      </div>
+
+    <!-- ── CLUSTERS VIEW ── -->
+    <div id="intel-view-clusters">
+      <div class="ta-bar">
+        <div class="ta-bar-left">
+          <span class="filter-label">Lookback</span>
+          <select class="refresh-select" id="intel-cluster-days" style="font-size:11px">
+            <option value="14">14 days</option>
+            <option value="30" selected>30 days</option>
+            <option value="60">60 days</option>
+            <option value="90">90 days</option>
+          </select>
+          <span class="filter-label" style="margin-left:8px">Similarity threshold</span>
+          <select class="refresh-select" id="intel-cluster-threshold" style="font-size:11px">
+            <option value="0.25">Low (0.25)</option>
+            <option value="0.35" selected>Medium (0.35)</option>
+            <option value="0.50">High (0.50)</option>
+          </select>
+        </div>
+        <div class="ta-bar-right" style="gap:12px;align-items:center">
+          <label style="font-family:var(--font-ui);font-size:10px;color:var(--text-dim);cursor:pointer;display:flex;align-items:center;gap:5px">
+            <input type="checkbox" id="cluster-show-single" onchange="renderClusterList()"> Show single-source
+          </label>
+          <label style="font-family:var(--font-ui);font-size:10px;color:var(--text-dim);cursor:pointer;display:flex;align-items:center;gap:5px">
+            <input type="checkbox" id="cluster-excl-lowrel"> Exclude low-reliability
+          </label>
+          <button class="btn-reset" onclick="loadClusters()"><i data-ic="refresh"></i> Refresh</button>
+          <button class="tap-regen" onclick="loadClusters()" style="font-size:11px;padding:4px 10px"><i data-ic="settings"></i> Generate Clusters</button>
+        </div>
+      </div>
+      <div id="intel-clusters-body" class="ta-table-wrap" style="min-height:240px">
+        <div class="intel-empty" style="padding:48px 0;text-align:center;opacity:0.5">Configure parameters above and click <strong><i data-ic="settings"></i> Generate Clusters</strong> to run clustering.</div>
+      </div>
+      <div class="ta-table-footer">
+        <span class="ta-total" id="intel-clusters-footer">—</span>
+      </div>
+    </div>
+
+    <!-- ── SPIKES / EARLY WARNING VIEW ── -->
+    <div id="intel-view-spikes" style="display:none">
+      <div class="ta-bar">
+        <div class="ta-bar-left">
+          <span class="filter-label">Lookback</span>
+          <select class="refresh-select" id="intel-spike-days" onchange="loadSpikes()" style="font-size:11px">
+            <option value="14">14 days</option>
+            <option value="30" selected>30 days</option>
+            <option value="60">60 days</option>
+          </select>
+          <span class="filter-label" style="margin-left:8px">Z-score threshold</span>
+          <select class="refresh-select" id="intel-spike-z" onchange="loadSpikes()" style="font-size:11px">
+            <option value="1.5">Sensitive (1.5σ)</option>
+            <option value="2.0" selected>Standard (2.0σ)</option>
+            <option value="3.0">Strict (3.0σ)</option>
+          </select>
+        </div>
+        <div class="ta-bar-right">
+          <button class="btn-reset" onclick="loadSpikes()"><i data-ic="refresh"></i> Refresh</button>
+        </div>
+      </div>
+      <div id="intel-spikes-body" style="min-height:200px">
+        <div class="loading-state"><div class="loading-spinner"></div><div class="loading-text">Analyzing signals…</div></div>
+      </div>
+    </div>
+
+    <!-- ── CAMPAIGN CLUSTERS VIEW ── -->
+    <div id="intel-view-campaigns" style="display:none">
+
+      <div class="ta-bar">
+        <div class="ta-bar-left" style="gap:8px;flex-wrap:wrap">
+          <span class="filter-label">Lookback</span>
+          <select class="refresh-select" id="campaigns-days" style="font-size:11px">
+            <option value="7" selected>7 days</option>
+            <option value="14">14 days</option>
+            <option value="30">30 days</option>
+          </select>
+          <span class="filter-label" style="margin-left:8px">Min cluster size</span>
+          <select class="refresh-select" id="campaigns-minsize" style="font-size:11px">
+            <option value="2">2</option>
+            <option value="3" selected>3</option>
+            <option value="5">5</option>
+          </select>
+        </div>
+        <div class="ta-bar-right">
+          <button class="btn-reset" onclick="loadCampaigns()"><i data-ic="refresh"></i> Refresh</button>
+        </div>
+      </div>
+
+      <!-- Geopolitical Overview collapsible panel -->
+      <div style="margin-bottom:10px;border:1px solid rgba(255,255,255,0.08);border-radius:4px;background:rgba(255,255,255,0.02)">
+        <div style="display:flex;align-items:center;justify-content:space-between;padding:7px 12px;cursor:pointer;user-select:none" onclick="toggleGeopolitical()">
+          <button id="geo-toggle-btn" class="btn-reset" style="font-size:11px;font-weight:600;letter-spacing:.04em;color:var(--text);background:none;border:none;cursor:pointer;padding:0"><i data-ic="chevron-right" data-size="11"></i> Geopolitical Overview</button>
+          <span style="font-size:9px;color:var(--text-dim);font-family:var(--font-ui)">Nation-state · Sector · Motivation</span>
+        </div>
+        <div id="geo-overview-body" style="display:none;border-top:1px solid rgba(255,255,255,0.06)"></div>
+      </div>
+
+      <div id="campaigns-body" class="ta-table-wrap" style="min-height:300px">
+        <div class="intel-empty" style="padding:48px 0;text-align:center;opacity:0.5">Loading campaign clusters…</div>
+      </div>
+      <div class="ta-table-footer" style="margin-top:10px">
+        <span class="ta-total" id="campaigns-footer">—</span>
+      </div>
+
+    </div><!-- end #intel-view-campaigns -->
+
+    <!-- ── RISK MATRIX VIEW ── -->
+    <div id="intel-view-riskmatrix" style="display:none">
+
+      <div class="ta-bar">
+        <div class="ta-bar-left" style="gap:8px;flex-wrap:wrap">
+          <span class="filter-label">Current period</span>
+          <select class="refresh-select" id="riskmatrix-days" style="font-size:11px">
+            <option value="14">14 days</option>
+            <option value="30" selected>30 days</option>
+            <option value="60">60 days</option>
+            <option value="90">90 days</option>
+          </select>
+          <span class="filter-label" style="margin-left:8px">Compare period</span>
+          <select class="refresh-select" id="riskmatrix-compare-days" style="font-size:11px">
+            <option value="14">14 days</option>
+            <option value="30" selected>30 days</option>
+            <option value="60">60 days</option>
+          </select>
+          <span class="filter-label" style="margin-left:8px">Min risk score</span>
+          <input type="range" id="riskmatrix-min-score" min="0" max="75" step="5" value="0"
+                 style="width:90px;accent-color:var(--accent)"
+                 oninput="document.getElementById('riskmatrix-min-score-val').textContent=this.value;renderRiskMatrix()">
+          <span id="riskmatrix-min-score-val" style="font-family:var(--font-ui);font-size:10px;color:var(--text-dim);min-width:20px">0</span>
+        </div>
+        <div class="ta-bar-right">
+          <button class="btn-reset" onclick="loadRiskMatrix()"><i data-ic="refresh"></i> Refresh</button>
+        </div>
+      </div>
+
+      <div id="riskmatrix-status" style="font-family:var(--font-ui);font-size:10px;color:var(--text-dim);margin:6px 0 2px"></div>
+
+      <div style="overflow-x:auto">
+        <div id="riskmatrix-body" style="min-height:200px">
+          <div style="font-family:var(--font-ui);font-size:11px;color:var(--text-dim);padding:32px 0;text-align:center">
+            Select parameters and click <i data-ic="refresh"></i> Refresh to load matrix.
+          </div>
+        </div>
+      </div>
+
+      <div style="display:flex;gap:16px;flex-wrap:wrap;margin-top:10px;font-family:var(--font-ui);font-size:10px;color:var(--text-dim)">
+        <span><span style="display:inline-block;width:10px;height:10px;background:#1a472a;border-radius:2px;margin-right:4px"></span>Low (0–25)</span>
+        <span><span style="display:inline-block;width:10px;height:10px;background:#7a6000;border-radius:2px;margin-right:4px"></span>Medium (26–50)</span>
+        <span><span style="display:inline-block;width:10px;height:10px;background:#7a3500;border-radius:2px;margin-right:4px"></span>High (51–75)</span>
+        <span><span style="display:inline-block;width:10px;height:10px;background:#6b0000;border-radius:2px;margin-right:4px"></span>Critical (76–100)</span>
+      </div>
+
+    </div><!-- end #intel-view-riskmatrix -->
+
+    </div><!-- end #intelgrp-landscape -->
+
+    <!-- ══════════ ATT&CK GROUP ══════════ -->
+    <div id="intelgrp-attack" class="intel-group" style="display:none">
+
+      <div class="ta-submenu" style="border-bottom:1px solid var(--border);margin-bottom:14px">
+        <button class="ta-submenu-btn" id="intel-mitre-btn" onclick="intelSwitchViewAndLoad('mitre')">MITRE ATT&amp;CK</button>
+        <button class="ta-submenu-btn" id="intel-attackdb-btn" onclick="intelSwitchViewAndLoad('attackdb')">ATT&amp;CK DB</button>
+      </div>
+
+    <!-- ── MITRE ATT&CK SUB-VIEW ── -->
+    <div id="intel-view-mitre" style="display:none">
+      <div style="display:flex;align-items:center;gap:14px;margin-bottom:16px;flex-wrap:wrap;">
+        <span style="font-family:var(--font-ui);font-size:11px;color:var(--text-dim);text-transform:uppercase;letter-spacing:.08em;">MITRE ATT&amp;CK Heatmap</span>
+        <select id="mitre-view" class="filter-select" style="width:auto">
+          <option value="ta">By Threat Actor</option>
+          <option value="industry">By Industry</option>
+        </select>
+        <select id="mitre-days" class="filter-select" style="width:auto">
+          <option value="30">Last 30 days</option>
+          <option value="90" selected>Last 90 days</option>
+          <option value="180">Last 180 days</option>
+          <option value="365">Last 365 days</option>
+        </select>
+        <button class="btn-apply" style="margin: 10px;" onclick="loadMitreHeatmap()">LOAD</button>
+        <button class="btn-apply" style="margin: 10px;" onclick="downloadNavigatorLayer()" title="Export ATT&CK Navigator layer JSON"><i data-ic="download"></i> Navigator</button>
+        <button class="btn-apply" style="margin: 10px;" onclick="openNavigator()" title="Open layer in ATT&CK Navigator"><i data-ic="external-link"></i> Open Navigator</button>
+      </div>
+      <div id="mitre-loading" style="display:none;font-family:var(--font-ui);font-size:11px;color:var(--text-dim);padding:20px 0;">Loading heatmap…</div>
+      <div id="mitre-empty" style="display:none;font-family:var(--font-ui);font-size:11px;color:var(--text-dim);padding:20px 0;">No TTP co-occurrence data found for this period.</div>
+      <div class="heatmap-wrap">
+        <table class="heatmap-table" id="mitre-heatmap-table"></table>
+      </div>
+      <div style="margin-top:12px;font-family:var(--font-ui);font-size:10px;color:var(--text-dim);">
+        Cell value = article co-occurrence count. Darker = higher frequency.
+      </div>
+    </div>
+
+    <!-- ── ATT&CK DB SUB-VIEW ── -->
+    <div id="intel-view-attackdb" style="display:none">
+
+      <!-- Sync Status Row -->
+      <div style="display:flex;align-items:center;gap:10px;margin-bottom:14px;flex-wrap:wrap;">
+        <span style="font-family:var(--font-ui);font-size:11px;color:var(--text-dim);text-transform:uppercase;letter-spacing:.08em;">ATT&amp;CK Database</span>
+        <button class="btn-apply" onclick="attackSyncAll()" id="attackdb-sync-all-btn" style="margin-left:auto;margin-top: 10px;"><i data-ic="refresh"></i> Sync All Domains</button>
+      </div>
+
+      <!-- Domain cards -->
+      <div id="attackdb-status-row" style="display:flex;gap:10px;flex-wrap:wrap;margin-bottom:18px;"></div>
+
+      <!-- Browse tabs -->
+      <div style="display:flex;margin-bottom:12px;border-bottom:1px solid var(--border);padding-bottom:8px;">
+        <div style="display:flex;gap:4px;margin-left:auto;">
+          <button class="btn-apply" id="attackdb-tab-techniques" onclick="attackdbSwitchBrowse('techniques')" style="margin-left:0">Techniques</button>
+          <button class="btn-apply" id="attackdb-tab-groups" onclick="attackdbSwitchBrowse('groups')" style="margin-left:0">Groups</button>
+          <button class="btn-apply" id="attackdb-tab-software" onclick="attackdbSwitchBrowse('software')" style="margin-left:0">Software</button>
+          <button class="btn-apply" id="attackdb-tab-mitigations" onclick="attackdbSwitchBrowse('mitigations')" style="margin-left:0">Mitigations</button>
+        </div>
+      </div>
+
+      <!-- Technique browser -->
+      <div id="attackdb-browse-techniques">
+        <div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:10px;">
+          <input id="attackdb-tech-search" class="filter-input" placeholder="Search techniques…" style="flex:1;min-width:180px" oninput="attackdbTechSearch()">
+          <select id="attackdb-tech-domain" class="filter-select" style="width:auto" onchange="_loadTacticOptions();attackdbTechSearch()">
+            <option value="">All domains</option>
+            <option value="enterprise-attack">Enterprise</option>
+            <option value="ics-attack">ICS</option>
+            <option value="mobile-attack">Mobile</option>
+          </select>
+          <select id="attackdb-tech-tactic" class="filter-select" style="width:auto" onchange="attackdbTechSearch()">
+            <option value="">All tactics</option>
+          </select>
+          <select id="attackdb-tech-subs" class="filter-select" style="width:auto" onchange="attackdbTechSearch()">
+            <option value="">All (parent + sub)</option>
+            <option value="false">Parent techniques only</option>
+            <option value="true">Sub-techniques only</option>
+          </select>
+          <button class="btn-apply" onclick="openAttackDBNavigator()" title="Open current filter in ATT&CK Navigator"><i data-ic="external-link"></i> Open Navigator</button>
+        </div>
+        <div id="attackdb-tech-loading" style="display:none;font-family:var(--font-ui);font-size:11px;color:var(--text-dim);padding:10px 0;">Loading…</div>
+        <div id="attackdb-tech-table-wrap" style="overflow-x:auto">
+          <table style="width:100%;border-collapse:collapse;font-family:var(--font-ui);font-size:11px;">
+            <thead><tr style="color:var(--text-dim);border-bottom:1px solid var(--border);">
+              <th style="text-align:left;padding:4px 8px;width:90px">ID</th>
+              <th style="text-align:left;padding:4px 8px">Name</th>
+              <th style="text-align:left;padding:4px 8px">Tactics</th>
+              <th style="text-align:left;padding:4px 8px;width:80px">Domains</th>
+            </tr></thead>
+            <tbody id="attackdb-tech-tbody"></tbody>
+          </table>
+        </div>
+        <div style="display:flex;gap:8px;align-items:center;margin-top:10px;">
+          <button class="btn-reset" id="attackdb-tech-prev" onclick="attackdbTechPage(-1)"><i data-ic="chevron-left" data-size="12"></i> Prev</button>
+          <span id="attackdb-tech-pageinfo" style="font-family:var(--font-ui);font-size:10px;color:var(--text-dim);flex:1;text-align:center;"></span>
+          <button class="btn-reset" id="attackdb-tech-next" onclick="attackdbTechPage(1)">Next <i data-ic="chevron-right" data-size="12"></i></button>
+        </div>
+      </div>
+
+      <!-- Groups browser -->
+      <div id="attackdb-browse-groups" style="display:none">
+        <div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:10px;">
+          <input id="attackdb-grp-search" class="filter-input" placeholder="Search groups…" style="flex:1;min-width:180px" oninput="attackdbGrpSearch()">
+          <select id="attackdb-grp-domain" class="filter-select" style="width:auto" onchange="attackdbGrpSearch()">
+            <option value="">All domains</option>
+            <option value="enterprise-attack">Enterprise</option>
+            <option value="ics-attack">ICS</option>
+            <option value="mobile-attack">Mobile</option>
+          </select>
+        </div>
+        <div id="attackdb-grp-loading" style="display:none;font-family:var(--font-ui);font-size:11px;color:var(--text-dim);padding:10px 0;">Loading…</div>
+        <div id="attackdb-grp-table-wrap" style="overflow-x:auto">
+          <table style="width:100%;border-collapse:collapse;font-family:var(--font-ui);font-size:11px;">
+            <thead><tr style="color:var(--text-dim);border-bottom:1px solid var(--border);">
+              <th style="text-align:left;padding:4px 8px;width:70px">ID</th>
+              <th style="text-align:left;padding:4px 8px">Name</th>
+              <th style="text-align:left;padding:4px 8px">Aliases</th>
+              <th style="text-align:left;padding:4px 8px;width:80px">Domains</th>
+            </tr></thead>
+            <tbody id="attackdb-grp-tbody"></tbody>
+          </table>
+        </div>
+        <div style="display:flex;gap:8px;align-items:center;margin-top:10px;">
+          <button class="btn-reset" id="attackdb-grp-prev" onclick="attackdbGrpPage(-1)"><i data-ic="chevron-left" data-size="12"></i> Prev</button>
+          <span id="attackdb-grp-pageinfo" style="font-family:var(--font-ui);font-size:10px;color:var(--text-dim);flex:1;text-align:center;"></span>
+          <button class="btn-reset" id="attackdb-grp-next" onclick="attackdbGrpPage(1)">Next <i data-ic="chevron-right" data-size="12"></i></button>
+        </div>
+      </div>
+
+      <!-- Software browser -->
+      <div id="attackdb-browse-software" style="display:none">
+        <div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:10px;">
+          <input id="attackdb-sw-search" class="filter-input" placeholder="Search software…" style="flex:1;min-width:180px" oninput="attackdbSwSearch()">
+          <select id="attackdb-sw-domain" class="filter-select" style="width:auto" onchange="attackdbSwSearch()">
+            <option value="">All domains</option>
+            <option value="enterprise-attack">Enterprise</option>
+            <option value="ics-attack">ICS</option>
+            <option value="mobile-attack">Mobile</option>
+          </select>
+          <select id="attackdb-sw-type" class="filter-select" style="width:auto" onchange="attackdbSwSearch()">
+            <option value="">All types</option>
+            <option value="malware">Malware</option>
+            <option value="tool">Tool</option>
+          </select>
+        </div>
+        <div id="attackdb-sw-loading" style="display:none;font-family:var(--font-ui);font-size:11px;color:var(--text-dim);padding:10px 0;">Loading…</div>
+        <div id="attackdb-sw-table-wrap" style="overflow-x:auto">
+          <table style="width:100%;border-collapse:collapse;font-family:var(--font-ui);font-size:11px;">
+            <thead><tr style="color:var(--text-dim);border-bottom:1px solid var(--border);">
+              <th style="text-align:left;padding:4px 8px;width:70px">ID</th>
+              <th style="text-align:left;padding:4px 8px">Name</th>
+              <th style="text-align:left;padding:4px 8px;width:60px">Type</th>
+              <th style="text-align:left;padding:4px 8px">Platforms</th>
+              <th style="text-align:left;padding:4px 8px;width:80px">Domains</th>
+            </tr></thead>
+            <tbody id="attackdb-sw-tbody"></tbody>
+          </table>
+        </div>
+        <div style="display:flex;gap:8px;align-items:center;margin-top:10px;">
+          <button class="btn-reset" id="attackdb-sw-prev" onclick="attackdbSwPage(-1)"><i data-ic="chevron-left" data-size="12"></i> Prev</button>
+          <span id="attackdb-sw-pageinfo" style="font-family:var(--font-ui);font-size:10px;color:var(--text-dim);flex:1;text-align:center;"></span>
+          <button class="btn-reset" id="attackdb-sw-next" onclick="attackdbSwPage(1)">Next <i data-ic="chevron-right" data-size="12"></i></button>
+        </div>
+      </div>
+
+      <!-- Mitigations browser -->
+      <div id="attackdb-browse-mitigations" style="display:none">
+        <div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:10px;">
+          <input id="attackdb-mit-search" class="filter-input" placeholder="Search mitigations…" style="flex:1;min-width:180px" oninput="attackdbMitSearch()">
+          <select id="attackdb-mit-domain" class="filter-select" style="width:auto" onchange="attackdbMitSearch()">
+            <option value="">All domains</option>
+            <option value="enterprise-attack">Enterprise</option>
+            <option value="ics-attack">ICS</option>
+            <option value="mobile-attack">Mobile</option>
+          </select>
+        </div>
+        <div id="attackdb-mit-loading" style="display:none;font-family:var(--font-ui);font-size:11px;color:var(--text-dim);padding:10px 0;">Loading…</div>
+        <div id="attackdb-mit-table-wrap" style="overflow-x:auto">
+          <table style="width:100%;border-collapse:collapse;font-family:var(--font-ui);font-size:11px;">
+            <thead><tr style="color:var(--text-dim);border-bottom:1px solid var(--border);">
+              <th style="text-align:left;padding:4px 8px;width:70px">ID</th>
+              <th style="text-align:left;padding:4px 8px">Name</th>
+              <th style="text-align:left;padding:4px 8px;width:80px">Domains</th>
+            </tr></thead>
+            <tbody id="attackdb-mit-tbody"></tbody>
+          </table>
+        </div>
+        <div style="display:flex;gap:8px;align-items:center;margin-top:10px;">
+          <button class="btn-reset" id="attackdb-mit-prev" onclick="attackdbMitPage(-1)"><i data-ic="chevron-left" data-size="12"></i> Prev</button>
+          <span id="attackdb-mit-pageinfo" style="font-family:var(--font-ui);font-size:10px;color:var(--text-dim);flex:1;text-align:center;"></span>
+          <button class="btn-reset" id="attackdb-mit-next" onclick="attackdbMitPage(1)">Next <i data-ic="chevron-right" data-size="12"></i></button>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- Detail Modal (shared for technique/group/software) -->
+    <div id="attackdb-modal" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,.85);z-index:9800;overflow-y:auto;">
+      <div style="max-width:800px;margin:40px auto;background:var(--surface);border:1px solid var(--border-bright);border-radius:6px;padding:50px;position:relative;">
+        <button onclick="document.getElementById('attackdb-modal').style.display='none'" style="position:absolute;top:14px;right:16px;background:none;border:none;color:var(--text-dim);font-size:18px;cursor:pointer;"><i data-ic="x"></i></button>
+        <div id="attackdb-modal-content"></div>
+      </div>
+    </div>
+
+    </div><!-- end #intelgrp-attack -->
+
+    <!-- ══════════ REQUIREMENTS GROUP ══════════ -->
+    <div id="intelgrp-requirements" class="intel-group" style="display:none">
+
+      <div class="ta-submenu" style="border-bottom:1px solid var(--border);margin-bottom:14px">
+        <button class="ta-submenu-btn" id="intel-pir-btn" onclick="intelSwitchViewAndLoad('pir')">PIR</button>
+        <button class="ta-submenu-btn" id="intel-rfi-btn" onclick="intelSwitchViewAndLoad('rfi')">RFI <span class="ta-submenu-count" id="intel-rfi-count">—</span></button>
+      </div>
+
+    <!-- ── PIR SUB-VIEW ── -->
+    <div id="intel-view-pir" style="display:none">
+      <div style="display:flex;align-items:center;gap:12px;margin-bottom:16px;flex-wrap:wrap;">
+        <span style="font-family:var(--font-ui);font-size:11px;color:var(--text-dim);text-transform:uppercase;letter-spacing:.08em;">Priority Intelligence Requirements</span>
+        <button class="btn-apply" onclick="openPirModal(null)" style="margin-left:auto; margin: 10px;">+ NEW PIR</button>
+      </div>
+
+      <div class="pir-list" id="pir-list">
+        <div style="font-family:var(--font-ui);font-size:11px;color:var(--text-dim);padding:20px 0;">Loading PIRs…</div>
+      </div>
+
+      <!-- PIR Articles Overlay -->
+      <div id="pir-art-overlay" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,.85);z-index:9500;overflow-y:auto;">
+        <div style="max-width:760px;margin:40px auto;background:var(--surface);border:1px solid var(--border-bright);border-radius:6px;padding:24px;">
+          <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:16px;">
+            <div>
+              <div id="pir-art-title" style="font-size:15px;font-weight:700;color:var(--text-bright);"></div>
+              <div id="pir-art-count" style="font-family:var(--font-ui);font-size:10px;color:var(--text-dim);margin-top:3px;"></div>
+            </div>
+            <button onclick="closePirArticles()" style="background:none;border:none;color:var(--text-dim);font-size:18px;cursor:pointer;"><i data-ic="x"></i></button>
+          </div>
+          <div id="pir-art-list" style="display:flex;flex-direction:column;gap:8px;"></div>
+          <div style="display:flex;gap:8px;margin-top:16px;align-items:center;">
+            <button class="btn-reset" id="pir-art-prev" onclick="pirArtPage(-1)"><i data-ic="chevron-left" data-size="12"></i> Prev</button>
+            <span id="pir-art-pageinfo" style="font-family:var(--font-ui);font-size:10px;color:var(--text-dim);flex:1;text-align:center;"></span>
+            <button class="btn-reset" id="pir-art-next" onclick="pirArtPage(1)">Next <i data-ic="chevron-right" data-size="12"></i></button>
+          </div>
+        </div>
+      </div>
+
+      <!-- PIR Analyst Note Modal -->
+      <div id="pir-note-modal" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,.75);z-index:9600;align-items:center;justify-content:center;">
+        <div style="background:var(--surface);border:1px solid var(--border-bright);border-radius:6px;padding:24px;width:520px;max-width:95vw;max-height:90vh;overflow-y:auto;">
+          <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;">
+            <span style="font-size:14px;font-weight:700;color:var(--text-bright);">Analyst Note</span>
+            <button onclick="closePirNote()" style="background:none;border:none;color:var(--text-dim);font-size:18px;cursor:pointer;"><i data-ic="x"></i></button>
+          </div>
+          <div id="pir-note-article-title" style="font-size:12px;color:var(--text);font-family:var(--font-ui);margin-bottom:14px;padding:8px;background:var(--surface2);border-radius:3px;border:1px solid var(--border);"></div>
+          <div style="margin-bottom:10px;">
+            <label style="font-family:var(--font-ui);font-size:10px;color:var(--text-dim);text-transform:uppercase;letter-spacing:.06em;display:block;margin-bottom:4px;">Note</label>
+            <textarea id="pir-note-text" rows="5" placeholder="Add analyst observations, context, or findings…"
+              style="width:100%;background:var(--surface2);border:1px solid var(--border);border-radius:3px;color:var(--text);font-size:12px;font-family:var(--font-ui);padding:8px;resize:vertical;box-sizing:border-box;"></textarea>
+          </div>
+          <div style="margin-bottom:14px;">
+            <label style="font-family:var(--font-ui);font-size:10px;color:var(--text-dim);text-transform:uppercase;letter-spacing:.06em;display:block;margin-bottom:4px;">Analyst</label>
+            <input id="pir-note-analyst" type="text" placeholder="Your name"
+              style="width:100%;background:var(--surface2);border:1px solid var(--border);border-radius:3px;color:var(--text);font-size:12px;font-family:var(--font-ui);padding:7px 10px;box-sizing:border-box;">
+          </div>
+          <div id="pir-note-updated" style="font-family:var(--font-ui);font-size:10px;color:var(--text-dim);margin-bottom:12px;"></div>
+          <div style="display:flex;gap:8px;justify-content:flex-end;">
+            <button onclick="closePirNote()" class="btn-reset">Cancel</button>
+            <button onclick="savePirNote()" class="btn-apply">SAVE NOTE</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- PIR Modal -->
+      <div id="pir-modal" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,.7);z-index:9000;align-items:center;justify-content:center;">
+        <div style="background:var(--surface);border:1px solid var(--border-bright);border-radius:6px;padding:24px;width:560px;max-width:95vw;max-height:90vh;overflow-y:auto;">
+          <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:18px;">
+            <span id="pir-modal-title" style="font-size:16px;font-weight:700;color:var(--text-bright);">New PIR</span>
+            <button onclick="closePirModal()" style="background:none;border:none;color:var(--text-dim);font-size:18px;cursor:pointer;"><i data-ic="x"></i></button>
+          </div>
+
+          <div style="display:flex;flex-direction:column;gap:12px;">
+            <div>
+              <label class="pir-lbl">TITLE *</label>
+              <input id="pir-f-title" class="filter-input" style="width:100%" placeholder="e.g. Monitor APT41 in Finance sector">
+            </div>
+            <div>
+              <label class="pir-lbl">DESCRIPTION</label>
+              <textarea id="pir-f-desc" class="filter-input" style="width:100%;height:56px;resize:vertical;" placeholder="Context and rationale…"></textarea>
+            </div>
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;">
+              <div>
+                <label class="pir-lbl">PRIORITY</label>
+                <select id="pir-f-priority" class="filter-select" style="width:100%">
+                  <option value="P1">P1 — Critical</option>
+                  <option value="P2" selected>P2 — High</option>
+                  <option value="P3">P3 — Routine</option>
+                </select>
+              </div>
+              <div>
+                <label class="pir-lbl">OWNER</label>
+                <input id="pir-f-owner" class="filter-input" style="width:100%" placeholder="Analyst / Team">
+              </div>
+            </div>
+
+            <div style="font-family:var(--font-ui);font-size:10px;color:var(--text-dim);text-transform:uppercase;letter-spacing:.08em;border-top:1px solid var(--border);padding-top:10px;margin-top:2px;">Coverage Criteria — select from existing data</div>
+
+            <div>
+              <label class="pir-lbl">THREAT ACTORS</label>
+              <div class="pir-ms" id="pir-ms-tas"><div class="pir-ms-box" onclick="pirMsOpen('tas',event)"><span class="pir-ms-placeholder">Select actors…</span></div><div class="pir-ms-dropdown" id="pir-dd-tas"></div></div>
+            </div>
+            <div>
+              <label class="pir-lbl">INDUSTRIES</label>
+              <div class="pir-ms" id="pir-ms-industries"><div class="pir-ms-box" onclick="pirMsOpen('industries',event)"><span class="pir-ms-placeholder">Select industries…</span></div><div class="pir-ms-dropdown" id="pir-dd-industries"></div></div>
+            </div>
+            <div>
+              <label class="pir-lbl">COUNTRIES</label>
+              <div class="pir-ms" id="pir-ms-countries"><div class="pir-ms-box" onclick="pirMsOpen('countries',event)"><span class="pir-ms-placeholder">Select countries…</span></div><div class="pir-ms-dropdown" id="pir-dd-countries"></div></div>
+            </div>
+            <div>
+              <label class="pir-lbl">NEWS TYPES</label>
+              <div class="pir-ms" id="pir-ms-news_types"><div class="pir-ms-box" onclick="pirMsOpen('news_types',event)"><span class="pir-ms-placeholder">Select news types…</span></div><div class="pir-ms-dropdown" id="pir-dd-news_types"></div></div>
+            </div>
+            <div>
+              <label class="pir-lbl">MITRE TTPs</label>
+              <div class="pir-ms" id="pir-ms-ttps"><div class="pir-ms-box" onclick="pirMsOpen('ttps',event)"><span class="pir-ms-placeholder">Select TTPs…</span></div><div class="pir-ms-dropdown" id="pir-dd-ttps"></div></div>
+            </div>
+            <div>
+              <label class="pir-lbl">KEYWORDS (title match, free text)</label>
+              <input id="pir-f-keywords" class="filter-input" style="width:100%" placeholder="ransomware, supply chain">
+            </div>
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;">
+              <div>
+                <label class="pir-lbl">START DATE</label>
+                <input id="pir-f-start-date" type="date" class="filter-input" style="width:100%" title="Only scan articles on or after this date">
+              </div>
+              <div>
+                <label class="pir-lbl">END DATE</label>
+                <input id="pir-f-end-date" type="date" class="filter-input" style="width:100%" title="Only scan articles on or before this date; PIR auto-skips alerts after this date">
+              </div>
+            </div>
+            <div id="pir-f-status-wrap" style="display:none;">
+              <label class="pir-lbl">STATUS</label>
+              <select id="pir-f-status" class="filter-select" style="width:100%">
+                <option value="active">Active</option>
+                <option value="closed">Closed</option>
+              </select>
+            </div>
+          </div>
+
+          <div style="margin-top:18px;display:flex;justify-content:flex-end;gap:8px;">
+            <button onclick="closePirModal()" class="btn-reset">Cancel</button>
+            <button onclick="savePir()" class="btn-apply">SAVE PIR</button>
+          </div>
+        </div>
+      </div>
+    </div><!-- end #intel-view-pir -->
+
+    <!-- ── RFI VIEW ── -->
+    <div id="intel-view-rfi" style="display:none">
+      <div style="display:flex;align-items:center;gap:12px;margin-bottom:14px;flex-wrap:wrap;">
+        <span style="font-family:var(--font-ui);font-size:11px;color:var(--text-dim);text-transform:uppercase;letter-spacing:.08em;">Request for Intelligence</span>
+        <div style="display:flex;gap:6px;margin-left:0;">
+          <button class="rfi-filter-btn active" id="rfi-f-all"         onclick="rfiSetFilter(null)">All</button>
+          <button class="rfi-filter-btn"        id="rfi-f-open"        onclick="rfiSetFilter('open')">Open</button>
+          <button class="rfi-filter-btn"        id="rfi-f-in_progress" onclick="rfiSetFilter('in_progress')">In Progress</button>
+          <button class="rfi-filter-btn"        id="rfi-f-closed"      onclick="rfiSetFilter('closed')">Closed</button>
+        </div>
+        <button class="btn-apply" onclick="openRfiModal(null)" style="margin-left:auto; margin: 10px;">+ NEW RFI</button>
+      </div>
+
+      <div id="rfi-list">
+        <div style="font-family:var(--font-ui);font-size:11px;color:var(--text-dim);padding:20px 0;">Sign in to view RFIs.</div>
+      </div>
+
+      <!-- RFI Create/Edit Modal -->
+      <div id="rfi-modal" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,.7);z-index:9000;align-items:center;justify-content:center;">
+        <div style="background:var(--surface);border:1px solid var(--border-bright);border-radius:6px;padding:24px;width:540px;max-width:95vw;max-height:90vh;overflow-y:auto;">
+          <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:18px;">
+            <span id="rfi-modal-title" style="font-size:16px;font-weight:700;color:var(--text-bright);">New RFI</span>
+            <button onclick="closeRfiModal()" style="background:none;border:none;color:var(--text-dim);font-size:18px;cursor:pointer;"><i data-ic="x"></i></button>
+          </div>
+
+          <div style="display:flex;flex-direction:column;gap:12px;">
+            <div>
+              <label class="pir-lbl">REQUESTER *</label>
+              <input id="rfi-f-requester" class="filter-input" style="width:100%" placeholder="analyst@org or team name">
+            </div>
+            <div>
+              <label class="pir-lbl">QUESTION *</label>
+              <textarea id="rfi-f-question" class="filter-input" style="width:100%;height:72px;resize:vertical;" placeholder="What intelligence is being requested?"></textarea>
+            </div>
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;">
+              <div>
+                <label class="pir-lbl">DUE DATE</label>
+                <input id="rfi-f-due-date" type="date" class="filter-input" style="width:100%">
+              </div>
+              <div>
+                <label class="pir-lbl">STATUS</label>
+                <select id="rfi-f-status" class="filter-select" style="width:100%">
+                  <option value="open">Open</option>
+                  <option value="in_progress">In Progress</option>
+                  <option value="closed">Closed</option>
+                </select>
+              </div>
+            </div>
+            <div>
+              <label class="pir-lbl">LINKED PIR (optional)</label>
+              <select id="rfi-f-linked-pir" class="filter-select" style="width:100%">
+                <option value="">— None —</option>
+              </select>
+            </div>
+            <div>
+              <label class="pir-lbl">RESPONSE</label>
+              <textarea id="rfi-f-response" class="filter-input" style="width:100%;height:80px;resize:vertical;" placeholder="Analyst response, findings, or notes…"></textarea>
+            </div>
+          </div>
+
+          <div style="margin-top:18px;display:flex;justify-content:flex-end;gap:8px;">
+            <button onclick="closeRfiModal()" class="btn-reset">Cancel</button>
+            <button onclick="saveRfi()" class="btn-apply">SAVE RFI</button>
+          </div>
+        </div>
+      </div>
+    </div><!-- end #intel-view-rfi -->
+
+    </div><!-- end #intelgrp-requirements -->
+
+    <!-- ══════════ THREAT ACTORS GROUP ══════════ -->
+    <div id="intelgrp-threatactors" class="intel-group" style="display:none">
+
+      <div class="ta-submenu" style="border-bottom:1px solid var(--border);margin-bottom:14px">
+        <button class="ta-submenu-btn" id="intel-threatroom-btn" onclick="intelSwitchViewAndLoad('threatroom')">Threat Actor Room <span class="ta-submenu-count" id="ta-count">—</span></button>
+      </div>
+
+    <!-- ── THREAT ACTOR ROOM VIEW ── -->
+    <div id="intel-view-threatroom" style="display:none">
+
+      <!-- TA Room sub-menu -->
+      <div class="ta-submenu" style="margin-bottom:12px">
+        <button class="ta-submenu-btn active" id="taview-tracked"   onclick="taSwitchView('tracked')">Tracked</button>
+        <button class="ta-submenu-btn"         id="taview-aliases"  onclick="taSwitchView('aliases')">Aliases <span class="ta-submenu-count" id="al-submenu-count">—</span></button>
+        <button class="ta-submenu-btn"         id="taview-whitelist" onclick="taSwitchView('whitelist')">Whitelist <span class="ta-submenu-count" id="wl-submenu-count">—</span></button>
+        <button class="ta-submenu-btn"         id="taview-watchlist" onclick="taSwitchView('watchlist')">Watchlist <span class="ta-submenu-count" id="taw-submenu-count">—</span></button>
+      </div>
+
+      <!-- ── TRACKED VIEW ── -->
+      <div id="ta-view-tracked">
+
+        <!-- Controls: Add + Search -->
+        <div class="ta-bar">
+          <div class="ta-bar-left">
+            <span class="filter-label">Add Group</span>
+            <input type="text" class="filter-input" id="ta-input"
+                   placeholder="Group name (lowercase)…" style="width:260px"
+                   onkeydown="if(event.key==='Enter')taAddGroup()">
+            <button class="btn-apply" style="font-size:11px;padding:6px 16px;margin-left:0" onclick="taAddGroup()">+ ADD</button>
+            <span id="ta-status" class="ta-status"></span>
+          </div>
+          <div class="ta-bar-right">
+            <input type="text" class="filter-input" id="ta-search"
+                   placeholder="Search groups…" style="width:200px"
+                   oninput="taSearchInput()">
+            <select class="filter-select" id="ta-page-size" onchange="taSetPageSize()" style="min-width:110px">
+              <option value="25">25 / page</option>
+              <option value="50" selected>50 / page</option>
+              <option value="100">100 / page</option>
+              <option value="200">200 / page</option>
+              <option value="500">500 / page</option>
+            </select>
+          </div>
+        </div>
+
+        <!-- Table -->
+        <div class="ta-table-wrap">
+          <table class="ta-table" id="ta-table">
+            <thead>
+              <tr>
+                <th class="ta-th">#</th>
+                <th class="ta-th sortable sort-active" id="th-name"       onclick="taSortBy('name')">      Group Name <span class="sort-ind"><i data-ic="arrow-up" data-size="11"></i></span></th>
+                <th class="ta-th">Aliases</th>
+                <th class="ta-th sortable"             id="th-added_date" onclick="taSortBy('added_date')">Date Added <span class="sort-ind"><i data-ic="chevrons-up-down" data-size="11"></i></span></th>
+                <th class="ta-th sortable"             id="th-source"     onclick="taSortBy('source')">    Source     <span class="sort-ind"><i data-ic="chevrons-up-down" data-size="11"></i></span></th>
+                <th class="ta-th">Action</th>
+              </tr>
+            </thead>
+            <tbody id="ta-tbody">
+              <tr><td colspan="6" class="ta-td"><div class="loading-state"><div class="loading-spinner"></div><div class="loading-text">Loading...</div></div></td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        <!-- Footer: count left, pager right -->
+        <div class="ta-table-footer">
+          <span id="ta-total" class="ta-total">— groups tracked</span>
+          <div id="ta-pager"></div>
+        </div>
+
+      </div><!-- end #ta-view-tracked -->
+
+      <!-- ── ALIASES VIEW ── -->
+      <div id="ta-view-aliases" style="display:none">
+
+        <div class="ta-bar">
+          <div class="ta-bar-left">
+            <span class="filter-label">Known Aliases</span>
+            <span style="font-family:var(--font-ui);font-size:10px;color:var(--text-dim)">
+              Check here before adding a new actor — it may already be tracked under a different name.
+            </span>
+          </div>
+          <div class="ta-bar-right">
+            <input type="text" class="filter-input" id="al-search"
+                   placeholder="Search alias or group…" style="width:220px"
+                   oninput="alSearchInput()">
+            <select class="filter-select" id="al-page-size" onchange="alSetPageSize()" style="min-width:110px">
+              <option value="25">25 / page</option>
+              <option value="50" selected>50 / page</option>
+              <option value="100">100 / page</option>
+              <option value="200">200 / page</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="ta-table-wrap">
+          <table class="ta-table" id="al-table">
+            <thead>
+              <tr>
+                <th class="ta-th">#</th>
+                <th class="ta-th">Alias</th>
+                <th class="ta-th">Connected Group</th>
+                <th class="ta-th">Action</th>
+              </tr>
+            </thead>
+            <tbody id="al-tbody">
+              <tr><td colspan="4" class="ta-td"><div class="loading-state"><div class="loading-spinner"></div><div class="loading-text">Loading…</div></div></td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div class="ta-table-footer">
+          <span id="al-total" class="ta-total">— aliases tracked</span>
+          <div id="al-pager"></div>
+        </div>
+
+      </div><!-- end #ta-view-aliases -->
+
+      <!-- ── WHITELIST VIEW ── -->
+      <div id="ta-view-whitelist" style="display:none">
+
+        <!-- Whitelist search + page size bar -->
+        <div class="ta-bar">
+          <div class="ta-bar-left">
+            <span class="filter-label">Whitelisted Groups</span>
+            <span style="font-family:var(--font-ui);font-size:10px;color:var(--text-dim)">
+              Groups removed from tracking. Restore to re-enable.
+            </span>
+          </div>
+          <div class="ta-bar-right">
+            <input type="text" class="filter-input" id="wl-search"
+                   placeholder="Search whitelist…" style="width:200px"
+                   oninput="wlSearchInput()">
+            <select class="filter-select" id="wl-page-size" onchange="wlSetPageSize()" style="min-width:110px">
+              <option value="25">25 / page</option>
+              <option value="50" selected>50 / page</option>
+              <option value="100">100 / page</option>
+              <option value="200">200 / page</option>
+            </select>
+          </div>
+        </div>
+
+        <!-- Whitelist table -->
+        <div class="ta-table-wrap">
+          <table class="ta-table" id="wl-table">
+            <thead>
+              <tr>
+                <th class="ta-th">#</th>
+                <th class="ta-th sortable sort-active" id="wl-th-name"       onclick="wlSortBy('name')">     Group Name       <span class="sort-ind"><i data-ic="arrow-up" data-size="11"></i></span></th>
+                <th class="ta-th sortable"             id="wl-th-added_date" onclick="wlSortBy('added_date')">Date Whitelisted <span class="sort-ind"><i data-ic="chevrons-up-down" data-size="11"></i></span></th>
+                <th class="ta-th">Action</th>
+              </tr>
+            </thead>
+            <tbody id="wl-tbody">
+              <tr><td colspan="4" class="ta-td"><div class="loading-state"><div class="loading-spinner"></div><div class="loading-text">Loading…</div></div></td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        <!-- Whitelist footer -->
+        <div class="ta-table-footer">
+          <span id="wl-total" class="ta-total">— groups whitelisted</span>
+          <div id="wl-pager"></div>
+        </div>
+
+      </div><!-- end #ta-view-whitelist -->
+
+      <!-- ── WATCHLIST VIEW ── -->
+      <div id="ta-view-watchlist" style="display:none">
+
+        <div class="ta-bar">
+          <div class="ta-bar-left">
+            <span class="filter-label">Threat Actor Watchlist</span>
+            <span style="font-family:var(--font-ui);font-size:10px;color:var(--text-dim)">
+              Articles mentioning watched actors appear in News Room.
+            </span>
+          </div>
+          <div class="ta-bar-right">
+            <input type="text" class="filter-input" id="taw-search"
+                   placeholder="Search watchlist…" style="width:200px"
+                   oninput="tawSearchInput()">
+            <button class="btn-apply" onclick="tawOpenNavigator()" title="Open watchlist TTPs in ATT&CK Navigator"><i data-ic="external-link"></i> Open Navigator</button>
+            <select class="filter-select" id="taw-page-size" onchange="tawSetPageSize()" style="min-width:110px">
+              <option value="25">25 / page</option>
+              <option value="50" selected>50 / page</option>
+              <option value="100">100 / page</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="ta-sort-bar">
+          <span class="filter-label" style="font-size:10px">SORT:</span>
+          <button class="ta-sort-btn sort-active" id="taw-th-name"       onclick="tawSortBy('name')">Name <span class="sort-ind"><i data-ic="arrow-up" data-size="11"></i></span></button>
+          <button class="ta-sort-btn"             id="taw-th-added_date" onclick="tawSortBy('added_date')">Date Added <span class="sort-ind"><i data-ic="chevrons-up-down" data-size="11"></i></span></button>
+        </div>
+
+        <div class="taw-card-grid" id="taw-card-grid">
+          <div class="loading-state"><div class="loading-spinner"></div><div class="loading-text">Loading…</div></div>
+        </div>
+
+        <div class="ta-table-footer">
+          <span id="taw-total" class="ta-total">— groups watched</span>
+          <div id="taw-pager"></div>
+        </div>
+
+      </div><!-- end #ta-view-watchlist -->
+
+    </div><!-- end #intel-view-threatroom -->
+
+    </div><!-- end #intelgrp-threatactors -->
+
+    <!-- ══════════ IOC MANAGEMENT GROUP ══════════ -->
+    <div id="intelgrp-iocmgmt" class="intel-group" style="display:none">
+
+      <div class="ta-submenu" style="border-bottom:1px solid var(--border);margin-bottom:14px">
+        <button class="ta-submenu-btn" id="intel-iocmgmt-btn" onclick="intelSwitchViewAndLoad('iocmgmt')">IOC Management <span class="ta-submenu-count" id="intel-iocmgmt-count">—</span></button>
+      </div>
+
+    <!-- ── IOC MANAGEMENT VIEW ── -->
+    <div id="intel-view-iocmgmt" style="display:none">
+
+      <!-- toolbar -->
+      <div class="ta-bar">
+        <div class="ta-bar-left" style="gap:8px;flex-wrap:wrap">
+          <select class="refresh-select" id="iocmgmt-type-filter" onchange="iocmgmtLoad(1)" style="font-size:11px">
+            <option value="">All Types</option>
+            <option value="ip">IP</option>
+            <option value="domain">Domain</option>
+            <option value="url">URL</option>
+            <option value="url_with_path">URL+Path</option>
+            <option value="email">Email</option>
+            <option value="sha256">SHA256</option>
+            <option value="sha1">SHA1</option>
+            <option value="md5">MD5</option>
+            <option value="cve">CVE</option>
+          </select>
+          <input type="text" class="filter-input" id="iocmgmt-search" placeholder="Search value…"
+                 style="width:200px" onkeydown="if(event.key==='Enter')iocmgmtLoad(1)">
+          <button class="btn-apply" onclick="iocmgmtLoad(1)" style="font-size:11px;padding:3px 10px">Search</button>
+          <select class="refresh-select" onchange="iocmgmtSetSort(this.value)" style="font-size:11px">
+            <option value="last_seen">Sort: Last Seen</option>
+            <option value="confidence">Sort: Confidence</option>
+          </select>
+          <select id="iocmgmt-action-filter" class="refresh-select" onchange="iocmgmtSetActionabilityFilter(this.value)" style="font-size:11px">
+            <option value="">All Actions</option>
+            <option value="block_now">Block Now</option>
+            <option value="investigate">Investigate</option>
+            <option value="monitor">Monitor</option>
+            <option value="archive">Archive</option>
+          </select>
+          <select class="refresh-select" id="iocmgmt-verdict-filter" onchange="iocmgmtSetVerdictFilter(this.value)" style="font-size:11px">
+            <option value="">All Verdicts</option>
+            <option value="malicious">Malicious</option>
+            <option value="suspicious">Suspicious</option>
+            <option value="clean">Clean</option>
+            <option value="unknown">Unknown</option>
+          </select>
+        </div>
+        <div class="ta-bar-right">
+          <span id="iocmgmt-total" style="font-family:var(--font-ui);font-size:10px;color:var(--text-dim)">— IOCs</span>
+          <select class="filter-select" onchange="iocmgmtSetPageSize(this.value)" style="min-width:110px">
+            <option value="25">25 / page</option>
+            <option value="50" selected>50 / page</option>
+            <option value="100">100 / page</option>
+            <option value="200">200 / page</option>
+          </select>
+          <button class="btn-reset" onclick="iocmgmtExportSTIX()" title="Export STIX 2.1 bundle for current type filter"><i data-ic="download"></i> STIX</button>
+          <button class="btn-reset" onclick="iocmgmtExportCSV()" title="Export CSV with active filters"><i data-ic="download"></i> CSV</button>
+          <button class="btn-reset" onclick="iocmgmtLoad(1)"><i data-ic="refresh"></i> Refresh</button>
+        </div>
+      </div>
+
+      <!-- stats chips -->
+      <div id="iocmgmt-stats" style="display:flex;gap:8px;flex-wrap:wrap;margin:10px"></div>
+
+      <!-- table -->
+      <div class="ta-table-wrap" style="min-height:300px; padding: 10px;">
+        <table class="ta-table" style="width:100%">
+          <thead>
+            <tr style="margin: 10px;">
+              <th style="width:90px">Type</th>
+              <th>Value</th>
+              <th style="width:70px;text-align:center">Confidence</th>
+              <th style="width:100px;text-align:center">Actionability</th>
+              <th style="width:110px;text-align:center">Enrichment</th>
+              <th style="width:60px;text-align:center">Seen</th>
+              <th style="width:100px">First Seen</th>
+              <th style="width:100px">Last Seen</th>
+              <th style="width:80px;text-align:center">Feedback</th>
+            </tr>
+          </thead>
+          <tbody id="iocmgmt-tbody" style="margin-top: 10px;">
+            <tr><td colspan="9" style="text-align:center;color:var(--text-dim);padding:24px">Loading…</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="ta-table-footer" style="margin-top: 10px;">
+        <span id="iocmgmt-footer-total" class="ta-total"></span>
+        <div id="iocmgmt-pager"></div>
+      </div>
+
+      <!-- FP Analytics sub-section -->
+      <div id="ioc-fp-analytics-section" style="margin-top:24px;border-top:1px solid var(--border);padding-top:16px">
+        <div style="display:flex;align-items:center;gap:10px;margin-bottom:12px;flex-wrap:wrap">
+          <span style="font-family:var(--font-ui);font-size:11px;color:var(--text-dim);text-transform:uppercase;letter-spacing:.08em">FP Pattern Analytics</span>
+          <span id="ioc-fp-suppressed-badge" style="font-family:var(--font-ui);font-size:10px;color:var(--text-dim)"></span>
+          <button class="btn-reset" onclick="fpAnalyticsLoad(true)" style="margin-left:auto"><i data-ic="refresh"></i> Refresh</button>
+        </div>
+        <div id="ioc-fp-analytics-body">
+          <div style="text-align:center;color:var(--text-dim);padding:16px;font-size:11px">Loading…</div>
+        </div>
+      </div>
+
+      <!-- IOC Allowlist sub-section (admin only) -->
+      <div id="ioc-allowlist-section" style="margin-top:24px;border-top:1px solid var(--border);padding-top:16px">
+        <div style="display:flex;align-items:center;gap:10px;margin-bottom:10px;flex-wrap:wrap">
+          <span style="font-family:var(--font-ui);font-size:11px;color:var(--text-dim);text-transform:uppercase;letter-spacing:.08em">IOC Extraction Allowlist</span>
+          <span style="font-family:var(--font-ui);font-size:10px;color:var(--text-dim)">— domains added here are never stored as IOCs, and existing matching IOCs are deleted on add.</span>
+          <button class="btn-reset" onclick="allowlistLoad()" style="margin-left:auto"><i data-ic="refresh"></i> Refresh</button>
+        </div>
+        <div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:12px">
+          <select class="refresh-select" id="allowlist-type" style="font-size:11px">
+            <option value="domain">Domain</option>
+            <option value="ip">IP Address</option>
+          </select>
+          <input type="text" class="filter-input" id="allowlist-value" placeholder="e.g. cybersecuritynews.com"
+                 style="width:240px" onkeydown="if(event.key==='Enter')allowlistAdd()">
+          <button class="btn-apply" onclick="allowlistAdd()" style="font-size:11px;padding:3px 10px">+ Add</button>
+          <span id="allowlist-status" style="font-family:var(--font-ui);font-size:10px;color:var(--text-dim);align-self:center"></span>
+        </div>
+        <div id="allowlist-table-wrap" style="overflow-x:auto">
+          <table style="width:100%;border-collapse:collapse;font-family:var(--font-ui);font-size:11px">
+            <thead>
+              <tr style="color:var(--text-dim);border-bottom:1px solid var(--border)">
+                <th style="text-align:left;padding:4px 8px;width:110px">Type</th>
+                <th style="text-align:left;padding:4px 8px">Value</th>
+                <th style="text-align:left;padding:4px 8px;width:120px">Added By</th>
+                <th style="text-align:left;padding:4px 8px;width:110px">Added At</th>
+                <th style="text-align:center;padding:4px 8px;width:60px">Action</th>
+              </tr>
+            </thead>
+            <tbody id="allowlist-tbody">
+              <tr><td colspan="5" style="text-align:center;color:var(--text-dim);padding:16px">Loading…</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+    </div><!-- end #intel-view-iocmgmt -->
+
+    <!-- IOC detail modal -->
+    <div id="iocmgmt-modal" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.65);z-index:9000;overflow-y:auto">
+      <div style="max-width:640px;margin:60px auto;background:var(--surface);border:1px solid var(--border);border-radius:6px;padding:28px;position:relative">
+        <button onclick="document.getElementById('iocmgmt-modal').style.display='none'"
+                style="position:absolute;top:14px;right:16px;background:none;border:none;color:var(--text-dim);font-size:18px;cursor:pointer"><i data-ic="x"></i></button>
+        <div id="iocmgmt-modal-body"></div>
+      </div>
+    </div>
+
+    </div><!-- end #intelgrp-iocmgmt -->
+
+    <!-- ══════════ SOURCE RELIABILITY GROUP ══════════ -->
+    <div id="intelgrp-sourcerel" class="intel-group" style="display:none">
+
+      <div class="ta-submenu" style="border-bottom:1px solid var(--border);margin-bottom:14px">
+        <button class="ta-submenu-btn" id="intel-scores-btn" onclick="intelSwitchViewAndLoad('scores')">Source Reliability <span class="ta-submenu-count" id="intel-scores-count">—</span></button>
+      </div>
+
+    <!-- ── SOURCE RELIABILITY DB VIEW ── -->
+    <div id="intel-view-scores" style="display:none">
+
+      <!-- Controls bar -->
+      <div class="ta-bar">
+        <div class="ta-bar-left">
+          <input type="text" class="filter-input" id="sr-search"
+                 placeholder="Search source or analyst…" style="width:220px"
+                 oninput="srSearchInput()">
+          <select class="filter-select" id="sr-grade-filter" onchange="loadSREntries()" style="min-width:140px">
+            <option value="">All Grades</option>
+            <option value="A">A — Completely reliable</option>
+            <option value="B">B — Usually reliable</option>
+            <option value="C">C — Fairly reliable</option>
+            <option value="D">D — Not usually reliable</option>
+            <option value="E">E — Unreliable</option>
+            <option value="F">F — Cannot be judged</option>
+          </select>
+          <span id="sr-status" class="ta-status"></span>
+        </div>
+        <div class="ta-bar-right">
+          <select class="filter-select" id="sr-page-size" onchange="srSetPageSize()" style="min-width:110px">
+            <option value="25">25 / page</option>
+            <option value="50" selected>50 / page</option>
+            <option value="100">100 / page</option>
+          </select>
+          <button class="btn-close-modal" style="font-size:11px;padding:6px 16px" onclick="srImportDefaults()" title="Copy the baseline rating library into this client, skipping sources already rated here">Import Defaults</button>
+          <button class="btn-apply" style="font-size:11px;padding:6px 16px" onclick="openSRAddModal()">+ ADD SOURCE</button>
+        </div>
+      </div>
+
+      <!-- Table -->
+      <div class="ta-table-wrap">
+        <table class="ta-table">
+          <thead>
+            <tr>
+              <th class="ta-th" style="width:40px">#</th>
+              <th class="ta-th ta-th--sortable" data-col="source_name" onclick="srSort(this)">Source Name <span class="sort-ind"><i data-ic="chevrons-up-down" data-size="11"></i></span></th>
+              <th class="ta-th ta-th--sortable" data-col="analyst_name" onclick="srSort(this)">Analyst <span class="sort-ind"><i data-ic="chevrons-up-down" data-size="11"></i></span></th>
+              <th class="ta-th">Code</th>
+              <th class="ta-th ta-th--sortable" data-col="reliability_grade" onclick="srSort(this)">Reliability <span class="sort-ind"><i data-ic="chevrons-up-down" data-size="11"></i></span></th>
+              <th class="ta-th">Credibility</th>
+              <th class="ta-th">Notes</th>
+              <th class="ta-th ta-th--sortable" data-col="last_updated" onclick="srSort(this)">Updated <span class="sort-ind"><i data-ic="chevrons-up-down" data-size="11"></i></span></th>
+              <th class="ta-th">Actions</th>
+            </tr>
+          </thead>
+          <tbody id="sr-tbody">
+            <tr><td colspan="9" class="ta-td"><div class="loading-state"><div class="loading-spinner"></div><div class="loading-text">Loading…</div></div></td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="ta-table-footer">
+        <span class="ta-total" id="sr-total">—</span>
+        <div id="sr-pager"></div>
+      </div>
+    </div>
+
+    </div><!-- end #intelgrp-sourcerel -->
+
+
+  </div><!-- end #tab-intelligence -->
+
+
+
+  <!-- ══════════ EXEC DASHBOARD (V2) ══════════ -->

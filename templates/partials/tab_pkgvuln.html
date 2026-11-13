@@ -1,0 +1,192 @@
+  <!-- ── PKG VULN VIEW ── -->
+  <div id="cveview-pkgvuln" style="display:none">
+
+    <!-- Stats row (vulns only) -->
+    <div id="pv-stats-grid" class="cve-grid" style="margin-bottom:14px;display:none">
+      <div class="cve-stat-box">
+        <div class="cve-stat-label">Packages Monitored</div>
+        <div class="cve-stat-value info" id="pv-stat-packages">—</div>
+      </div>
+      <div class="cve-stat-box">
+        <div class="cve-stat-label">Critical Vulns</div>
+        <div class="cve-stat-value crit" id="pv-stat-critical">—</div>
+      </div>
+      <div class="cve-stat-box">
+        <div class="cve-stat-label">High Vulns</div>
+        <div class="cve-stat-value high" id="pv-stat-high">—</div>
+      </div>
+      <div class="cve-stat-box">
+        <div class="cve-stat-label">CISA KEV</div>
+        <div class="cve-stat-value" style="color:#DA3633" id="pv-stat-kev">—</div>
+      </div>
+      <div class="cve-stat-box">
+        <div class="cve-stat-label">Unacknowledged</div>
+        <div class="cve-stat-value med" id="pv-stat-unacked">—</div>
+      </div>
+    </div>
+
+    <!-- Filter + actions bar (vulns only) -->
+    <div id="pv-filter-bar" class="filter-bar" style="margin-bottom:14px;display:none">
+      <span class="filter-label">Filter</span>
+      <div class="filter-group">
+        <input type="text" class="filter-input" id="pv-search"
+               placeholder="Advisory ID, CVE, summary…" style="width:220px"
+               onkeydown="if(event.key==='Enter')pvLoadVulns()">
+        <select class="filter-select" id="pv-severity-filter" style="min-width:140px" onchange="pvLoadVulns()">
+          <option value="">All Severities</option>
+          <option value="CRITICAL">Critical</option>
+          <option value="HIGH">High</option>
+          <option value="MEDIUM">Medium</option>
+          <option value="LOW">Low</option>
+        </select>
+        <select class="filter-select" id="pv-pkg-filter" style="min-width:180px" onchange="pvLoadVulns()">
+          <option value="">All Packages</option>
+        </select>
+        <label style="display:flex;align-items:center;gap:5px;font-family:var(--font-ui);font-size:10px;color:var(--red);cursor:pointer;white-space:nowrap">
+          <input type="checkbox" id="pv-kev-filter" onchange="pvLoadVulns()"> KEV Only
+        </label>
+        <label style="display:flex;align-items:center;gap:5px;font-family:var(--font-ui);font-size:10px;color:var(--orange);cursor:pointer;white-space:nowrap">
+          <input type="checkbox" id="pv-unacked-filter" onchange="pvLoadVulns()"> Unacked Only
+        </label>
+      </div>
+      <button class="btn-reset" onclick="pvResetFilters()">Reset</button>
+      <button class="btn-apply" onclick="pvLoadVulns()">APPLY</button>
+      <div style="display:flex;flex-direction:column;gap:4px;margin-left:auto">
+        <button class="btn-reset" id="pv-scan-btn"
+                onclick="pvScanAll(this)"
+                style="border-color:rgba(47,129,247,0.4);color:var(--accent);white-space:nowrap"
+                title="Scan all monitored packages against osv.dev and deps.dev now">
+          <i data-ic="refresh"></i> Scan All Now
+        </button>
+      </div>
+    </div>
+
+    <!-- View toggle: Vulns list vs Packages list -->
+    <div style="display:flex;gap:8px;margin-bottom:10px;align-items:center;flex-wrap:wrap">
+      <button id="pv-view-vulns-btn" class="ta-submenu-btn active" onclick="pvSwitchSubview('vulns')"
+              style="font-size:11px;padding:5px 12px">
+        Vulnerabilities <span id="pv-vuln-count-badge" class="ta-submenu-count">—</span>
+      </button>
+      <button id="pv-view-pkgs-btn" class="ta-submenu-btn" onclick="pvSwitchSubview('packages')"
+              style="font-size:11px;padding:5px 12px">
+        Packages <span id="pv-pkg-count-badge" class="ta-submenu-count">—</span>
+      </button>
+      <span id="pv-status" class="ta-status" style="margin-left:8px"></span>
+    </div>
+
+    <!-- ── Packages subview ── -->
+    <div id="pv-subview-packages" style="display:none">
+
+      <!-- Add package + lockfile import row -->
+      <div style="display:flex;gap:8px;align-items:center;margin-bottom:12px;flex-wrap:wrap">
+        <input type="text" class="filter-input" id="pv-pkg-input" placeholder="Package name…" style="width:180px"
+               onkeydown="if(event.key==='Enter')pvAddPackage()">
+        <input type="text" class="filter-input" id="pv-ver-input" placeholder="Version (optional)…" style="width:130px"
+               title="Pin a specific version for version-accurate vulnerability results">
+        <select class="filter-select" id="pv-eco-select" style="min-width:130px">
+          <option value="npm">npm</option>
+          <option value="PyPI">PyPI</option>
+          <option value="Go">Go</option>
+          <option value="Maven">Maven</option>
+          <option value="crates.io">crates.io</option>
+          <option value="NuGet">NuGet</option>
+          <option value="RubyGems">RubyGems</option>
+          <option value="Packagist">Packagist</option>
+          <option value="Hex">Hex</option>
+        </select>
+        <button class="btn-apply" onclick="pvAddPackage()" style="margin-left: 10px;">+ Add</button>
+
+        <div style="height:24px;width:1px;background:var(--border);margin:0 4px"></div>
+
+        <!-- Lockfile import -->
+        <label class="btn-reset" style="cursor:pointer;border-color:rgba(110,124,255,0.4);color:#6E7CFF;white-space:nowrap"
+               title="Import packages from requirements.txt, package-lock.json, go.mod, pom.xml, or poetry.lock">
+          <i data-ic="upload"></i> Import Lockfile
+          <input type="file" id="pv-lockfile-input" style="display:none"
+                 accept=".txt,.json,.xml,.lock,.mod,.sum"
+                 onchange="pvImportLockfile(this)">
+        </label>
+
+        <span style="font-family:var(--font-ui);font-size:10px;color:var(--text-dim);margin-left:auto"
+              id="pv-pkg-total">—</span>
+      </div>
+
+      <div class="cve-table-wrapper">
+        <table class="cve-table">
+          <thead>
+            <tr>
+              <th class="cve-table th" style="width:40px">#</th>
+              <th class="cve-table th">Package</th>
+              <th class="cve-table th">Ecosystem</th>
+              <th class="cve-table th">Pinned / Latest</th>
+              <th class="cve-table th">Vulns</th>
+              <th class="cve-table th">Highest</th>
+              <th class="cve-table th" title="Direct / Indirect transitive dependencies + OSSF Scorecard">Deps / Score</th>
+              <th class="cve-table th">Source</th>
+              <th class="cve-table th">Last Scan</th>
+              <th class="cve-table th">Actions</th>
+            </tr>
+          </thead>
+          <tbody id="pv-pkg-tbody"></tbody>
+        </table>
+      </div>
+      <div id="pv-pkg-pager"></div>
+    </div>
+
+    <!-- ── Vulns subview ── -->
+    <div id="pv-subview-vulns">
+      <div class="cve-table-wrapper">
+        <table class="cve-table">
+          <thead>
+            <tr>
+              <th class="cve-table th" style="width:40px">#</th>
+              <th class="cve-table th">Advisory / CVEs</th>
+              <th class="cve-table th">Package</th>
+              <th class="cve-table th">Summary</th>
+              <th class="cve-table th" style="width:90px">Severity</th>
+              <th class="cve-table th" style="width:80px" title="Composite score: CVSS × EPSS mult × KEV mult">Score <i data-ic="star" data-size="11"></i></th>
+              <th class="cve-table th" style="width:55px">EPSS</th>
+              <th class="cve-table th" style="width:100px">Published</th>
+              <th class="cve-table th">Fixed In</th>
+              <th class="cve-table th" style="width:100px">Status</th>
+            </tr>
+          </thead>
+          <tbody id="pv-vuln-tbody"></tbody>
+        </table>
+      </div>
+      <div id="pv-vuln-pager"></div>
+    </div>
+
+    <!-- Vuln detail modal -->
+    <div id="pv-modal" class="modal-overlay" onclick="if(event.target===this)pvCloseModal()">
+      <div class="modal-box" style="max-width:600px;max-height:78vh;overflow-y:auto;position:relative">
+        <button class="modal-close" onclick="pvCloseModal()"><i data-ic="x"></i></button>
+        <div id="pv-modal-body" style="padding:18px;font-size:12px"></div>
+      </div>
+    </div>
+
+    <!-- Lockfile import result modal -->
+    <div id="pv-import-modal" class="modal-overlay" onclick="if(event.target===this)document.getElementById('pv-import-modal').classList.remove('open')">
+      <div class="modal-box" style="max-width:560px">
+        <button class="modal-close" onclick="document.getElementById('pv-import-modal').classList.remove('open')"><i data-ic="x"></i></button>
+        <div id="pv-import-modal-body"></div>
+      </div>
+    </div>
+
+    <!-- Edit package modal -->
+    <div id="pv-edit-modal" class="modal-overlay" onclick="if(event.target===this)pvCloseEditModal()">
+      <div class="modal-box" style="max-width:460px">
+        <button class="modal-close" onclick="pvCloseEditModal()"><i data-ic="x"></i></button>
+        <div id="pv-edit-modal-body"></div>
+      </div>
+    </div>
+
+    <!-- Dep graph modal -->
+    <div id="pv-deps-modal" class="modal-overlay" onclick="if(event.target===this)pvCloseDepsModal()">
+      <div class="modal-box" style="max-width:760px;max-height:85vh;overflow-y:auto">
+        <button class="modal-close" onclick="pvCloseDepsModal()"><i data-ic="x"></i></button>
+        <div id="pv-deps-modal-body"></div>
+      </div>
+    </div>
+
+  </div>

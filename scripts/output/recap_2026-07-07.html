@@ -1,0 +1,55 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>Daily CTI Recap — 2026-07-07</title>
+<style>
+body { font-family: Segoe UI, Arial, sans-serif; max-width: 800px; margin: 2rem auto; color: #1a1a1a; }
+h1 { font-size: 1.4rem; }
+h2 { font-size: 1.1rem; margin-top: 1.5rem; border-bottom: 1px solid #ddd; padding-bottom: .25rem; }
+.counts span { margin-right: 1rem; color: #555; font-size: .9rem; }
+li { margin-bottom: .4rem; }
+</style>
+</head>
+<body>
+<h1>Daily CTI Recap — 2026-07-07</h1>
+<p><b>Ransomware and phishing dominated yesterday&#x27;s threat landscape, with multiple active groups and a notable KVM flaw enabling VM escape.</b></p>
+<div class="counts">
+<span>Articles: 55</span>
+<span>Tweets: 73</span>
+<span>CVEs: </span>
+<span>IOCs: </span>
+<span>Campaigns: </span>
+<span>New TAs: </span>
+</div>
+
+<h2>Summary</h2>
+<p>Yesterday saw a high volume of ransomware incidents, with groups including INC Ransom, Qilin, Akira, and DragonForce claiming multiple victims globally. A 16-year-old Linux KVM flaw (CVE-2026-20896?) was highlighted, allowing VM escape on Intel/AMD systems. Threat actors leveraged phishing via Microsoft Teams to deploy EtherRAT and used fake recruiter emails to steal credentials. The Accenture breach claimed by actor 888 gained attention, and a court filing revealed Windows Device ID helped trace a Scattered Spider hacker.</p>
+
+<h2>Top Stories</h2>
+<ul><li><b>Court Filing Reveals Windows Device ID Helped FBI Trace Alleged Scattered Spider Hacker</b> (Hackernews) — Highlights how OS-level telemetry aids law enforcement in tracking sophisticated threat actors.</li><li><b>16-Year-Old Linux KVM Flaw Lets Guest VMs Escape to Host on Intel and AMD x86 Systems</b> (Hackernews) — A critical vulnerability enabling VM escape, potentially affecting many cloud and virtualized environments.</li><li><b>Hackers Leverage Microsoft Teams Call to Install RMM Tools and Deploy EtherRAT</b> (Cybersecurity News) — Demonstrates a novel social engineering vector using trusted collaboration tools for malware deployment.</li><li><b>Critical BeyondTrust Flaws Let Attackers Bypass Access Controls and Gain Unauthorized Access</b> (Cybersecurity News) — Remote access software vulnerabilities can lead to widespread compromise if exploited.</li><li><b>Suspected China-Aligned Hackers Exploit Roundcube Flaws Against Universities</b> (Hackernews) — Targeting of educational institutions with webmail vulnerabilities shows persistent espionage threats.</li><li><b>DEBULL Tooling Abuses Microsoft Device-Code Flow to Target M365 Accounts</b> (Hackernews) — Device-code phishing attacks are a growing trend, evading traditional MFA protections.</li><li><b>Alleged Accenture Breach by Threat Actor 888</b> (H4ckmanac) — Major consulting firm breach could expose sensitive client data and intellectual property.</li><li><b>IRan-Linked Hackers Use New Cavern C2 Framework to Target Israeli Organizations</b> (Hackernews) — New C2 framework indicates evolving capabilities from Iranian threat actors.</li></ul>
+
+<h2>Top Tweets</h2>
+<ul><li><b>@@MonThreat</b> [incident] — BONK DAO loses approximately $20 million in treasury funds due to a malicious DAO governance proposal.</li><li><b>@@H4ckmanac</b> [incident] — Threat actor 888 claims to have breached Accenture, stealing 35 GB of source code, RSA/SSH keys, Azure credentials.</li><li><b>@@DailyDarkWeb</b> [other] — Pakistan International Airlines flight records (30M) allegedly offered for sale on cybercrime forum.</li><li><b>@@MonThreat</b> [incident] — Threat actor claims 430M record breach of Argentine credit bureau InfoExperto.</li><li><b>@@rst_cloud</b> [incident] — Report on fake Indian ITR notice leading to dual RAT deployment (Gh0st, Quasar, AsyncRAT).</li><li><b>@@FalconFeedsio</b> [other] — Multiple ransomware alerts: INC Ransom, Qilin, Akira, DragonForce, Everest, etc. adding victims.</li></ul>
+
+<h2>Active Threat Actors</h2>
+<p>Scattered spider, INC Ransom, Qilin, Akira, DragonForce, Everest Ransomware Group, KRYBIT, INTERLOCK, BravoX Ransomware, Space Bears, Play Ransomware, AiLock, NoName, Turla, Secret Blizzard, Storm-2372, Oilrig, Muddywater, Lyceum, Volt Typhoon, Sandworm, Noname057, APT44, Silk Typhoon, TA4922, 888</p>
+
+<h2>Notable CVEs</h2>
+<p>CVE-2026-20896, CVE-2026-48282</p>
+
+<h2>Active Campaigns</h2>
+<ul><li><b>Ransomware-as-a-Service (RaaS) activity</b> (3 articles) — Multiple ransomware groups added victims, indicating sustained operational tempo.</li><li><b>Social engineering via Microsoft Teams and fake job interviews</b> (3 articles) — Threat actors are using trusted platforms and recruitment lures to deliver malware and steal credentials.</li><li><b>VM escape vulnerabilities</b> (2 articles) — Two separate KVM flaws could allow guest-to-host escape, critical for cloud security.</li></ul>
+
+<h2>APAC Signals</h2>
+<ul><li>DragonForce ransomware victim Ample Surveyor Services Limited (Hong Kong)</li><li>Pakistan International Airlines flight records data breach offered for sale</li><li>DDoS attacks targeting Thai websites by groups SEXDAN and NXBB.SEC</li><li>Threat actor targets multiple Italian and Indian companies</li></ul>
+
+<h2>Forecast</h2>
+<p>Over the next 1-3 days, expect continued ransomware attacks with new victims posted by groups like INC Ransom and Qilin. Phishing campaigns using Microsoft Teams and fake job interviews are likely to persist, targeting credentials and deploying malware. Exploitation of the recently disclosed KVM flaw (CVE-2026-20896) may increase as proof-of-concept code emerges.</p>
+<h2>Likely Events</h2>
+<ul><li>Additional ransomware victims will be posted by INC Ransom, Qilin, and Akira based on recent activity. — <i>Multiple posts from FalconFeedsio on July 7 confirm these groups added new victims and active threat actor listings.</i> (confidence: high)</li><li>Phishing attacks using Microsoft Teams calls to deliver EtherRAT or similar malware will be reported in other regions. — <i>Cybersecurity News article on July 7 details this technique; it is likely to be replicated by other threat actors.</i> (confidence: med)</li><li>Threat actors will begin exploiting CVE-2026-20896 (Gitea Docker flaw) as PoCs become available. — <i>Hackernews reports threat actors probing the flaw 13 days after disclosure; scanning activity expected to increase.</i> (confidence: med)</li><li>Further data breaches of major companies (e.g., Accenture) may be confirmed or additional leaks advertised. — <i>Claims by threat actor 888 of Accenture breach and other high-value target advertisements on cybercrime forums.</i> (confidence: low)</li></ul>
+<h2>Watch Items</h2>
+<ul><li>Exploitation of the 16-year-old KVM VM escape vulnerability (CVE-2026-20896) in cloud environments.</li><li>Phishing campaigns leveraging Microsoft Teams for initial access.</li><li>New ransomware victim postings by INC Ransom, Qilin, and Akira.</li><li>Accenture breach: confirmation of data legitimacy and potential impact.</li></ul>
+
+</body>
+</html>

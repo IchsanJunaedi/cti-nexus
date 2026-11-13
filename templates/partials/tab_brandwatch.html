@@ -1,0 +1,74 @@
+  <div id="watch-subtab-brand" style="display:none">
+
+    <!-- Stats row -->
+    <div id="bw-stats-grid" class="cve-grid" style="margin-bottom:14px">
+      <div class="cve-stat-box">
+        <div class="cve-stat-label">Brands Watched</div>
+        <div class="cve-stat-value info" id="bw-stat-brands">—</div>
+      </div>
+      <div class="cve-stat-box">
+        <div class="cve-stat-label">Total Matches</div>
+        <div class="cve-stat-value" id="bw-stat-matches">—</div>
+      </div>
+      <div class="cve-stat-box">
+        <div class="cve-stat-label">New Matches</div>
+        <div class="cve-stat-value high" id="bw-stat-new">—</div>
+      </div>
+      <div class="cve-stat-box">
+        <div class="cve-stat-label">Suspicious</div>
+        <div class="cve-stat-value crit" id="bw-stat-suspicious">—</div>
+      </div>
+      <div class="cve-stat-box">
+        <div class="cve-stat-label">Unacknowledged</div>
+        <div class="cve-stat-value med" id="bw-stat-unacked">—</div>
+      </div>
+    </div>
+
+    <!-- Add domain bar -->
+    <div style="display:flex;gap:8px;align-items:center;margin-bottom:12px;flex-wrap:wrap">
+      <input type="text" class="filter-input" id="bw-name-input" placeholder="Full domain (e.g. example.com)…" style="width:260px"
+             onkeydown="if(event.key==='Enter')bwAddDomain()">
+      <button class="btn-apply" onclick="bwAddDomain()">+ Watch</button>
+      <span style="font-family:var(--font-ui);font-size:10px;color:var(--text-dim)">
+        Hashes favicon, searches Shodan for hosts serving the same hash.
+      </span>
+      <span id="bw-status" class="ta-status" style="margin-left:auto"></span>
+    </div>
+
+    <div class="cve-table-wrapper">
+      <table class="cve-table">
+        <thead>
+          <tr>
+            <th class="cve-table th" style="width:40px">#</th>
+            <th class="cve-table th">Domain</th>
+            <th class="cve-table th">Added</th>
+            <th class="cve-table th">Last Scan</th>
+            <th class="cve-table th">Favicon Hash</th>
+            <th class="cve-table th">Matches</th>
+            <th class="cve-table th">New</th>
+            <th class="cve-table th">Suspicious</th>
+            <th class="cve-table th">Actions</th>
+          </tr>
+        </thead>
+        <tbody id="bw-tbody"></tbody>
+      </table>
+    </div>
+    <div id="bw-pager"></div>
+
+    <!-- Results modal -->
+    <div id="bw-results-modal" class="modal-overlay" onclick="if(event.target===this)bwCloseResultsModal()">
+      <div class="modal-box" style="max-width:960px;max-height:85vh;overflow-y:auto">
+        <button class="modal-close" onclick="bwCloseResultsModal()"><i data-ic="x"></i></button>
+        <div style="padding:18px 18px 0;display:flex;gap:14px;justify-content:flex-end" id="bw-results-modal-toolbar">
+          <label style="display:flex;align-items:center;gap:5px;font-family:var(--font-ui);font-size:10px;color:var(--red);cursor:pointer;white-space:nowrap">
+            <input type="checkbox" id="bw-suspicious-filter" onchange="bwReloadResults()"> Suspicious Only
+          </label>
+          <label style="display:flex;align-items:center;gap:5px;font-family:var(--font-ui);font-size:10px;color:var(--orange);cursor:pointer;white-space:nowrap">
+            <input type="checkbox" id="bw-unacked-filter" onchange="bwReloadResults()"> Unacked Only
+          </label>
+        </div>
+        <div id="bw-results-modal-body" style="padding:0 18px 18px;font-size:12px"></div>
+      </div>
+    </div>
+
+  </div>

@@ -1,0 +1,34 @@
+/* Design tokens — Synchronized with CTI Nexus Navy/Aqua Geometric Theme */
+:root {
+  --color-base:            #060D1A;
+  --color-surface:         rgba(10, 22, 42, 0.74);
+  --color-card:            rgba(15, 33, 62, 0.80);
+  --color-panel:           rgba(90, 185, 193, 0.16);
+  --color-primary:         #4CC9D0;
+  --color-secondary:       #38D39F;
+  --color-link:            #5AB9C1;
+  --color-focus:           #4CC9D0;
+  --color-success:         #38D39F;
+  --color-warning:         #F59E0B;
+  --color-danger:          #F05252;
+  --color-muted:           #93B1C8;
+  --color-text-primary:    #ECF4F8;
+  --color-text-secondary:  #B8CEE0;
+  --color-text-muted:      #7F9EB8;
+  --color-border-subtle:   rgba(90, 185, 193, 0.16);
+}
+
+::-webkit-scrollbar {
+  width: 7px;
+  height: 7px;
+}
+::-webkit-scrollbar-track {
+  background: rgba(6, 13, 26, 0.65);
+}
+::-webkit-scrollbar-thumb {
+  background: rgba(90, 185, 193, 0.35);
+  border-radius: 4px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(90, 185, 193, 0.60);
+}

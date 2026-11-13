@@ -1,0 +1,77 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>Daily CTI Recap — 2026-09-01</title>
+<style>
+body { font-family: Segoe UI, Arial, sans-serif; max-width: 800px; margin: 2rem auto; color: #1a1a1a; }
+h1 { font-size: 1.4rem; }
+h2 { font-size: 1.1rem; margin-top: 1.5rem; border-bottom: 1px solid #ddd; padding-bottom: .25rem; }
+.counts span { margin-right: 1rem; color: #555; font-size: .9rem; }
+li { margin-bottom: .4rem; }
+.error-banner { background: #fff3cd; border: 1px solid #ffdf7e; color: #7a5b00; padding: .75rem 1rem; border-radius: 4px; margin-bottom: 1rem; }
+.badge { display: inline-block; font-size: .72rem; font-weight: 600; padding: .05rem .4rem; border-radius: 3px; margin-left: .3rem; color: #fff; background: #6b7280; }
+.badge-critical { background: #b91c1c; }
+.badge-high { background: #c2410c; }
+.badge-default { background: #6b7280; }
+.cve-chip { display: inline-block; margin: 0 .6rem .4rem 0; }
+.mono-block { background: #f6f8fa; border: 1px solid #ddd; border-radius: 4px; padding: .6rem .8rem; font-size: .85rem; overflow-x: auto; white-space: pre; }
+.health-ok { color: #1a7f37; font-size: .9rem; }
+.health-degraded { color: #b91c1c; font-weight: 600; font-size: .9rem; }
+</style>
+</head>
+<body>
+<h1>Daily CTI Recap — 2026-09-01</h1>
+
+<p><b>Heightened ransomware activity, active supply-chain attacks, and APAC-targeted breaches characterize yesterday&#x27;s threat landscape.</b></p>
+<p class="health-ok">Scraper health (24h): OK — accept rate 94.6%, 70 accepted / 4 rejected</p>
+<div class="counts">
+<span>Articles: 64 <span style="color:#1a7f37">(+14)</span></span>
+<span>Tweets: 66 <span style="color:#cf222e">(-3)</span></span>
+<span>CVEs: 0 <span style="color:#666">(+0)</span></span>
+<span>IOCs: 0 <span style="color:#666">(+0)</span></span>
+<span>Campaigns: 1 <span style="color:#666">(+0)</span></span>
+<span>New TAs: 0 <span style="color:#666">(+0)</span></span>
+<span>Ransomware victims: 36</span>
+<span>KEV additions: 0</span>
+<span>Domain watch hits: 0</span>
+<span>Package vulns: 0</span>
+</div>
+
+<h2>Summary</h2>
+<p>Yesterday&#x27;s cyber threat landscape was marked by extensive ransomware activity, with major groups like Krybit and Meduza Locker adding numerous victims, and notable incidents including a BGP hijacking to distribute malicious Virtualizor updates and exploitation of PaperCut, Langflow, and Rails vulnerabilities. APAC-specific events included a record fine for GS Retail in South Korea and multiple alleged data breaches in Singapore and Japan. Additionally, multiple campaigns leveraged fake IT support and job recruitment lures to deploy malware, while analysts highlighted session hijacking and infostealer attacks against AI platforms like Anthropic.</p>
+<h2>Top Stories</h2>
+<ul><li><b><a href="https://cybersecuritynews.com/microsof-new-exchange-online/" target="_blank" rel="noopener">Microsoft Investigating New Exchange Online Outage Tracked as EX1464935 [Updated]</a></b> (Cybersecurity News) — An ongoing Exchange Online outage affects enterprises globally and may be exploited by threat actors.</li><li><b><a href="https://cybersecuritynews.com/virtualizor-compromise/" target="_blank" rel="noopener">BGP Hijack Diverts Softaculous Traffic to Deliver Malicious Virtualizor Update</a></b> (Cybersecurity News) — Demonstrates sophisticated supply-chain attack vector via BGP hijacking to distribute malware.</li><li><b><a href="https://www.darkreading.com/cyberattacks-data-breaches/anthropic-users-infostealer-attacks-session-thefts" target="_blank" rel="noopener">Anthropic Users Hit by Infostealer Attacks, Session Thefts</a></b> (Dark Reading) — Highlights targeted attacks against AI platform users, indicating a rising trend in credential theft.</li><li><b><a href="https://thehackernews.com/2026/08/north-korean-job-fraud-expands-beyond.html" target="_blank" rel="noopener">North Korean Job Fraud Expands Beyond IT Into Healthcare and Sales</a></b> (Hackernews) — Expansion of fraudulent job schemes into new sectors increases social engineering risk.</li><li><b><a href="https://www.bleepingcomputer.com/news/security/recently-patched-papercut-zero-days-used-in-data-theft-attacks/" target="_blank" rel="noopener">Recently patched PaperCut zero-days used in data theft attacks</a></b> (Bleeping Computer) — Active exploitation of patched zero-days underscores need for prompt patching.</li><li><b><a href="https://thehackernews.com/2026/09/attackers-exploit-critical-langflow-and.html" target="_blank" rel="noopener">Attackers Exploit Critical Langflow and Rails Flaws in Credential-Probing and C2 Activity</a></b> (Hackernews) — Exploitation of critical flaws in popular frameworks enables widespread credential attacks.</li><li><b><a href="https://cybersecuritynews.com/poc-microsoft-exchange-server-pre-auth-rce/" target="_blank" rel="noopener">Public PoC Released for Microsoft Exchange Server Pre-auth RCE Vulnerability</a></b> (Cybersecurity News) — Public exploit code increases risk of widespread attacks against exposed Exchange servers.</li><li><b><a href="https://www.darkreading.com/endpoint-security/clickfix-campaign-comprises-31-orgs-abuses-polygon-blockchain" target="_blank" rel="noopener">ClickFix Campaign Compromises 31 Orgs, Abuses Polygon Blockchain</a></b> (Dark Reading) — Shows evolution of ClickFix tactics with blockchain abuse for financial gain.</li></ul>
+<h2>Top Tweets</h2>
+<ul><li><b><a href="https://x.com/DailyDarkWeb/status/2094880957287551132" target="_blank" rel="noopener">@DailyDarkWeb</a></b> [incident] — South Korea fines GS Retail ₩12.8B after 1.66M customer records exposed in credential stuffing attack.</li><li><b><a href="https://x.com/FalconFeedsio/status/2094924308867117358" target="_blank" rel="noopener">@FalconFeedsio</a></b> [incident] — Storm ransomware group added 5 new victims to its dark web portal, including US and Australian entities.</li><li><b><a href="https://x.com/Unit42_Intel/status/2094909461747966300" target="_blank" rel="noopener">@Unit42_Intel</a></b> [ttp] — Fake IT support campaign delivers malicious MSI side-loading trojanized DLL and reverse shell via WMI to AWS API Gateway C2.</li><li><b><a href="https://x.com/H4ckmanac/status/2094865134128656736" target="_blank" rel="noopener">@H4ckmanac</a></b> [other] — Hack Tuesday: 535 cyber attacks across 68 countries last week; most active actor RBL LEVIATHAN GHOST with 59 attacks.</li><li><b><a href="https://x.com/DailyDarkWeb/status/2094905807800320442" target="_blank" rel="noopener">@DailyDarkWeb</a></b> [incident] — Alleged data breach of 700,000+ Singapore visa application records posted on cybercrime forum.</li><li><b><a href="https://x.com/FalconFeedsio/status/2094763804777443564" target="_blank" rel="noopener">@FalconFeedsio</a></b> [incident] — Meduza Locker ransomware group added 11 new victims to dark web portal, spanning multiple countries.</li></ul>
+<h2>Active Threat Actors</h2>
+<p>Akira, Krybit, Everest, Qilin, Meduza Locker, RansomHouse, Brain Cipher, FulcrumSec, Mirage Kitten, Sandworm</p>
+<h2>Notable CVEs</h2>
+<p><span class='cve-chip'>CVE-2026-82078</span> <span class='cve-chip'>CVE-2026-62911</span></p>
+<h2>Active Campaigns</h2>
+<ul><li><b>Fake IT Support and Recruitment Campaigns</b> (3 articles) — Social engineering via fake IT support and job offers targets corporate users, delivering malware and stealing credentials.</li></ul>
+<h2>APAC Signals</h2>
+<ul><li>South Korea imposes ₩12.8B fine on GS Retail for credential stuffing breach affecting 1.66M customers.</li><li>Alleged leak of 700,000+ Singapore visa application records on a cybercrime forum.</li><li>Alleged data breach of 6.8 million Argentine employment records; not APAC but noted.</li><li>Corona Corporation in Japan discloses unauthorized access to cloud service, exposing customer data.</li><li>RansomHouse claims breach of REXT Holdings in Japan.</li><li>Everest adds VIVOTEK (Taiwan) as victim.</li><li>RBL LEVIATHAN GHOST targets Indonesian website.</li><li>BD Anonymous targets Japanese AIST website.</li></ul>
+<h2>Ransomware Victims</h2>
+<ul><li><b>akira</b> — BYK Construction (United States, Manufacturing)</li><li><b>krybit</b> — HCCD Construction (United States, Manufacturing)</li><li><b>majinahanashi</b> — TERRACOM &amp; MONTCAU (Spain, Technology)</li><li><b>ransomhouse</b> — REXT Holdings Co., Ltd. (Japan, Other)</li><li><b>Wallstreet</b> — Total Education Solutions (United States, Education)</li><li><b>fulcrumsec</b> — Manchester Airports Group (United Kingdom, Transportation)</li><li><b>bravox</b> — SCHMIDT (United States, Not Found)</li><li><b>everest</b> — VIVOTEK (Taiwan, Province of China, Technology)</li><li><b>qilin</b> — Commission de la construction du Quebec (Canada, Government &amp; Defense)</li><li><b>krybit</b> — seashellhospital.com (India, Healthcare)</li></ul><p><i>Krybit ransomware group was most active today, adding 13 new victims to their dark web portal, followed by Meduza Locker with 11 victims.</i></p>
+<h2>CISA KEV Additions</h2>
+<ul><li>(none)</li></ul>
+<h2>MITRE TTPs</h2>
+<ul><li>T1566 — Phishing (x15)</li><li>T1105 — Ingress Tool Transfer (x14)</li><li>T1078 — Valid Accounts (x13)</li><li>T1190 — Exploit Public-Facing Application (x12)</li><li>T1059 — Command and Scripting Interpreter (x12)</li></ul>
+<h2>Domain Watch — Newly Registered Lookalikes</h2>
+<ul><li>(none)</li></ul>
+<h2>Package Vulnerabilities</h2>
+<ul><li>(none)</li></ul>
+<h2>Top IOCs</h2>
+<p>(none)</p>
+<h2>Forecast</h2>
+<p>Given the surge in ransomware activity, particularly by Krybit and Meduza Locker, and the observed spike in attacks on Finance &amp; Insurance and Healthcare sectors, additional ransomware victims are likely to be posted in the coming days. The active exploitation of Langflow and PaperCut vulnerabilities suggests continued attempts to breach unpatched systems. Also, the BGP hijacking incident may prompt further supply-chain attacks.</p>
+<h2>Likely Events</h2>
+<ul><li>Continued ransomware victim postings by Krybit and Meduza Locker groups. — <i>Today saw high volume of new victims added by these groups, indicating sustained operations.</i> (confidence: high)</li><li>Increased targeting of finance and healthcare sectors due to observed spike in those industries. — <i>Anomaly detection showed Finance &amp; Insurance (count=9, z=3.56) and Healthcare (count=4, z=2.67) spiking.</i> (confidence: med)</li><li>Further exploitation of Langflow and PaperCut vulnerabilities. — <i>Articles report active exploitation of these vulnerabilities, with public PoCs available.</i> (confidence: med)</li><li>Additional DDoS attacks by hacktivist groups like NoName and RBL LEVIATHAN GHOST. — <i>These groups were active today targeting Estonia and Indonesia, respectively.</i> (confidence: med)</li></ul>
+<h2>Watch Items</h2>
+<ul><li>Monitor for additional supply-chain attacks similar to the Virtualizor/Softaculous BGP hijack.</li><li>Watch for exploitation of Microsoft Exchange pre-auth RCE (CVE-2026-62911) as PoC is public.</li><li>Monitor dark web forums for leaks of data from APAC entities like Singapore and Japan.</li><li>Track new victims from ransomware groups, especially Krybit and Meduza Locker.</li></ul>
+<h2>Forecast Review (previous day)</h2>
+<ul><li><span class="badge badge-high">hit</span> Additional ransomware victims will be added to dark web portals by groups like LockBit 5.0, INC RANSOM, and Brain Cipher. — Today&#x27;s data shows multiple ransomware groups adding new victims, including Brain Cipher claiming breach of Seeliger y Conde.</li><li><span class="badge badge-high">hit</span> New supply-chain compromises of npm packages will be disclosed. — A report of a compromised npm package with 150K weekly downloads was published today.</li><li><span class="badge badge-high">hit</span> DDoS attacks by hacktivist groups like NoName and Dark Storm Team will continue, targeting Estonian and other Baltic entities. — NoName claimed DDoS attacks against Estonian websites today.</li><li><span class="badge badge-high">hit</span> Exploitation of the disclosed CubeCart, Linksys, and Langflow vulnerabilities will be attempted. — Langflow vulnerability exploitation was reported today, and exploits for other CMS were published.</li><li><span class="badge badge-default">unclear</span> More data leaks from the Thailand Post and Baguio City Government incidents will be confirmed or expanded. — No further information on these specific incidents was observed today.</li></ul>
+
+</body>
+</html>

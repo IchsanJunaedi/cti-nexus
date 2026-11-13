@@ -1,0 +1,122 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<map version="tango">
+  <topic central="true" id="1" text="ScraperNewsWeb CTI Service Catalog" bgColor="#1a1a2e" fontStyle=";;#ffffff;;;" shape="rounded rectangle">
+    <topic id="2" text="Strategic CTI Services" bgColor="#e94560" fontStyle=";;#ffffff;;;" shape="rounded rectangle" position="300,-120" order="0">
+      <topic id="3" text="Executive Threat Briefing" bgColor="#e94560" fontStyle=";;#ffffff;;;" shape="rounded rectangle" position="520,-330" order="0">
+        <topic id="4" text="Exec Dashboard v2" bgColor="#3a3a5c" fontStyle=";;#ffffff;;;" shape="rounded rectangle" position="720,-390" order="0">
+          <note><![CDATA[Sector risk-matrix, TA velocity leaderboard, sector x actor heatmap]]></note>
+        </topic>
+        <topic id="5" text="AI-Generated Exec Brief" bgColor="#3a3a5c" fontStyle=";;#ffffff;;;" shape="rounded rectangle" position="720,-330" order="1">
+          <note><![CDATA[LLM narrative from live metrics, board-ready, zero fabrication]]></note>
+        </topic>
+      </topic>
+      <topic id="6" text="Daily Threat Recap &amp; Forecast" bgColor="#e94560" fontStyle=";;#ffffff;;;" shape="rounded rectangle" position="520,-270" order="1">
+        <topic id="7" text="Auto 06:00 UTC daily summary" bgColor="#3a3a5c" fontStyle=";;#ffffff;;;" shape="rounded rectangle" position="720,-330" order="0"/>
+        <topic id="8" text="1-3 day confidence-tagged forecast" bgColor="#3a3a5c" fontStyle=";;#ffffff;;;" shape="rounded rectangle" position="720,-270" order="1"/>
+      </topic>
+      <topic id="9" text="Geopolitical Risk Overview" bgColor="#e94560" fontStyle=";;#ffffff;;;" shape="rounded rectangle" position="520,-210" order="2">
+        <topic id="10" text="Campaign attribution context" bgColor="#3a3a5c" fontStyle=";;#ffffff;;;" shape="rounded rectangle" position="720,-240" order="0"/>
+      </topic>
+      <topic id="11" text="Custom Newsletter / Client Reporting" bgColor="#e94560" fontStyle=";;#ffffff;;;" shape="rounded rectangle" position="520,-150" order="3">
+        <topic id="12" text="Curated APAC/Global/Local digest" bgColor="#3a3a5c" fontStyle=";;#ffffff;;;" shape="rounded rectangle" position="720,-210" order="0"/>
+        <topic id="13" text="SMTP / MS Graph delivery, resend history" bgColor="#3a3a5c" fontStyle=";;#ffffff;;;" shape="rounded rectangle" position="720,-150" order="1"/>
+      </topic>
+      <topic id="14" text="Managed PIR Program" bgColor="#e94560" fontStyle=";;#ffffff;;;" shape="rounded rectangle" position="520,-90" order="4">
+        <topic id="15" text="Standing intel requirements, P1/P2 SLA" bgColor="#3a3a5c" fontStyle=";;#ffffff;;;" shape="rounded rectangle" position="720,-180" order="0"/>
+        <topic id="16" text="Telegram alert ~5min on P1 match" bgColor="#3a3a5c" fontStyle=";;#ffffff;;;" shape="rounded rectangle" position="720,-120" order="1"/>
+        <topic id="17" text="Export DOCX/JSON deliverable" bgColor="#3a3a5c" fontStyle=";;#ffffff;;;" shape="rounded rectangle" position="720,-60" order="2"/>
+      </topic>
+      <topic id="18" text="RFI-as-a-Service" bgColor="#e94560" fontStyle=";;#ffffff;;;" shape="rounded rectangle" position="520,-30" order="5">
+        <topic id="19" text="Ad-hoc intel Q&amp;A, audit-logged, SOC 2 friendly" bgColor="#3a3a5c" fontStyle=";;#ffffff;;;" shape="rounded rectangle" position="720,-60" order="0"/>
+      </topic>
+      <topic id="20" text="Source Reliability Governance" bgColor="#e94560" fontStyle=";;#ffffff;;;" shape="rounded rectangle" position="520,30" order="6">
+        <topic id="21" text="NATO Admiralty Code scoring, quality assurance layer" bgColor="#3a3a5c" fontStyle=";;#ffffff;;;" shape="rounded rectangle" position="720,0" order="0"/>
+      </topic>
+    </topic>
+    <topic id="22" text="Tactical / Operational CTI Services" bgColor="#0f3460" fontStyle=";;#ffffff;;;" shape="rounded rectangle" position="-300,-120" order="1">
+      <topic id="23" text="Curated Threat News Feed" bgColor="#0f3460" fontStyle=";;#ffffff;;;" shape="rounded rectangle" position="-520,-450" order="0">
+        <topic id="24" text="APAC + Global + client-local, 60+ scrapers" bgColor="#3a3a5c" fontStyle=";;#ffffff;;;" shape="rounded rectangle" position="-720,-510" order="0"/>
+        <topic id="25" text="Confidence-scored articles (0-100)" bgColor="#3a3a5c" fontStyle=";;#ffffff;;;" shape="rounded rectangle" position="-720,-450" order="1"/>
+      </topic>
+      <topic id="26" text="Campaign Cluster Analysis" bgColor="#0f3460" fontStyle=";;#ffffff;;;" shape="rounded rectangle" position="-520,-390" order="1">
+        <topic id="27" text="TF-IDF clustering, Diamond Model, Kill Chain mapping" bgColor="#3a3a5c" fontStyle=";;#ffffff;;;" shape="rounded rectangle" position="-720,-450" order="0"/>
+        <topic id="28" text="Severity + velocity scoring" bgColor="#3a3a5c" fontStyle=";;#ffffff;;;" shape="rounded rectangle" position="-720,-390" order="1"/>
+      </topic>
+      <topic id="29" text="Early-Warning Spike Detection" bgColor="#0f3460" fontStyle=";;#ffffff;;;" shape="rounded rectangle" position="-520,-330" order="2">
+        <topic id="30" text="Z-score anomaly alerts feed exec dashboard" bgColor="#3a3a5c" fontStyle=";;#ffffff;;;" shape="rounded rectangle" position="-720,-360" order="0"/>
+      </topic>
+      <topic id="31" text="MITRE ATT&amp;CK Heatmap Service" bgColor="#0f3460" fontStyle=";;#ffffff;;;" shape="rounded rectangle" position="-520,-270" order="3">
+        <topic id="32" text="TTP frequency by actor/industry" bgColor="#3a3a5c" fontStyle=";;#ffffff;;;" shape="rounded rectangle" position="-720,-330" order="0"/>
+        <topic id="33" text="Navigator v4.5 export + D3FEND countermeasures" bgColor="#3a3a5c" fontStyle=";;#ffffff;;;" shape="rounded rectangle" position="-720,-270" order="1"/>
+      </topic>
+      <topic id="34" text="Threat Actor Profiling" bgColor="#0f3460" fontStyle=";;#ffffff;;;" shape="rounded rectangle" position="-520,-210" order="4">
+        <topic id="35" text="LLM-synthesized actor dossiers: aliases, TTPs, malware, CVEs" bgColor="#3a3a5c" fontStyle=";;#ffffff;;;" shape="rounded rectangle" position="-720,-270" order="0"/>
+        <topic id="36" text="Watchlist / tracked / whitelist tiers" bgColor="#3a3a5c" fontStyle=";;#ffffff;;;" shape="rounded rectangle" position="-720,-210" order="1"/>
+      </topic>
+      <topic id="37" text="IOC Feed &amp; Management" bgColor="#0f3460" fontStyle=";;#ffffff;;;" shape="rounded rectangle" position="-520,-150" order="5">
+        <topic id="38" text="Auto-extracted IP/domain/hash/CVE/email" bgColor="#3a3a5c" fontStyle=";;#ffffff;;;" shape="rounded rectangle" position="-720,-210" order="0"/>
+        <topic id="39" text="FP analytics + allowlist, daily decay sweep" bgColor="#3a3a5c" fontStyle=";;#ffffff;;;" shape="rounded rectangle" position="-720,-150" order="1"/>
+      </topic>
+      <topic id="40" text="Ransomware Victim Monitoring" bgColor="#0f3460" fontStyle=";;#ffffff;;;" shape="rounded rectangle" position="-520,-90" order="6">
+        <topic id="41" text="ransomware.live ingestion, per-group report+mindmap" bgColor="#3a3a5c" fontStyle=";;#ffffff;;;" shape="rounded rectangle" position="-720,-120" order="0"/>
+      </topic>
+      <topic id="42" text="Social Media (X/Twitter) Threat Monitoring" bgColor="#0f3460" fontStyle=";;#ffffff;;;" shape="rounded rectangle" position="-520,-30" order="7">
+        <topic id="43" text="Curated security-account feed, top-tweet digest" bgColor="#3a3a5c" fontStyle=";;#ffffff;;;" shape="rounded rectangle" position="-720,-60" order="0"/>
+      </topic>
+      <topic id="44" text="Cross-Reference / Pivot Lookup" bgColor="#0f3460" fontStyle=";;#ffffff;;;" shape="rounded rectangle" position="-520,30" order="8">
+        <topic id="45" text="CVE &lt;-&gt; actor &lt;-&gt; PIR relationship pivot" bgColor="#3a3a5c" fontStyle=";;#ffffff;;;" shape="rounded rectangle" position="-720,0" order="0"/>
+      </topic>
+      <topic id="46" text="Mind Map / Visual Intel Export" bgColor="#0f3460" fontStyle=";;#ffffff;;;" shape="rounded rectangle" position="-520,90" order="9">
+        <topic id="47" text="Wisemapping + Mermaid, reused across 6 features (this deliverable itself)" bgColor="#3a3a5c" fontStyle=";;#ffffff;;;" shape="rounded rectangle" position="-720,60" order="0"/>
+      </topic>
+      <topic id="48" text="STIX 2.1 Interoperability Export" bgColor="#0f3460" fontStyle=";;#ffffff;;;" shape="rounded rectangle" position="-520,150" order="10">
+        <topic id="49" text="TLP-marked bundles: reports, actors, IOCs, PIRs" bgColor="#3a3a5c" fontStyle=";;#ffffff;;;" shape="rounded rectangle" position="-720,120" order="0"/>
+      </topic>
+    </topic>
+    <topic id="50" text="Technical CTI / Vuln Services" bgColor="#f18f01" fontStyle=";;#ffffff;;;" shape="rounded rectangle" position="300,0" order="2">
+      <topic id="51" text="Managed CVE Tracker" bgColor="#f18f01" fontStyle=";;#ffffff;;;" shape="rounded rectangle" position="520,-210" order="0">
+        <topic id="52" text="Filter tracked-tech/severity, exploit + KEV status" bgColor="#3a3a5c" fontStyle=";;#ffffff;;;" shape="rounded rectangle" position="720,-270" order="0"/>
+        <topic id="53" text="FP triage bulk-to-100, true-positive Excel export" bgColor="#3a3a5c" fontStyle=";;#ffffff;;;" shape="rounded rectangle" position="720,-210" order="1"/>
+      </topic>
+      <topic id="54" text="CVE Enrichment Service" bgColor="#f18f01" fontStyle=";;#ffffff;;;" shape="rounded rectangle" position="520,-150" order="1">
+        <topic id="55" text="CISA KEV + Exploit-DB cross-reference" bgColor="#3a3a5c" fontStyle=";;#ffffff;;;" shape="rounded rectangle" position="720,-210" order="0"/>
+        <topic id="56" text="EPSS exploitation-probability scoring" bgColor="#3a3a5c" fontStyle=";;#ffffff;;;" shape="rounded rectangle" position="720,-150" order="1"/>
+      </topic>
+      <topic id="57" text="Vuln Ticketing &amp; Remediation Tracking" bgColor="#f18f01" fontStyle=";;#ffffff;;;" shape="rounded rectangle" position="520,-90" order="2">
+        <topic id="58" text="Ticket lifecycle per CVE, assignee/status/notes" bgColor="#3a3a5c" fontStyle=";;#ffffff;;;" shape="rounded rectangle" position="720,-120" order="0"/>
+      </topic>
+      <topic id="59" text="Stakeholder CVE Notification" bgColor="#f18f01" fontStyle=";;#ffffff;;;" shape="rounded rectangle" position="520,-30" order="3">
+        <topic id="60" text="Drafted alert email tied to internal ticket ID" bgColor="#3a3a5c" fontStyle=";;#ffffff;;;" shape="rounded rectangle" position="720,-60" order="0"/>
+      </topic>
+      <topic id="61" text="Tech Stack / Attack Surface Mapping" bgColor="#f18f01" fontStyle=";;#ffffff;;;" shape="rounded rectangle" position="520,30" order="4">
+        <topic id="62" text="Org product inventory drives CVE relevance" bgColor="#3a3a5c" fontStyle=";;#ffffff;;;" shape="rounded rectangle" position="720,0" order="0"/>
+      </topic>
+      <topic id="63" text="Software Composition Analysis (SCA)" bgColor="#f18f01" fontStyle=";;#ffffff;;;" shape="rounded rectangle" position="520,90" order="5">
+        <topic id="64" text="npm/PyPI/Go/Maven scan vs osv.dev" bgColor="#3a3a5c" fontStyle=";;#ffffff;;;" shape="rounded rectangle" position="720,30" order="0"/>
+        <topic id="65" text="Dependency-tree graph, lockfile bulk import" bgColor="#3a3a5c" fontStyle=";;#ffffff;;;" shape="rounded rectangle" position="720,90" order="1"/>
+      </topic>
+      <topic id="66" text="Per-CVE Mind Map Report" bgColor="#f18f01" fontStyle=";;#ffffff;;;" shape="rounded rectangle" position="520,150" order="6">
+        <topic id="67" text="Affected tech + severity + related TTPs/exploits" bgColor="#3a3a5c" fontStyle=";;#ffffff;;;" shape="rounded rectangle" position="720,120" order="0"/>
+      </topic>
+    </topic>
+    <topic id="68" text="Platform Differentiators (Enterprise Sell)" bgColor="#533483" fontStyle=";;#ffffff;;;" shape="rounded rectangle" position="-300,0" order="3">
+      <topic id="69" text="Full Audit Trail" bgColor="#533483" fontStyle=";;#ffffff;;;" shape="rounded rectangle" position="-520,-150" order="0">
+        <topic id="70" text="Every mutation logged: user/action/target/IP/UTC" bgColor="#3a3a5c" fontStyle=";;#ffffff;;;" shape="rounded rectangle" position="-720,-210" order="0"/>
+        <topic id="71" text="ISO 27001 / SOC 2 / CIS Control 8 alignment" bgColor="#3a3a5c" fontStyle=";;#ffffff;;;" shape="rounded rectangle" position="-720,-150" order="1"/>
+      </topic>
+      <topic id="72" text="RBAC + Multi-Tenancy" bgColor="#533483" fontStyle=";;#ffffff;;;" shape="rounded rectangle" position="-520,-90" order="1">
+        <topic id="73" text="superadmin/admin/analyst + custom roles" bgColor="#3a3a5c" fontStyle=";;#ffffff;;;" shape="rounded rectangle" position="-720,-150" order="0"/>
+        <topic id="74" text="Client tenant isolation, country-scoped access" bgColor="#3a3a5c" fontStyle=";;#ffffff;;;" shape="rounded rectangle" position="-720,-90" order="1"/>
+      </topic>
+      <topic id="75" text="SSO / OIDC" bgColor="#533483" fontStyle=";;#ffffff;;;" shape="rounded rectangle" position="-520,-30" order="2">
+        <topic id="76" text="Enterprise IdP login, exempt from local password reset" bgColor="#3a3a5c" fontStyle=";;#ffffff;;;" shape="rounded rectangle" position="-720,-60" order="0"/>
+      </topic>
+      <topic id="77" text="REST API Access" bgColor="#533483" fontStyle=";;#ffffff;;;" shape="rounded rectangle" position="-520,30" order="3">
+        <topic id="78" text="In-app browsable API docs, integration-ready" bgColor="#3a3a5c" fontStyle=";;#ffffff;;;" shape="rounded rectangle" position="-720,0" order="0"/>
+      </topic>
+      <topic id="79" text="Scraper Health SLA" bgColor="#533483" fontStyle=";;#ffffff;;;" shape="rounded rectangle" position="-520,90" order="4">
+        <topic id="80" text="60+ source uptime, accept/reject rate transparency" bgColor="#3a3a5c" fontStyle=";;#ffffff;;;" shape="rounded rectangle" position="-720,60" order="0"/>
+      </topic>
+    </topic>
+  </topic>
+</map>

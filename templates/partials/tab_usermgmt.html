@@ -1,0 +1,199 @@
+  <div id="tab-usermgmt" class="tab-panel">
+    <div style="padding:24px 20px;max-width:1100px;margin:0 auto">
+
+      <!-- Users section -->
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:20px;margin-bottom:24px">
+
+        <!-- User list -->
+        <div style="background:var(--surface);padding:18px">
+          <div style="font-family:var(--font-ui);font-size:9px;color:var(--text-dim);text-transform:uppercase;letter-spacing:.1em;margin-bottom:12px">Users</div>
+          <table style="width:100%;border-collapse:collapse;font-size:12px">
+            <thead><tr>
+              <th style="text-align:left;padding:6px 8px;color:var(--text-dim);font-family:var(--font-ui);font-size:9px;border-bottom:1px solid var(--border)">Username</th>
+              <th style="text-align:left;padding:6px 8px;color:var(--text-dim);font-family:var(--font-ui);font-size:9px;border-bottom:1px solid var(--border)">Role</th>
+              <th style="text-align:left;padding:6px 8px;color:var(--text-dim);font-family:var(--font-ui);font-size:9px;border-bottom:1px solid var(--border)">Client</th>
+              <th style="text-align:left;padding:6px 8px;color:var(--text-dim);font-family:var(--font-ui);font-size:9px;border-bottom:1px solid var(--border)">Created</th>
+              <th style="text-align:left;padding:6px 8px;color:var(--text-dim);font-family:var(--font-ui);font-size:9px;border-bottom:1px solid var(--border)">Last Sign In</th>
+              <th style="text-align:left;padding:6px 8px;color:var(--text-dim);font-family:var(--font-ui);font-size:9px;border-bottom:1px solid var(--border)">By</th>
+              <th style="padding:6px 8px;border-bottom:1px solid var(--border)"></th>
+            </tr></thead>
+            <tbody id="um-user-tbody"><tr><td colspan="7" style="padding:12px 8px;color:var(--text-dim);font-family:var(--font-ui);font-size:10px">Loading…</td></tr></tbody>
+          </table>
+        </div>
+
+        <!-- Add user form -->
+        <div style="background:var(--surface);padding:18px">
+          <div style="font-family:var(--font-ui);font-size:9px;color:var(--text-dim);text-transform:uppercase;letter-spacing:.1em;margin-bottom:12px">Add User</div>
+          <div style="display:flex;flex-direction:column;gap:10px">
+            <div>
+              <div style="font-family:var(--font-ui);font-size:9px;color:var(--text-dim);margin-bottom:4px">USERNAME</div>
+              <input type="text" class="filter-input" id="um-new-username" placeholder="username…" style="width:100%;box-sizing:border-box">
+            </div>
+            <div>
+              <div style="font-family:var(--font-ui);font-size:9px;color:var(--text-dim);margin-bottom:4px;display:flex;align-items:center">
+                PASSWORD
+                <span class="pw-info-wrap"><span class="pw-info-btn">?</span><span class="pw-tooltip" id="pw-tooltip-dyn"></span></span>
+              </div>
+              <input type="password" class="filter-input" id="um-new-password" placeholder="min 8 chars…" style="width:100%;box-sizing:border-box">
+            </div>
+            <div>
+              <div style="font-family:var(--font-ui);font-size:9px;color:var(--text-dim);margin-bottom:4px">ROLE</div>
+              <select class="filter-select" id="um-new-role" style="width:100%">
+                <option value="">Loading roles…</option>
+              </select>
+            </div>
+            <div id="um-client-assign-row">
+              <div style="font-family:var(--font-ui);font-size:9px;color:var(--text-dim);margin-bottom:4px">CLIENT(S) <span style="opacity:.6">comma-separated</span></div>
+              <input type="text" class="filter-input" id="um-new-client-id-user" placeholder="default" value="default" style="width:100%;box-sizing:border-box">
+            </div>
+            <div id="um-add-err" style="display:none;font-family:var(--font-ui);font-size:10px;color:var(--red);padding:6px 8px;border:1px solid rgba(218,54,51,0.3);background:rgba(218,54,51,0.06);border-radius:2px"></div>
+            <button type="button" class="btn-apply" style="align-self:flex-start" onclick="umAddUser()">Add User</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Roles section -->
+      <div style="background:var(--surface);padding:18px;margin-bottom:20px">
+        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:14px">
+          <div style="font-family:var(--font-ui);font-size:9px;color:var(--text-dim);text-transform:uppercase;letter-spacing:.1em">User Roles</div>
+          <button id="um-add-role-btn" class="btn-apply" style="font-size:11px;padding:4px 12px;display:none" onclick="umOpenAddRoleModal()">+ Add Role</button>
+        </div>
+        <table style="width:100%;border-collapse:collapse;font-size:12px">
+          <thead><tr>
+            <th style="text-align:left;padding:6px 8px;color:var(--text-dim);font-family:var(--font-ui);font-size:9px;border-bottom:1px solid var(--border)">Role</th>
+            <th style="text-align:left;padding:6px 8px;color:var(--text-dim);font-family:var(--font-ui);font-size:9px;border-bottom:1px solid var(--border)">Display Name</th>
+            <th style="text-align:left;padding:6px 8px;color:var(--text-dim);font-family:var(--font-ui);font-size:9px;border-bottom:1px solid var(--border)">Permissions</th>
+            <th style="padding:6px 8px;border-bottom:1px solid var(--border)"></th>
+          </tr></thead>
+          <tbody id="um-roles-tbody"><tr><td colspan="4" style="padding:12px 8px;color:var(--text-dim);font-family:var(--font-ui);font-size:10px">Loading…</td></tr></tbody>
+        </table>
+      </div>
+
+      <!-- Password Policy section -->
+      <div style="background:var(--surface);padding:18px;margin-bottom:20px">
+        <div style="font-family:var(--font-ui);font-size:9px;color:var(--text-dim);text-transform:uppercase;letter-spacing:.1em;margin-bottom:14px">Password Policy</div>
+        <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:10px;margin-bottom:14px">
+          <div>
+            <div style="font-family:var(--font-ui);font-size:9px;color:var(--text-dim);margin-bottom:4px">MIN LENGTH</div>
+            <input type="number" class="filter-input" id="pol-min-length" min="4" max="128" value="8" style="width:80px">
+          </div>
+          <label style="display:flex;align-items:center;gap:6px;font-family:var(--font-ui);font-size:11px;cursor:pointer">
+            <input type="checkbox" id="pol-upper" checked> Require Uppercase
+          </label>
+          <label style="display:flex;align-items:center;gap:6px;font-family:var(--font-ui);font-size:11px;cursor:pointer">
+            <input type="checkbox" id="pol-lower" checked> Require Lowercase
+          </label>
+          <label style="display:flex;align-items:center;gap:6px;font-family:var(--font-ui);font-size:11px;cursor:pointer">
+            <input type="checkbox" id="pol-number" checked> Require Number
+          </label>
+          <label style="display:flex;align-items:center;gap:6px;font-family:var(--font-ui);font-size:11px;cursor:pointer">
+            <input type="checkbox" id="pol-symbol" checked> Require Symbol
+          </label>
+        </div>
+        <label style="display:flex;align-items:center;gap:6px;font-family:var(--font-ui);font-size:11px;cursor:pointer;margin-bottom:12px">
+          <input type="checkbox" id="pol-force-all"> Force all users to change password on next login
+        </label>
+        <div id="pol-err" style="display:none;font-family:var(--font-ui);font-size:10px;color:var(--red);margin-bottom:8px"></div>
+        <div style="display:flex;gap:8px;align-items:center">
+          <button class="btn-apply" style="font-size:11px;padding:5px 14px" onclick="savePolicy()">Save Policy</button>
+          <span id="pol-status" style="font-family:var(--font-ui);font-size:10px;color:var(--text-dim)"></span>
+        </div>
+      </div>
+
+      <!-- Audit log section -->
+      <div style="background:var(--surface);padding:18px">
+        <div style="display:flex;align-items:center;gap:10px;margin-bottom:12px;flex-wrap:wrap">
+          <div style="font-family:var(--font-ui);font-size:9px;color:var(--text-dim);text-transform:uppercase;letter-spacing:.1em">Audit Log</div>
+          <input type="text" class="filter-input" id="um-audit-user" placeholder="Filter user…" style="width:130px" oninput="_umAuditDebounce()">
+          <input type="text" class="filter-input" id="um-audit-action" placeholder="Filter action…" style="width:160px" oninput="_umAuditDebounce()">
+          <button class="btn-apply" style="font-size:11px;padding:4px 10px" onclick="loadAuditLog(1)">Apply</button>
+          <select class="filter-select" id="um-audit-page-size" style="width:80px;font-size:11px" onchange="loadAuditLog(1)">
+            <option value="25" selected>25 / pg</option>
+            <option value="50">50 / pg</option>
+            <option value="100">100 / pg</option>
+          </select>
+          <span id="um-audit-total" style="font-family:var(--font-ui);font-size:10px;color:var(--text-dim);margin-left:auto"></span>
+        </div>
+        <div style="overflow-x:auto">
+          <table style="width:100%;border-collapse:collapse;font-size:12px">
+            <thead><tr>
+              <th style="text-align:left;padding:6px 8px;color:var(--text-dim);font-family:var(--font-ui);font-size:9px;border-bottom:1px solid var(--border);white-space:nowrap">Timestamp</th>
+              <th style="text-align:left;padding:6px 8px;color:var(--text-dim);font-family:var(--font-ui);font-size:9px;border-bottom:1px solid var(--border)">User</th>
+              <th style="text-align:left;padding:6px 8px;color:var(--text-dim);font-family:var(--font-ui);font-size:9px;border-bottom:1px solid var(--border)">Action</th>
+              <th style="text-align:left;padding:6px 8px;color:var(--text-dim);font-family:var(--font-ui);font-size:9px;border-bottom:1px solid var(--border)">Target</th>
+              <th style="text-align:left;padding:6px 8px;color:var(--text-dim);font-family:var(--font-ui);font-size:9px;border-bottom:1px solid var(--border)">Detail</th>
+              <th style="text-align:left;padding:6px 8px;color:var(--text-dim);font-family:var(--font-ui);font-size:9px;border-bottom:1px solid var(--border)">IP</th>
+            </tr></thead>
+            <tbody id="um-audit-tbody"><tr><td colspan="6" style="padding:12px 8px;color:var(--text-dim);font-family:var(--font-ui);font-size:10px">Load audit log from the filter above.</td></tr></tbody>
+          </table>
+        </div>
+        <div id="um-audit-pager" style="display:flex;gap:6px;margin-top:10px;align-items:center;font-family:var(--font-ui);font-size:10px;color:var(--text-dim)"></div>
+      </div>
+
+    </div>
+
+      <!-- Client Management — superadmin only -->
+      <div id="um-clients-section" style="display:none;background:var(--surface);padding:18px;margin-bottom:20px">
+        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:14px">
+          <div style="font-family:var(--font-ui);font-size:9px;color:var(--text-dim);text-transform:uppercase;letter-spacing:.1em">Client Tenants</div>
+          <button class="btn-apply" style="font-size:11px;padding:4px 12px" onclick="umOpenAddClient()">+ Add Client</button>
+        </div>
+        <table style="width:100%;border-collapse:collapse;font-size:12px">
+          <thead><tr>
+            <th style="text-align:left;padding:6px 8px;color:var(--text-dim);font-family:var(--font-ui);font-size:9px;border-bottom:1px solid var(--border)">Client ID</th>
+            <th style="text-align:left;padding:6px 8px;color:var(--text-dim);font-family:var(--font-ui);font-size:9px;border-bottom:1px solid var(--border)">Name</th>
+            <th style="text-align:left;padding:6px 8px;color:var(--text-dim);font-family:var(--font-ui);font-size:9px;border-bottom:1px solid var(--border)">Countries</th>
+            <th style="text-align:left;padding:6px 8px;color:var(--text-dim);font-family:var(--font-ui);font-size:9px;border-bottom:1px solid var(--border)">Sectors</th>
+            <th style="text-align:left;padding:6px 8px;color:var(--text-dim);font-family:var(--font-ui);font-size:9px;border-bottom:1px solid var(--border)">Newsletter Recipients</th>
+            <th style="text-align:left;padding:6px 8px;color:var(--text-dim);font-family:var(--font-ui);font-size:9px;border-bottom:1px solid var(--border)">Created</th>
+            <th style="padding:6px 8px;border-bottom:1px solid var(--border)"></th>
+          </tr></thead>
+          <tbody id="um-clients-tbody"><tr><td colspan="7" style="padding:12px 8px;color:var(--text-dim);font-family:var(--font-ui);font-size:10px">Loading…</td></tr></tbody>
+        </table>
+
+        <!-- Add client inline form -->
+        <div id="um-add-client-form" style="display:none;margin-top:14px;padding-top:14px;border-top:1px solid var(--border);flex-direction:column;gap:12px">
+          <div style="display:flex;gap:10px;flex-wrap:wrap;align-items:flex-end">
+            <div>
+              <div style="font-family:var(--font-ui);font-size:9px;color:var(--text-dim);margin-bottom:4px">CLIENT ID <span style="color:var(--text-dim)">(lowercase, a-z 0-9 _-)</span></div>
+              <input type="text" class="filter-input" id="um-new-client-id" placeholder="e.g. acme_corp" style="width:160px">
+            </div>
+            <div>
+              <div style="font-family:var(--font-ui);font-size:9px;color:var(--text-dim);margin-bottom:4px">DISPLAY NAME</div>
+              <input type="text" class="filter-input" id="um-new-client-name" placeholder="Acme Corp" style="width:200px">
+            </div>
+            <button class="btn-apply" style="font-size:11px;padding:5px 14px" onclick="umSaveClient()">Save</button>
+            <button style="font-family:var(--font-ui);font-size:11px;padding:5px 14px;background:transparent;border:1px solid var(--border);color:var(--text-dim);border-radius:2px;cursor:pointer" onclick="umCloseAddClient()">Cancel</button>
+          </div>
+          <div>
+            <div style="font-family:var(--font-ui);font-size:9px;color:var(--text-dim);margin-bottom:6px">COUNTRIES</div>
+            <div id="um-new-client-countries-picker" style="border:1px solid var(--border);border-radius:2px;padding:8px;background:rgba(255,255,255,0.02)"></div>
+          </div>
+          <div>
+            <div style="font-family:var(--font-ui);font-size:9px;color:var(--text-dim);margin-bottom:6px">SECTORS</div>
+            <div id="um-new-client-sectors-picker" style="border:1px solid var(--border);border-radius:2px;padding:8px;background:rgba(255,255,255,0.02)"></div>
+          </div>
+          <div>
+            <div style="font-family:var(--font-ui);font-size:9px;color:var(--text-dim);margin-bottom:4px">NEWSLETTER RECIPIENTS <span style="color:var(--text-dim)">(comma-separated emails)</span></div>
+            <input type="text" class="filter-input" id="um-new-client-recipients" placeholder="alice@client.com, bob@client.com" style="width:100%;box-sizing:border-box">
+          </div>
+          <div style="display:flex;gap:10px;flex-wrap:wrap">
+            <div style="flex:1;min-width:200px">
+              <div style="font-family:var(--font-ui);font-size:9px;color:var(--text-dim);margin-bottom:4px">NEWSLETTER CSS</div>
+              <textarea class="filter-input" id="um-new-client-css" rows="3" style="width:100%;box-sizing:border-box;font-family:monospace;font-size:11px" placeholder=".highlight-card{background:#000}"></textarea>
+            </div>
+            <div style="flex:1;min-width:200px">
+              <div style="font-family:var(--font-ui);font-size:9px;color:var(--text-dim);margin-bottom:4px">NEWSLETTER INTRO</div>
+              <textarea class="filter-input" id="um-new-client-intro" rows="3" style="width:100%;box-sizing:border-box;font-size:11px" placeholder="Weekly digest for Acme Corp..."></textarea>
+            </div>
+            <div style="flex:1;min-width:200px">
+              <div style="font-family:var(--font-ui);font-size:9px;color:var(--text-dim);margin-bottom:4px">NEWSLETTER FOOTER</div>
+              <textarea class="filter-input" id="um-new-client-footer" rows="3" style="width:100%;box-sizing:border-box;font-size:11px" placeholder="Acme Corp · Confidential"></textarea>
+            </div>
+          </div>
+          <div id="um-client-err" style="display:none;font-family:var(--font-ui);font-size:10px;color:var(--red)"></div>
+        </div>
+      </div>
+
+    </div>
+  </div><!-- end #tab-usermgmt -->

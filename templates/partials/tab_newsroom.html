@@ -1,0 +1,159 @@
+  <div id="tab-newsroom" class="tab-panel">
+
+    <!-- Sub-menu: Cyber News / Not Related Cyber -->
+    <div class="ta-submenu">
+      <button class="ta-submenu-btn active" id="newsroom-cyber-btn" onclick="newsroomSwitchView('cyber')">
+        Cyber News <span class="ta-submenu-count" id="newsroom-count-cyber">—</span>
+      </button>
+      <button class="ta-submenu-btn" id="newsroom-filtered-btn" onclick="newsroomSwitchView('filtered')">
+        Not Related Cyber <span class="ta-submenu-count" id="newsroom-count-filtered" style="background:rgba(218,54,51,0.1);border-color:rgba(218,54,51,0.3);color:var(--red)">—</span>
+      </button>
+    </div>
+
+    <!-- ── Cyber News view ── -->
+    <div id="newsroom-view-cyber">
+    <div class="news-grid-row">
+
+      <div class="news-panel">
+        <div class="panel-header">
+          <div class="panel-title"><span class="panel-icon apac"></span>APAC News</div>
+          <div class="panel-meta">
+            <span class="panel-count" id="apac-count">— items</span>
+            <button class="panel-refresh" id="apac-refresh" title="Refresh" onclick="refreshPanel('apac')"><i data-ic="refresh"></i></button>
+          </div>
+        </div>
+        <div class="news-list" id="apac-list"><div class="loading-state"><div class="loading-spinner"></div><div class="loading-text">Loading...</div></div></div>
+        <div class="panel-footer" id="apac-pager"></div>
+      </div>
+
+      <div class="news-panel">
+        <div class="panel-header">
+          <div class="panel-title"><span class="panel-icon global"></span>Global News</div>
+          <div class="panel-meta">
+            <span class="panel-count" id="global-count">— items</span>
+            <button class="panel-refresh" id="global-refresh" title="Refresh" onclick="refreshPanel('global')"><i data-ic="refresh"></i></button>
+          </div>
+        </div>
+        <div class="news-list" id="global-list"><div class="loading-state"><div class="loading-spinner"></div><div class="loading-text">Loading...</div></div></div>
+        <div class="panel-footer" id="global-pager"></div>
+      </div>
+
+      <div class="news-panel">
+        <div class="panel-header">
+          <div class="panel-title"><span class="panel-icon ransomware"></span>Ransomware Activity</div>
+          <div class="panel-meta">
+            <span class="panel-count" id="rw-count">— items</span>
+            <button class="panel-refresh" id="rw-expand" title="Expand — view &amp; edit full victim list" onclick="openRwVictimsFullModal()"><i data-ic="maximize"></i></button>
+            <button class="panel-refresh" id="rw-refresh" title="Refresh" onclick="loadRwVictims(1); loadRwArticles(1)"><i data-ic="refresh"></i></button>
+          </div>
+        </div>
+        <!-- Victim table from ransomware.live -->
+        <div id="rw-victims-section" style="padding:0 4px 8px">
+          <div style="display:flex;gap:6px;padding:6px 4px;flex-wrap:wrap;align-items:center">
+            <input type="text" class="filter-input" id="rw-f-group"    placeholder="Group…"    style="width:100px;font-size:11px;padding:4px 8px">
+            <input type="text" class="filter-input" id="rw-f-country"  placeholder="Country…"  style="width:100px;font-size:11px;padding:4px 8px">
+            <input type="text" class="filter-input" id="rw-f-industry" placeholder="Industry…" style="width:110px;font-size:11px;padding:4px 8px">
+            <label style="display:flex;align-items:center;gap:4px;font-size:10px;color:var(--text-dim);cursor:pointer" title="Include unverified claims sourced from X/Twitter">
+              <input type="checkbox" id="rw-f-claimed" checked onchange="loadRwVictims(1)" style="cursor:pointer">Claimed (X)
+            </label>
+            <button class="btn-apply" style="font-size:10px;padding:4px 10px" onclick="loadRwVictims(1)">Filter</button>
+          </div>
+          <div id="rw-victim-list" style="max-height:300px;overflow-y:auto;font-size:11px"></div>
+          <div id="rw-victim-pager" style="padding:4px;text-align:center;font-size:11px;color:var(--text-dim)"></div>
+        </div>
+        <!-- Article cards from articles collection -->
+        <div style="font-size:10px;color:var(--text-dim);text-transform:uppercase;letter-spacing:.08em;padding:6px 8px 4px;border-top:1px solid var(--border);border-bottom:1px solid var(--border)">Related Articles</div>
+        <div class="news-list" id="rw-list"><div class="loading-state"><div class="loading-spinner"></div><div class="loading-text">Loading...</div></div></div>
+        <div class="panel-footer" id="rw-pager"></div>
+      </div>
+
+    </div>
+
+    <div class="news-grid-row-bottom">
+      <div class="news-panel" style="min-height:280px">
+        <div class="panel-header">
+          <div class="panel-title"><span class="panel-icon" id="local-panel-icon"></span><span id="local-panel-title">Local</span> News<span id="local-panel-countries-tip" style="display:none;margin-left:5px;font-size:10px;color:var(--text-dim);cursor:default;position:relative" title=""><i data-ic="info" data-size="11"></i></span></div>
+          <div class="panel-meta">
+            <div id="indo-type-filter" style="display:flex;gap:2px">
+              <button id="indo-filter-all"      onclick="indoSetFilter('all')"     style="font-size:10px;padding:2px 8px;font-family:var(--font-ui);border-radius:2px;cursor:pointer;background:rgba(47,129,247,0.12);border:1px solid var(--border-bright);color:var(--accent)">All</button>
+              <button id="indo-filter-articles" onclick="indoSetFilter('articles')" style="font-size:10px;padding:2px 8px;font-family:var(--font-ui);border-radius:2px;cursor:pointer;background:transparent;border:1px solid var(--border);color:var(--text-dim)">Articles</button>
+              <button id="indo-filter-tweets"   onclick="indoSetFilter('tweets')"   style="font-size:10px;padding:2px 8px;font-family:var(--font-ui);border-radius:2px;cursor:pointer;background:transparent;border:1px solid var(--border);color:var(--text-dim)">X Signals</button>
+            </div>
+            <span class="panel-count" id="indo-count">— items</span>
+            <button class="panel-refresh" id="indo-refresh" title="Refresh" onclick="refreshPanel('indo')"><i data-ic="refresh"></i></button>
+          </div>
+        </div>
+        <div class="indonesia-grid" id="indo-list"><div class="loading-state" style="grid-column:1/-1"><div class="loading-spinner"></div><div class="loading-text">Loading...</div></div></div>
+        <div class="panel-footer" id="indo-pager"></div>
+      </div>
+    </div>
+
+    <div class="news-grid-row-bottom">
+      <div class="news-panel" style="min-height:280px">
+        <div class="panel-header">
+          <div class="panel-title"><span class="panel-icon" style="background:var(--accent);box-shadow:0 0 6px var(--accent)"></span>TA Watchlist News</div>
+          <div class="panel-meta">
+            <span class="panel-count" id="watchlist-count">— items</span>
+            <button class="panel-refresh" id="watchlist-refresh" title="Refresh" onclick="refreshPanel('watchlist')"><i data-ic="refresh"></i></button>
+          </div>
+        </div>
+        <div class="indonesia-grid" id="watchlist-list"><div class="loading-state" style="grid-column:1/-1"><div class="loading-spinner"></div><div class="loading-text">Loading...</div></div></div>
+        <div class="panel-footer" id="watchlist-pager"></div>
+      </div>
+    </div>
+
+    <div class="news-grid-row-bottom">
+      <div class="news-panel" style="min-height:280px">
+        <div class="panel-header">
+          <div class="panel-title"><span class="panel-icon" style="background:#E3B341;box-shadow:0 0 6px #E3B341"></span>Tech Stack News</div>
+          <div class="panel-meta">
+            <span class="panel-count" id="techstack-count">— items</span>
+            <button class="panel-refresh" id="techstack-refresh" title="Refresh" onclick="refreshPanel('techstack')"><i data-ic="refresh"></i></button>
+          </div>
+        </div>
+        <div class="indonesia-grid" id="techstack-list"><div class="loading-state" style="grid-column:1/-1"><div class="loading-spinner"></div><div class="loading-text">Loading...</div></div></div>
+        <div class="panel-footer" id="techstack-pager"></div>
+      </div>
+    </div>
+
+    <div class="news-grid-row-bottom">
+      <div class="news-panel" style="min-height:280px">
+        <div class="panel-header">
+          <div class="panel-title"><span class="panel-icon" style="background:#3FB950;box-shadow:0 0 6px #3FB950"></span>Relevant Industry News</div>
+          <div class="panel-meta">
+            <span class="panel-count" id="industry-count">— items</span>
+            <button class="panel-refresh" id="industry-refresh" title="Refresh" onclick="refreshPanel('industry')"><i data-ic="refresh"></i></button>
+          </div>
+        </div>
+        <div class="indonesia-grid" id="industry-list"><div class="loading-state" style="grid-column:1/-1"><div class="loading-spinner"></div><div class="loading-text">Loading...</div></div></div>
+        <div class="panel-footer" id="industry-pager"></div>
+      </div>
+    </div>
+    </div><!-- end #newsroom-view-cyber -->
+
+    <!-- ── Not Related Cyber view ── -->
+    <div id="newsroom-view-filtered" style="display:none">
+      <div class="news-panel" style="max-width:900px;margin:0 auto">
+        <div class="panel-header">
+          <div class="panel-title" style="gap:8px">
+            <span class="panel-icon" style="background:var(--red);box-shadow:0 0 6px var(--red)"></span>
+            Not Related Cyber
+          </div>
+          <div class="panel-meta" style="gap:8px">
+            <input type="text" class="filter-input" id="filtered-search" placeholder="Search title or source…" style="width:180px;font-size:11px;padding:4px 8px" onkeydown="if(event.key==='Enter')loadFilteredArticles(1)">
+            <button class="btn-apply" style="font-size:10px;padding:4px 10px" onclick="loadFilteredArticles(1)">Search</button>
+            <span class="panel-count" id="filtered-count">— items</span>
+            <button class="panel-refresh" title="Refresh" onclick="loadFilteredArticles(1)"><i data-ic="refresh"></i></button>
+          </div>
+        </div>
+        <div style="padding:6px 12px;font-size:11px;color:var(--text-dim);border-bottom:1px solid var(--border)">
+          Articles LLM classified as not cyber-related. Restore to re-queue through NLP pipeline.
+        </div>
+        <div class="news-list" id="filtered-list"><div class="loading-state"><div class="loading-spinner"></div><div class="loading-text">Loading...</div></div></div>
+        <div class="panel-footer" id="filtered-pager"></div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- ══════════ CVE TRACKER TAB ══════════ -->

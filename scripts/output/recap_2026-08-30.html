@@ -1,0 +1,77 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>Daily CTI Recap — 2026-08-30</title>
+<style>
+body { font-family: Segoe UI, Arial, sans-serif; max-width: 800px; margin: 2rem auto; color: #1a1a1a; }
+h1 { font-size: 1.4rem; }
+h2 { font-size: 1.1rem; margin-top: 1.5rem; border-bottom: 1px solid #ddd; padding-bottom: .25rem; }
+.counts span { margin-right: 1rem; color: #555; font-size: .9rem; }
+li { margin-bottom: .4rem; }
+.error-banner { background: #fff3cd; border: 1px solid #ffdf7e; color: #7a5b00; padding: .75rem 1rem; border-radius: 4px; margin-bottom: 1rem; }
+.badge { display: inline-block; font-size: .72rem; font-weight: 600; padding: .05rem .4rem; border-radius: 3px; margin-left: .3rem; color: #fff; background: #6b7280; }
+.badge-critical { background: #b91c1c; }
+.badge-high { background: #c2410c; }
+.badge-default { background: #6b7280; }
+.cve-chip { display: inline-block; margin: 0 .6rem .4rem 0; }
+.mono-block { background: #f6f8fa; border: 1px solid #ddd; border-radius: 4px; padding: .6rem .8rem; font-size: .85rem; overflow-x: auto; white-space: pre; }
+.health-ok { color: #1a7f37; font-size: .9rem; }
+.health-degraded { color: #b91c1c; font-weight: 600; font-size: .9rem; }
+</style>
+</head>
+<body>
+<h1>Daily CTI Recap — 2026-08-30</h1>
+
+<p><b>Iran-linked hackers reportedly knocked a UK power plant offline for four days, while ransomware activity remained high with Qilin, Dire Wolf, and others claiming multiple victims.</b></p>
+<p class="health-ok">Scraper health (24h): OK — accept rate 100.0%, 9 accepted / 0 rejected</p>
+<div class="counts">
+<span>Articles: 9 <span style="color:#cf222e">(-10)</span></span>
+<span>Tweets: 48 <span style="color:#cf222e">(-10)</span></span>
+<span>CVEs: 0 <span style="color:#cf222e">(-3)</span></span>
+<span>IOCs: 0 <span style="color:#666">(+0)</span></span>
+<span>Campaigns: 0 <span style="color:#666">(+0)</span></span>
+<span>New TAs: 2 <span style="color:#cf222e">(-48)</span></span>
+<span>Ransomware victims: 11 <span style="color:#cf222e">(-9)</span></span>
+<span>KEV additions: 0 <span style="color:#666">(+0)</span></span>
+<span>Domain watch hits: 0 <span style="color:#666">(+0)</span></span>
+<span>Package vulns: 0 <span style="color:#666">(+0)</span></span>
+</div>
+
+<h2>Summary</h2>
+<p>On August 30, 2026, the cyber threat landscape was dominated by a reported OT attack on a UK power plant attributed to Iran-linked actors, alongside continued high-volume ransomware activity. Qilin and Dire Wolf were especially active, posting multiple victims across healthcare, manufacturing, and other sectors. Several significant data breaches and leaks were also reported, including a massive alleged Alipay breach affecting 820 million users, a leak of 12GB of Malaysian government data, and claims of access to the Central Bank of Iraq. Additionally, a working PoC was claimed for CVE-2026-72898 (Metabase SQL injection), and a new ransomware group named ZaWoo was identified.</p>
+<h2>Top Stories</h2>
+<ul><li><b><a href="https://cybersecuritynews.com/iran-linked-hackers-2/amp/#new_tab" target="_blank" rel="noopener">Iran-Linked Hackers Reportedly Knock UK Power Plant Offline for Four Days</a></b> (Threatmon) — This indicates a potential OT/ICS cyberattack with significant physical impact, highlighting risks to critical national infrastructure.</li><li><b><a href="https://thehackernews.com/2026/08/five-critical-wordpress-plugin-and.html" target="_blank" rel="noopener">Five Critical WordPress Plugin and Theme Flaws Enable Site Takeover or RCE</a></b> (Hackernews) — WordPress is ubiquitous, and these flaws could lead to widespread site takeovers if not patched promptly.</li><li><b><a href="https://cyberpress.org/uk-power-plant-cyberattack/#new_tab" target="_blank" rel="noopener">Cyberattack Disrupts 15 MW UK Power Plant for Four Days as OT Attack Vector Remains Unknown</a></b> (Threatmon) — The unknown attack vector underscores gaps in understanding OT security postures in the energy sector.</li><li><b><a href="https://www.wxow.com/news/crime/winona-county-paid-hackers-128k-after-back-to-back-ransomware-attacks-in-2026-social-security/article_327a85bf-46be-4fdc-a5d8-77b9055efb63.html" target="_blank" rel="noopener">Winona County paid hackers $128K after back-to-back ransomware attacks in 2026, Social Security numbers may be at risk</a></b> (wxow.com) — This demonstrates the severe financial and privacy impacts of ransomware on local governments.</li><li><b><a href="https://thehackernews.com/2026/08/terminalfix-uses-fake-cloudflare.html" target="_blank" rel="noopener">TerminalFix Uses Fake Cloudflare CAPTCHAs to Deploy Reverse-Tunnel Backdoor</a></b> (Hackernews) — This highlights a novel social engineering vector that could bypass user skepticism toward CAPTCHAs.</li><li><b><a href="https://www.bleepingcomputer.com/news/security/fulcrumsec-claims-manchester-airports-hack-theft-of-86-gb-of-data/" target="_blank" rel="noopener">FulcrumSec claims Manchester Airports hack, theft of 86 GB of data</a></b> (Bleeping Computer) — A hacktivist group claims significant data theft from a major airport, raising concerns about travel infrastructure security.</li></ul>
+<h2>Top Tweets</h2>
+<ul><li><b><a href="https://x.com/FalconFeedsio/status/2094052398482575796" target="_blank" rel="noopener">@FalconFeedsio</a></b> [incident] — Qilin ransomware added victims: Absolute Consultancy Services (UK) and Crystal Bio Solutions (US).</li><li><b><a href="https://x.com/DailyDarkWeb/status/2093852381783941437" target="_blank" rel="noopener">@DailyDarkWeb</a></b> [incident] — Alleged Alipay data breach exposing 820 million user records is offered for sale.</li><li><b><a href="https://x.com/DailyDarkWeb/status/2094034449360900374" target="_blank" rel="noopener">@DailyDarkWeb</a></b> [incident] — ShinyHunters names Neogen Corporation with a September 1 &#x27;final warning&#x27; for data leak.</li><li><b><a href="https://x.com/DailyDarkWeb/status/2094131315767468476" target="_blank" rel="noopener">@DailyDarkWeb</a></b> [cve] — Working PoC claimed for Metabase SQL injection CVE-2026-72898.</li><li><b><a href="https://x.com/FalconFeedsio/status/2093993848855019952" target="_blank" rel="noopener">@FalconFeedsio</a></b> [incident] — NoName claimed DDoS attacks on multiple Japanese websites including government and shipping firms.</li><li><b><a href="https://x.com/ido_cohen2/status/2094066337744068955" target="_blank" rel="noopener">@ido_cohen2</a></b> [other] — August month-to-date most active ransomware groups: Qilin (160), The Gentleman (113), Orova (43).</li></ul>
+<h2>Active Threat Actors</h2>
+<p>Qilin, Dire Wolf, ZaWoo, Wallstreet, BlackLotus, ShinyHunters, NoName, Dark Storm Team, Falcon, FulcrumSec</p>
+<h2>Notable CVEs</h2>
+<p><span class='cve-chip'>CVE-2026-72898</span></p>
+<h2>Active Campaigns</h2>
+<ul><li>(none)</li></ul>
+<h2>APAC Signals</h2>
+<ul><li>Qilin claimed victim AFSARD in North Macedonia (not APAC but notable)</li><li>NoName DDoS attacks on Japanese websites</li><li>Alipay data breach claim, 820M records</li><li>Malaysian government data leak (PLANMalaysia Perak)</li><li>BlackLotus claims data leak from City Government of Navotas, Philippines</li></ul>
+<h2>Ransomware Victims</h2>
+<ul><li><b>threeam</b> — wmdn.net (Moldova, Republic of, Not Found)</li><li><b>qilin</b> — Crystalpharmatech (United States, Healthcare)</li><li><b>qilin</b> — Absolute Consultancy Services (United Kingdom, Professional Services)</li><li><b>qilin</b> — Black Cat Engineering Construction Wll (Qatar, Manufacturing)</li><li><b>direwolf</b> — THQ Nordic (Sweden, Technology)</li><li><b>direwolf</b> — Erdem Hospital (Türkiye, Healthcare)</li><li><b>direwolf</b> — Hospital Clnico Universidad de Chile (Chile, Healthcare)</li><li><b>Falcon</b> — Globus Medical (United States, Healthcare)</li><li><b>Falcon</b> — DistributionNOW (DNOW Inc.) (United States, Manufacturing)</li><li><b>qilin</b> — AFSARD (North Macedonia, Not Found)</li><li><b>Wallstreet</b> — Andover (United States, Education)</li></ul><p><i>Qilin and Dire Wolf were notably active, with Qilin posting multiple victims and Dire Wolf adding three, including healthcare targets.</i></p>
+<h2>CISA KEV Additions</h2>
+<ul><li>(none)</li></ul>
+<h2>MITRE TTPs</h2>
+<ul><li>T1078 — Valid Accounts (x3)</li><li>T1190 — Exploit Public-Facing Application (x3)</li><li>T1566 — Phishing (x1)</li><li>T1021 — Remote Services (x1)</li><li>T1059 — Unauthorized Command Execution (x1)</li><li>T1098 — Account Manipulation (x1)</li><li>T1552 — Unsecured Credentials (x1)</li><li>T1486 — Data Encrypted for Impact (x1)</li><li>T1573 — Encrypted Channel (x1)</li><li>T1005 — Data from Local System (x1)</li></ul>
+<h2>Domain Watch — Newly Registered Lookalikes</h2>
+<ul><li>(none)</li></ul>
+<h2>Package Vulnerabilities</h2>
+<ul><li>(none)</li></ul>
+<h2>Top IOCs</h2>
+<p>(none)</p>
+<h2>Forecast</h2>
+<p>Ransomware activity is expected to remain elevated, especially from Qilin and other newly emerging groups like ZaWoo, given their continuous victim postings. The claimed PoC for CVE-2026-72898 in Metabase may lead to exploitation attempts, and hacktivist DDoS campaigns against Japan and US entities are likely to continue.</p>
+<h2>Likely Events</h2>
+<ul><li>Continuation of high ransomware victim postings, particularly from Qilin and Dire Wolf. — <i>Qilin posted multiple victims on August 30 and was the most active group in August with 160 victims; Dire Wolf added three victims today.</i> (confidence: high)</li><li>Exploitation attempts using CVE-2026-72898 (Metabase SQL injection) may increase, leading to further compromises. — <i>A working PoC for CVE-2026-72898 was published on underground forums on August 30, which often precedes a surge in exploitation.</i> (confidence: medium)</li><li>Hacktivist DDoS attacks, especially by NoName, will target Japanese and US entities. — <i>NoName claimed multiple DDoS attacks on Japanese targets today, and hacktivist activity has been consistent in recent days.</i> (confidence: medium)</li><li>Potential data leaks from claimed breaches, such as Alipay, ShinyHunters, and MKE Engineering, may be confirmed or denied, affecting exposed individuals. — <i>Multiple data breach claims were posted on August 30 with details of stolen data; such claims often surface as verified leaks later.</i> (confidence: low)</li></ul>
+<h2>Watch Items</h2>
+<ul><li>Monitor for any operational impact from the UK power plant attack and further OT intrusions.</li><li>Watch for exploitation of CVE-2026-72898 in Metabase, especially if public PoCs appear.</li><li>Track Qilin&#x27;s activity and possible victim disclosures, as they may signal sector-specific targeting.</li><li>Monitor hacktivist activity for solidarity attacks following the alliance between Team1914_official and Dark Storm Team.</li></ul>
+<h2>Forecast Review (previous day)</h2>
+<ul><li><span class="badge badge-default">unclear</span> Increased exploitation of PaperCut vulnerabilities by ransomware groups like Cl0p and LockBit, leading to more data breaches. — Today&#x27;s signals do not mention PaperCut exploitation; no direct evidence confirms or denies this trend.</li><li><span class="badge badge-default">unclear</span> Copycat AI agent attacks on other AI platforms or services following the Hugging Face incident. — No reports of AI agent attacks were observed today; likely did not occur in the immediate aftermath.</li><li><span class="badge badge-high">hit</span> Continuation of high ransomware victim postings across groups like Qilin, Orova, and others. — High ransomware victim postings were confirmed today with 11 victims, including Qilin and Dire Wolf, matching the forecast.</li><li><span class="badge badge-high">hit</span> New DDoS attacks on critical infrastructure in APAC or Middle East by hacktivist groups. — DDoS attacks by NoName and Dark Storm Team targeted Japanese infrastructure and other sites, confirming this prediction.</li></ul>
+
+</body>
+</html>

@@ -1,0 +1,63 @@
+  <!-- ── CISA KEV VIEW ── -->
+  <div id="cveview-kev" style="display:none">
+
+    <!-- Stats row -->
+    <div class="cve-grid" style="margin-bottom:14px">
+      <div class="cve-stat-box"><div class="cve-stat-label">Total KEV Entries</div><div class="cve-stat-value info" id="kev-stat-total">—</div><div class="cve-stat-sub">Full CISA catalog</div></div>
+      <div class="cve-stat-box"><div class="cve-stat-label">Matched to Tracker</div><div class="cve-stat-value" style="color:var(--green)" id="kev-stat-matched">—</div><div class="cve-stat-sub">Also in CVE Tracker</div></div>
+      <div class="cve-stat-box"><div class="cve-stat-label">Unmatched</div><div class="cve-stat-value med" id="kev-stat-unmatched">—</div><div class="cve-stat-sub">Not tracked yet</div></div>
+      <div class="cve-stat-box"><div class="cve-stat-label">Ransomware Use</div><div class="cve-stat-value crit" id="kev-stat-ransomware">—</div><div class="cve-stat-sub">Known campaign use</div></div>
+      <div class="cve-stat-box"><div class="cve-stat-label">Due Soon</div><div class="cve-stat-value high" id="kev-stat-duesoon">—</div><div class="cve-stat-sub">Unmatched, due ≤ 7 days</div></div>
+    </div>
+
+    <!-- Filter bar -->
+    <div class="filter-bar" style="margin-bottom:14px">
+      <span class="filter-label">Filter</span>
+      <div class="filter-group">
+        <input type="text" class="filter-input" id="kev-search"
+               placeholder="Search CVE ID, vendor, product…" style="width:220px"
+               onkeydown="if(event.key==='Enter')kevLoadEntries()">
+        <select class="filter-select" id="kev-matched-filter" style="min-width:160px" onchange="kevLoadEntries()">
+          <option value="">All Entries</option>
+          <option value="true">Matched to Tracker</option>
+          <option value="false">Unmatched Only</option>
+        </select>
+        <label style="display:flex;align-items:center;gap:5px;font-family:var(--font-ui);font-size:10px;color:var(--red);cursor:pointer;white-space:nowrap">
+          <input type="checkbox" id="kev-ransomware-filter" onchange="kevLoadEntries()"> Ransomware Only
+        </label>
+      </div>
+      <button class="btn-reset" onclick="kevResetFilters()">Reset</button>
+      <button class="btn-apply" onclick="kevLoadEntries()">APPLY</button>
+    </div>
+
+    <div class="cve-table-wrapper">
+      <table class="cve-table">
+        <thead><tr>
+          <th style="width:40px">#</th>
+          <th class="cve-th-sortable" onclick="kevSortBy('cve_id')" id="kev-th-cve_id">CVE ID <span class="cve-sort-ind" id="kev-si-cve_id"><i data-ic="chevrons-up-down" data-size="11"></i></span></th>
+          <th class="cve-th-sortable" onclick="kevSortBy('vendor_project')" id="kev-th-vendor_project">Vendor / Product <span class="cve-sort-ind" id="kev-si-vendor_project"><i data-ic="chevrons-up-down" data-size="11"></i></span></th>
+          <th>Vulnerability Name</th>
+          <th class="cve-th-sortable" onclick="kevSortBy('date_added')" id="kev-th-date_added">Date Added <span class="cve-sort-ind" id="kev-si-date_added"><i data-ic="arrow-down" data-size="11"></i></span></th>
+          <th class="cve-th-sortable" onclick="kevSortBy('due_date')" id="kev-th-due_date">Due Date <span class="cve-sort-ind" id="kev-si-due_date"><i data-ic="chevrons-up-down" data-size="11"></i></span></th>
+          <th>Ransomware</th>
+          <th>Tracker Status</th>
+        </tr></thead>
+        <tbody id="kev-tbody"><tr><td colspan="8"><div class="loading-state"><div class="loading-spinner"></div><div class="loading-text">Loading...</div></div></td></tr></tbody>
+      </table>
+    </div>
+
+    <div id="kev-pager" style="display:flex;align-items:center;gap:8px;padding:10px 20px;border-top:1px solid var(--border);flex-wrap:wrap">
+      <button class="pager-btn" id="kev-page-prev" onclick="kevChangePage(_kevPage-1)" disabled><i data-ic="chevron-left" data-size="12"></i> Prev</button>
+      <span id="kev-page-info" style="font-family:var(--font-ui);font-size:10px;color:var(--text-dim)"></span>
+      <button class="pager-btn" id="kev-page-next" onclick="kevChangePage(_kevPage+1)" disabled>Next <i data-ic="chevron-right" data-size="12"></i></button>
+    </div>
+
+    <!-- Detail modal -->
+    <div id="kev-modal" class="modal-overlay" onclick="if(event.target===this)kevCloseModal()">
+      <div class="modal-box" style="max-width:600px;max-height:78vh;overflow-y:auto;position:relative">
+        <button class="modal-close" onclick="kevCloseModal()"><i data-ic="x"></i></button>
+        <div id="kev-modal-body" style="padding:18px;font-size:12px"></div>
+      </div>
+    </div>
+
+  </div>

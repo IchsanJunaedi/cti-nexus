@@ -1,0 +1,138 @@
+  <div id="tab-xintel" class="tab-panel">
+
+    <!-- X Intel sub-tab bar -->
+    <div style="display:flex;align-items:center;gap:6px;padding:6px 0 12px;border-bottom:1px solid var(--border);margin-bottom:12px">
+      <button id="xi-subtab-btn-tweets" onclick="xiSwitchSubTab('tweets')"
+        style="background:rgba(47,129,247,0.12);border:1px solid var(--border-bright);color:var(--accent);padding:5px 14px;font-size:11px;font-family:var(--font-ui);border-radius:3px;cursor:pointer;letter-spacing:.08em">
+        Tweets
+      </button>
+      <button id="xi-subtab-btn-accounts" onclick="xiSwitchSubTab('accounts')"
+        style="background:transparent;border:1px solid var(--border);color:var(--text-dim);padding:5px 14px;font-size:11px;font-family:var(--font-ui);border-radius:3px;cursor:pointer;letter-spacing:.08em">
+        Monitored Accounts
+      </button>
+      <div id="xi-api-balance"
+        style="margin-left:auto;font-family:var(--font-ui);font-size:11px;color:var(--text-dim);display:flex;align-items:center;gap:6px;position:relative">
+        <span style="color:var(--text-dim)">X API</span>
+        <span id="xi-balance-chip" onclick="xiToggleBalancePopover(event)"
+          title="Click for breakdown"
+          style="background:rgba(30,215,96,0.1);border:1px solid rgba(30,215,96,0.3);color:#1ed760;padding:2px 8px;border-radius:3px;letter-spacing:.06em;cursor:pointer;user-select:none">
+          …
+        </span>
+        <button onclick="xiLoadBalance()" title="Refresh balance"
+          style="background:transparent;border:none;color:var(--text-dim);cursor:pointer;font-size:12px;padding:0 2px"><i data-ic="refresh" data-size="12"></i></button>
+        <!-- balance popover -->
+        <div id="xi-balance-popover" onclick="event.stopPropagation()"
+          style="display:none;position:absolute;top:calc(100% + 6px);right:0;z-index:200;
+                 background:var(--surface-2,var(--surface));border:1px solid var(--border-bright);
+                 border-radius:4px;padding:10px 12px;box-shadow:0 4px 16px rgba(0,0,0,0.4)">
+        </div>
+      </div>
+    </div>
+
+    <!-- ── SUB-TAB: TWEETS ── -->
+    <div id="xi-subtab-tweets">
+
+      <!-- X Intel filter bar -->
+      <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap;padding:10px 0 8px;border-bottom:1px solid var(--border);margin-bottom:12px">
+        <span style="font-family:var(--font-ui);font-size:10px;color:var(--text-dim);text-transform:uppercase;letter-spacing:.1em">Filter</span>
+
+        <input type="text" id="xi-search" placeholder="Search tweets…"
+          style="background:var(--surface);border:1px solid var(--border);color:var(--text);padding:5px 10px;font-size:12px;border-radius:3px;width:180px;font-family:var(--font-ui)">
+
+        <input type="text" id="xi-author" placeholder="@handle…"
+          style="background:var(--surface);border:1px solid var(--border);color:var(--text);padding:5px 10px;font-size:12px;border-radius:3px;width:120px;font-family:var(--font-ui)">
+
+        <input type="date" id="xi-date-start"
+          style="background:var(--surface);border:1px solid var(--border);color:var(--text);padding:5px 8px;font-size:12px;border-radius:3px;font-family:var(--font-ui)">
+        <span style="font-size:11px;color:var(--text-dim)"><i data-ic="arrow-right" data-size="12"></i></span>
+        <input type="date" id="xi-date-end"
+          style="background:var(--surface);border:1px solid var(--border);color:var(--text);padding:5px 8px;font-size:12px;border-radius:3px;font-family:var(--font-ui)">
+
+        <label style="display:flex;align-items:center;gap:5px;cursor:pointer;font-size:12px;color:var(--text-dim)">
+          <input type="checkbox" id="xi-apac-only" onchange="loadXIntel(1)" style="accent-color:var(--accent)"> APAC
+        </label>
+        <label style="display:flex;align-items:center;gap:5px;cursor:pointer;font-size:12px;color:var(--text-dim)">
+          <input type="checkbox" id="xi-ot-only" onchange="loadXIntel(1)" style="accent-color:var(--orange)"> OT
+        </label>
+        <label style="display:flex;align-items:center;gap:5px;cursor:pointer;font-size:12px;color:var(--text-dim)">
+          <input type="checkbox" id="xi-confirmed-only" onchange="loadXIntel(1)" style="accent-color:var(--red)"> Confirmed Incident
+        </label>
+
+        <button onclick="loadXIntel(1)"
+          style="background:rgba(47,129,247,0.1);border:1px solid var(--border-bright);color:var(--accent);padding:5px 14px;font-size:11px;font-family:var(--font-ui);border-radius:3px;cursor:pointer;letter-spacing:.08em">
+          APPLY
+        </button>
+        <button onclick="xiResetFilters()"
+          style="background:transparent;border:1px solid var(--border);color:var(--text-dim);padding:5px 10px;font-size:11px;font-family:var(--font-ui);border-radius:3px;cursor:pointer">
+          Reset
+        </button>
+      </div>
+
+      <!-- Stats row -->
+      <div id="xi-stats-row" style="display:flex;gap:16px;flex-wrap:wrap;margin-bottom:12px;font-family:var(--font-ui);font-size:11px;color:var(--text-dim)"></div>
+
+      <!-- Tweet list -->
+      <div id="xi-list" style="display:flex;flex-direction:column;gap:8px">
+        <div class="loading-state"><div class="loading-spinner"></div><div class="loading-text">Loading…</div></div>
+      </div>
+
+      <!-- Pager -->
+      <div id="xi-pager" style="margin-top:12px;text-align:center"></div>
+
+    </div><!-- /xi-subtab-tweets -->
+
+    <!-- ── SUB-TAB: MONITORED ACCOUNTS ── -->
+    <div id="xi-subtab-accounts" style="display:none">
+
+      <!-- Add account form -->
+      <div style="display:flex;align-items:flex-end;gap:8px;flex-wrap:wrap;padding:10px 0 12px;border-bottom:1px solid var(--border);margin-bottom:16px">
+        <div style="display:flex;flex-direction:column;gap:4px">
+          <label style="font-family:var(--font-ui);font-size:10px;color:var(--text-dim);text-transform:uppercase;letter-spacing:.08em">Handle</label>
+          <input type="text" id="xi-acc-username" placeholder="@username"
+            style="background:var(--surface);border:1px solid var(--border);color:var(--text);padding:5px 10px;font-size:12px;border-radius:3px;width:160px;font-family:var(--font-ui)">
+        </div>
+        <div style="display:flex;flex-direction:column;gap:4px">
+          <label style="font-family:var(--font-ui);font-size:10px;color:var(--text-dim);text-transform:uppercase;letter-spacing:.08em">Display name</label>
+          <input type="text" id="xi-acc-display" placeholder="optional"
+            style="background:var(--surface);border:1px solid var(--border);color:var(--text);padding:5px 10px;font-size:12px;border-radius:3px;width:160px;font-family:var(--font-ui)">
+        </div>
+        <div style="display:flex;flex-direction:column;gap:4px">
+          <label style="font-family:var(--font-ui);font-size:10px;color:var(--text-dim);text-transform:uppercase;letter-spacing:.08em">Notes</label>
+          <input type="text" id="xi-acc-notes" placeholder="optional"
+            style="background:var(--surface);border:1px solid var(--border);color:var(--text);padding:5px 10px;font-size:12px;border-radius:3px;width:220px;font-family:var(--font-ui)">
+        </div>
+        <button onclick="xiAddAccount()"
+          style="background:rgba(47,129,247,0.12);border:1px solid var(--border-bright);color:var(--accent);padding:6px 16px;font-size:11px;font-family:var(--font-ui);border-radius:3px;cursor:pointer;letter-spacing:.08em;white-space:nowrap">
+          + Add Account
+        </button>
+        <span id="xi-acc-msg" style="font-family:var(--font-ui);font-size:11px;color:var(--text-dim)"></span>
+      </div>
+
+      <!-- Accounts table -->
+      <div id="xi-accounts-list">
+        <div class="loading-state"><div class="loading-spinner"></div><div class="loading-text">Loading…</div></div>
+      </div>
+
+    </div><!-- /xi-subtab-accounts -->
+
+  </div>
+
+  <!-- ══════════ TWEET MODAL ══════════ -->
+  <div class="modal-overlay" id="xi-modal-overlay" onclick="xiHandleOverlayClick(event)">
+    <div class="modal-card" id="xi-modal-card" style="max-width:680px">
+      <div class="modal-head">
+        <span class="modal-type-dot" style="background:#2F81F7;box-shadow:0 0 6px #2F81F7"></span>
+        <div class="modal-title" id="xi-modal-title" style="font-size:13px"></div>
+        <button class="modal-close" onclick="closeXiModal()" title="Close"><i data-ic="x"></i></button>
+      </div>
+      <div class="modal-body" id="xi-modal-body"></div>
+      <div class="modal-foot">
+        <button class="btn-close-modal" onclick="closeXiModal()">Close</button>
+        <button id="xi-modal-newsletter-btn" onclick="queueTweetForNewsletter()"
+          style="background:rgba(47,129,247,0.08);border:1px solid rgba(47,129,247,0.3);color:var(--accent);padding:6px 14px;font-size:11px;font-family:var(--font-ui);border-radius:3px;cursor:pointer;letter-spacing:.06em">
+          + Newsletter
+        </button>
+        <a class="btn-open-article" id="xi-modal-tweet-link" href="#" target="_blank" rel="noopener noreferrer">Open Tweet <i data-ic="external-link"></i></a>
+      </div>
+    </div>
+  </div>

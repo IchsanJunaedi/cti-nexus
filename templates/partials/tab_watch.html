@@ -1,0 +1,18 @@
+  <div id="tab-watch" class="tab-panel">
+
+    <!-- Watch sub-tab bar -->
+    <div style="display:flex;align-items:center;gap:6px;padding:6px 0 12px;border-bottom:1px solid var(--border);margin-bottom:12px">
+      <button id="watch-subtab-btn-domain" onclick="watchSwitchSubTab('domain')"
+        style="background:rgba(47,129,247,0.12);border:1px solid var(--border-bright);color:var(--accent);padding:5px 14px;font-size:11px;font-family:var(--font-ui);border-radius:3px;cursor:pointer;letter-spacing:.08em">
+        Domain Watch
+      </button>
+      <button id="watch-subtab-btn-brand" onclick="watchSwitchSubTab('brand')"
+        style="background:transparent;border:1px solid var(--border);color:var(--text-dim);padding:5px 14px;font-size:11px;font-family:var(--font-ui);border-radius:3px;cursor:pointer;letter-spacing:.08em">
+        Brand Watch
+      </button>
+    </div>
+
+    {% include 'partials/tab_domainwatch.html' %}
+    {% include 'partials/tab_brandwatch.html' %}
+
+  </div>

@@ -1,0 +1,127 @@
+{
+  "pir": {
+    "id": "69ed6826daed4940a867c5f1",
+    "title": "Monitor APT36 Activity",
+    "description": "",
+    "priority": "P1",
+    "owner": "Admin",
+    "status": "active",
+    "criteria": {
+      "threat_actors": [
+        "Apt36"
+      ],
+      "industries": [],
+      "countries": [],
+      "news_types": [],
+      "keywords": [],
+      "ttps": []
+    },
+    "coverage_count": 0,
+    "recent_coverage": 0,
+    "is_gap": false,
+    "last_match": null,
+    "created_at": "2026-04-26T01:19:34.330823",
+    "updated_at": "2026-04-26T01:19:34.330823"
+  },
+  "exported_at": "2026-04-28T00:39:59.351548",
+  "total_articles": 4,
+  "articles": [
+    {
+      "_id": "69eb6281595e1b9b41c2e9fa",
+      "url": "https://cyble.com/blog/operation-trusttrap-domain-spoofing-campaign/",
+      "impacted_industries": [
+        "General"
+      ],
+      "mentioned_countries": [
+        "China",
+        "India",
+        "Pakistan",
+        "Singapore",
+        "Vietnam",
+        "Chinese",
+        "Indian"
+      ],
+      "news_type": "apac",
+      "posted_on": "2026-04-24",
+      "source": "Cyble",
+      "threat_actors": [
+        "Transparent tribe",
+        "Projectm",
+        "Apt36",
+        "Temp\\.lapis"
+      ],
+      "title": "Operation TrustTrap: Anatomy of a Large-Scale Deceptive Domain Spoofing Campaign",
+      "analyst_note": {
+        "note": "testing",
+        "analyst": "admin",
+        "updated_at": "2026-04-28T00:39:26.857511"
+      }
+    },
+    {
+      "_id": "69e201ef106db8f537e7aa9b",
+      "title": "Nation-State Actor Embraces AI Malware Assembly Line",
+      "url": "https://www.darkreading.com/cyberattacks-data-breaches/nation-state-actor-ai-malware-assembly-line",
+      "posted_on": "2026-03-06",
+      "source": "Dark Reading",
+      "impacted_industries": [
+        "General"
+      ],
+      "mentioned_countries": [
+        "Pakistan"
+      ],
+      "threat_actors": [
+        "Apt36"
+      ],
+      "news_type": "apac",
+      "analyst_note": {
+        "note": "haha",
+        "analyst": "admin",
+        "updated_at": "2026-04-28T00:39:38.906597"
+      }
+    },
+    {
+      "_id": "69e201ef106db8f537e7aa42",
+      "title": "APT36 : Multi-Vector Execution Malware Campaign Targeting Indian Government Entities",
+      "url": "https://www.cyfirma.com/research/apt36-multi-vector-execution-malware-campaign-targeting-indian-government-entities/",
+      "posted_on": "2026-02-27",
+      "source": "Cyfirma",
+      "impacted_industries": [
+        "Government & Public Sector"
+      ],
+      "mentioned_countries": [
+        "Pakistan",
+        "Indian"
+      ],
+      "threat_actors": [
+        "Apt36",
+        "Transparent tribe"
+      ],
+      "news_type": "apac",
+      "analyst_note": {
+        "note": "bagus ini",
+        "analyst": "admin",
+        "updated_at": "2026-04-28T00:39:53.581246"
+      }
+    },
+    {
+      "_id": "69e201ef106db8f537e7a72c",
+      "title": "5th January – Threat Intelligence Report",
+      "url": "https://research.checkpoint.com/2026/5th-january-threat-intelligence-report/",
+      "posted_on": "2026-01-05",
+      "source": "unknown",
+      "impacted_industries": [
+        "General"
+      ],
+      "mentioned_countries": [
+        "Pakistan",
+        "Chinese",
+        "Indian"
+      ],
+      "threat_actors": [
+        "Apt36"
+      ],
+      "news_type": "Vendor Report Article",
+      "analyst_note": {}
+    }
+  ]
+}
