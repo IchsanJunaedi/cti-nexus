@@ -96,9 +96,10 @@ function xiSwitchSubTab(tab) {
     if (!panel || !btn) return;
     const active = t === tab;
     panel.style.display = active ? '' : 'none';
-    btn.style.background = active ? 'rgba(47,129,247,0.12)' : 'transparent';
-    btn.style.borderColor = active ? 'var(--border-bright)' : 'var(--border)';
-    btn.style.color = active ? 'var(--accent)' : 'var(--text-dim)';
+    btn.classList.toggle('active', active);
+    btn.style.background = '';
+    btn.style.borderColor = '';
+    btn.style.color = '';
   });
   if (tab === 'accounts' && !_xiAccountsLoaded) loadMonitoredAccounts();
 }

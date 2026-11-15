@@ -1,30 +1,28 @@
   <div id="tab-xintel" class="tab-panel">
 
     <!-- X Intel sub-tab bar -->
-    <div style="display:flex;align-items:center;gap:6px;padding:6px 0 12px;border-bottom:1px solid var(--border);margin-bottom:12px">
-      <button id="xi-subtab-btn-tweets" onclick="xiSwitchSubTab('tweets')"
-        style="background:rgba(47,129,247,0.12);border:1px solid var(--border-bright);color:var(--accent);padding:5px 14px;font-size:11px;font-family:var(--font-ui);border-radius:3px;cursor:pointer;letter-spacing:.08em">
+    <div class="ta-submenu" style="margin-bottom:14px">
+      <button id="xi-subtab-btn-tweets" class="ta-submenu-btn active" onclick="xiSwitchSubTab('tweets')">
         Tweets
       </button>
-      <button id="xi-subtab-btn-accounts" onclick="xiSwitchSubTab('accounts')"
-        style="background:transparent;border:1px solid var(--border);color:var(--text-dim);padding:5px 14px;font-size:11px;font-family:var(--font-ui);border-radius:3px;cursor:pointer;letter-spacing:.08em">
+      <button id="xi-subtab-btn-accounts" class="ta-submenu-btn" onclick="xiSwitchSubTab('accounts')">
         Monitored Accounts
       </button>
       <div id="xi-api-balance"
-        style="margin-left:auto;font-family:var(--font-ui);font-size:11px;color:var(--text-dim);display:flex;align-items:center;gap:6px;position:relative">
-        <span style="color:var(--text-dim)">X API</span>
+        style="margin-left:auto;font-family:var(--font-ui);font-size:11px;color:var(--text-dim);display:flex;align-items:center;gap:6px;position:relative;padding-right:8px">
+        <span style="color:#DCE4EC">X API</span>
         <span id="xi-balance-chip" onclick="xiToggleBalancePopover(event)"
           title="Click for breakdown"
-          style="background:rgba(30,215,96,0.1);border:1px solid rgba(30,215,96,0.3);color:#1ed760;padding:2px 8px;border-radius:3px;letter-spacing:.06em;cursor:pointer;user-select:none">
+          style="background:rgba(30,215,96,0.15);border:1px solid rgba(30,215,96,0.35);color:#34D399;padding:2px 8px;border-radius:4px;letter-spacing:.06em;cursor:pointer;user-select:none;font-weight:600">
           …
         </span>
         <button onclick="xiLoadBalance()" title="Refresh balance"
-          style="background:transparent;border:none;color:var(--text-dim);cursor:pointer;font-size:12px;padding:0 2px"><i data-ic="refresh" data-size="12"></i></button>
+          style="background:transparent;border:none;color:#A9C2D6;cursor:pointer;font-size:12px;padding:0 2px;display:flex;align-items:center"><i data-ic="refresh" data-size="12"></i></button>
         <!-- balance popover -->
         <div id="xi-balance-popover" onclick="event.stopPropagation()"
           style="display:none;position:absolute;top:calc(100% + 6px);right:0;z-index:200;
-                 background:var(--surface-2,var(--surface));border:1px solid var(--border-bright);
-                 border-radius:4px;padding:10px 12px;box-shadow:0 4px 16px rgba(0,0,0,0.4)">
+                 background:rgba(8, 19, 38, 0.98);border:1px solid var(--border-bright);
+                 border-radius:10px;padding:12px 14px;box-shadow:0 8px 32px rgba(0,0,0,0.45);backdrop-filter:blur(14px)">
         </div>
       </div>
     </div>
@@ -33,39 +31,45 @@
     <div id="xi-subtab-tweets">
 
       <!-- X Intel filter bar -->
-      <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap;padding:10px 0 8px;border-bottom:1px solid var(--border);margin-bottom:12px">
-        <span style="font-family:var(--font-ui);font-size:10px;color:var(--text-dim);text-transform:uppercase;letter-spacing:.1em">Filter</span>
+      <div class="filter-bar xi-filter-panel" style="margin-bottom:16px">
+        <!-- Row 1: Filter label, Search inputs, Date range, Checkboxes -->
+        <div class="xi-filter-row-top">
+          <span class="filter-label">Filter</span>
 
-        <input type="text" id="xi-search" placeholder="Search tweets…"
-          style="background:var(--surface);border:1px solid var(--border);color:var(--text);padding:5px 10px;font-size:12px;border-radius:3px;width:180px;font-family:var(--font-ui)">
+          <input type="text" class="filter-input filter-input--search" id="xi-search" placeholder="Search tweets…"
+                 onkeydown="if(event.key==='Enter')loadXIntel(1)">
 
-        <input type="text" id="xi-author" placeholder="@handle…"
-          style="background:var(--surface);border:1px solid var(--border);color:var(--text);padding:5px 10px;font-size:12px;border-radius:3px;width:120px;font-family:var(--font-ui)">
+          <input type="text" class="filter-input" id="xi-author" placeholder="@handle…" style="width:130px;flex-shrink:0"
+                 onkeydown="if(event.key==='Enter')loadXIntel(1)">
 
-        <input type="date" id="xi-date-start"
-          style="background:var(--surface);border:1px solid var(--border);color:var(--text);padding:5px 8px;font-size:12px;border-radius:3px;font-family:var(--font-ui)">
-        <span style="font-size:11px;color:var(--text-dim)"><i data-ic="arrow-right" data-size="12"></i></span>
-        <input type="date" id="xi-date-end"
-          style="background:var(--surface);border:1px solid var(--border);color:var(--text);padding:5px 8px;font-size:12px;border-radius:3px;font-family:var(--font-ui)">
+          <div class="filter-date-range">
+            <span class="filter-sep">From</span>
+            <input type="date" class="filter-input filter-input--date" id="xi-date-start">
+            <span class="filter-sep">To</span>
+            <input type="date" class="filter-input filter-input--date" id="xi-date-end">
+          </div>
 
-        <label style="display:flex;align-items:center;gap:5px;cursor:pointer;font-size:12px;color:var(--text-dim)">
-          <input type="checkbox" id="xi-apac-only" onchange="loadXIntel(1)" style="accent-color:var(--accent)"> APAC
-        </label>
-        <label style="display:flex;align-items:center;gap:5px;cursor:pointer;font-size:12px;color:var(--text-dim)">
-          <input type="checkbox" id="xi-ot-only" onchange="loadXIntel(1)" style="accent-color:var(--orange)"> OT
-        </label>
-        <label style="display:flex;align-items:center;gap:5px;cursor:pointer;font-size:12px;color:var(--text-dim)">
-          <input type="checkbox" id="xi-confirmed-only" onchange="loadXIntel(1)" style="accent-color:var(--red)"> Confirmed Incident
-        </label>
+          <label class="cve-check-pill">
+            <input type="checkbox" id="xi-apac-only" onchange="loadXIntel(1)">
+            <span>APAC</span>
+          </label>
+          <label class="cve-check-pill">
+            <input type="checkbox" id="xi-ot-only" onchange="loadXIntel(1)">
+            <span>OT</span>
+          </label>
+          <label class="cve-check-pill">
+            <input type="checkbox" id="xi-confirmed-only" onchange="loadXIntel(1)">
+            <span>Confirmed Incident</span>
+          </label>
+        </div>
 
-        <button onclick="loadXIntel(1)"
-          style="background:rgba(47,129,247,0.1);border:1px solid var(--border-bright);color:var(--accent);padding:5px 14px;font-size:11px;font-family:var(--font-ui);border-radius:3px;cursor:pointer;letter-spacing:.08em">
-          APPLY
-        </button>
-        <button onclick="xiResetFilters()"
-          style="background:transparent;border:1px solid var(--border);color:var(--text-dim);padding:5px 10px;font-size:11px;font-family:var(--font-ui);border-radius:3px;cursor:pointer">
-          Reset
-        </button>
+        <!-- Row 2: Action buttons aligned to the bottom right -->
+        <div class="xi-filter-row-bottom">
+          <div class="filter-actions">
+            <button class="btn-reset" onclick="xiResetFilters()">Reset</button>
+            <button class="btn-apply" onclick="loadXIntel(1)">APPLY</button>
+          </div>
+        </div>
       </div>
 
       <!-- Stats row -->

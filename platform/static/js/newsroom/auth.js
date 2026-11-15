@@ -73,14 +73,37 @@ function _authAndClientHeaders(extra) {
 function _updateHeaderAuth() {
   const loggedIn = _jwtValid();
   const username = _jwtUsername();
-  const role     = _jwtRole();
-  document.getElementById('header-username').innerHTML = loggedIn ? statusDot('online', esc(username)) : '';
+  const roleRaw  = _jwtRole() || 'user';
+  const role     = String(roleRaw).toLowerCase();
+
+  let iconName = 'user';
+  if (role === 'superadmin') {
+    iconName = 'shield-check';
+  } else if (role === 'admin') {
+    iconName = 'shield';
+  }
+
+  const roleText = (roleRaw ? String(roleRaw) : 'user');
+  const iconSvg = window.ic
+    ? window.ic(iconName, 14, 'header-role-ic')
+    : `<i data-ic="${iconName}" data-size="14" class="header-role-ic"></i>`;
+
+  const userPill = document.getElementById('header-username');
+  if (userPill) {
+    userPill.innerHTML = loggedIn
+      ? `${iconSvg}<span class="header-role-text">${esc(roleText)}</span>`
+      : '';
+    userPill.title = loggedIn ? `Signed in as ${esc(username)} (${roleText})` : 'Account options';
+  }
   document.getElementById('header-user-wrap').style.display = loggedIn ? '' : 'none';
   if (loggedIn) _refreshQueueCount();
   document.getElementById('header-login-btn').style.display  = 'none'; // gate handles login
   document.getElementById('header-logout-btn').style.display = loggedIn ? '' : 'none';
   const umTab = document.getElementById('tab-btn-usermgmt');
-  if (umTab) umTab.style.display = (loggedIn && (role === 'admin' || role === 'superadmin')) ? '' : 'none';
+  const isPriv = loggedIn && ['admin','superadmin'].includes(role);
+  if (umTab) umTab.style.display = isPriv ? '' : 'none';
+  const adminGroup = document.querySelector('.sidebar-group-admin');
+  if (adminGroup) adminGroup.style.display = isPriv ? '' : 'none';
 
   // "Not Related Cyber" sub-tab — admin/superadmin only
   const filteredBtn = document.getElementById('newsroom-filtered-btn');
@@ -114,16 +137,18 @@ async function _loadClientSwitcher() {
         window._clientsCountriesMap[c.client_id] = c.countries || [];
         window._clientsSectorsMap[c.client_id] = c.sectors || [];
       });
-      sel.innerHTML = clients.map(c =>
-        `<option value="${c.client_id}" ${c.client_id === active ? 'selected' : ''}>${c.name} (${c.client_id})</option>`
-      ).join('');
+      sel.innerHTML = clients.map(c => {
+        const label = typeof formatClientLabel === 'function' ? formatClientLabel(c.client_id, c.name) : `${c.name} (${c.client_id})`;
+        return `<option value="${c.client_id}" ${c.client_id === active ? 'selected' : ''}>${label}</option>`;
+      }).join('');
     } catch(e) { console.error('client switcher:', e); }
   } else {
     // non-superadmin: only show assigned clients
     const ids = _jwtClientIds();
-    sel.innerHTML = ids.map(id =>
-      `<option value="${id}" ${id === active ? 'selected' : ''}>${id}</option>`
-    ).join('');
+    sel.innerHTML = ids.map(id => {
+      const label = typeof formatClientLabel === 'function' ? formatClientLabel(id) : id;
+      return `<option value="${id}" ${id === active ? 'selected' : ''}>${label}</option>`;
+    }).join('');
   }
 }
 
@@ -157,6 +182,7 @@ function onClientSwitch() {
   if (typeof loadPirs    === 'function') loadPirs();
   if (typeof loadRfis    === 'function') loadRfis();
   if (typeof iocmgmtLoad === 'function') iocmgmtLoad(1);
+  if (typeof prefetchTabBadges === 'function') prefetchTabBadges();
 }
 
 function openLoginModal() {

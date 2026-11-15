@@ -40,14 +40,18 @@ function _recapLinkTitle(title, url) {
   return href ? `<a href="${_recapEsc(href)}" target="_blank" rel="noopener" style="color:inherit;text-decoration:underline">${t}</a>` : t;
 }
 
-function _recapBadge(label, kind) {
+function _recapBadge(label, kind, inlineAfter = false) {
   const colors = {
-    critical: ['#e5534b', 'rgba(229,83,75,0.12)'],
-    high:     ['#f39c12', 'rgba(243,156,18,0.12)'],
-    default:  ['#8b949e', 'rgba(139,148,158,0.12)'],
+    critical: ['#F87171', 'rgba(239, 68, 68, 0.14)'],
+    high:     ['#F59E0B', 'rgba(245, 158, 11, 0.14)'],
+    hit:      ['#34D399', 'rgba(16, 185, 129, 0.14)'],
+    miss:     ['#F87171', 'rgba(239, 68, 68, 0.14)'],
+    unclear:  ['#93B1C8', 'rgba(147, 177, 200, 0.14)'],
+    default:  ['#93B1C8', 'rgba(147, 177, 200, 0.14)'],
   };
   const [fg, bg] = colors[kind] || colors.default;
-  return `<span style="font-family:var(--font-ui);font-size:9px;background:${bg};color:${fg};border:1px solid ${fg}55;padding:1px 6px;border-radius:2px;margin-left:4px">${_recapEsc(label)}</span>`;
+  const margin = inlineAfter ? 'margin-left:5px;' : 'margin-right:6px;';
+  return `<span style="font-family:var(--font-ui);font-size:9.5px;background:${bg};color:${fg};border:1px solid ${fg}55;padding:2px 7px;border-radius:4px;${margin}text-transform:uppercase;letter-spacing:.08em;font-weight:700;display:inline-block;vertical-align:middle">${_recapEsc(label)}</span>`;
 }
 
 function _recapEsc(s) {
@@ -59,16 +63,18 @@ function _recapEsc(s) {
 function _recapConfBadge(c) {
   const t = (c || '').toLowerCase();
   const map = {
-    high: ['#2ecc71', 'rgba(46,204,113,0.12)'],
-    med:  ['#f39c12', 'rgba(243,156,18,0.12)'],
-    low:  ['#95a5a6', 'rgba(149,165,166,0.12)'],
+    critical: ['#F87171', 'rgba(239, 68, 68, 0.14)', 'rgba(239, 68, 68, 0.38)'],
+    high:     ['#F87171', 'rgba(239, 68, 68, 0.14)', 'rgba(239, 68, 68, 0.38)'],
+    med:      ['#FBBF24', 'rgba(245, 158, 11, 0.14)', 'rgba(245, 158, 11, 0.38)'],
+    medium:   ['#FBBF24', 'rgba(245, 158, 11, 0.14)', 'rgba(245, 158, 11, 0.38)'],
+    low:      ['#38BDF8', 'rgba(56, 189, 248, 0.14)', 'rgba(56, 189, 248, 0.35)'],
   };
-  const [fg, bg] = map[t] || map.low;
-  return `<span style="font-family:var(--font-ui);font-size:9px;background:${bg};color:${fg};border:1px solid ${fg}55;padding:1px 6px;border-radius:2px;text-transform:uppercase;letter-spacing:.08em">${_recapEsc(c || 'low')}</span>`;
+  const [fg, bg, border] = map[t] || map.low;
+  return `<span style="font-family:var(--font-ui);font-size:9px;background:${bg};color:${fg};border:1px solid ${border};padding:2px 6px;border-radius:4px;text-transform:uppercase;letter-spacing:.08em;font-weight:700">${_recapEsc(c || 'low')}</span>`;
 }
 
 function _recapSection(title) {
-  return `<div style="font-family:var(--font-ui);font-size:10px;color:var(--text-dim);text-transform:uppercase;letter-spacing:.12em;margin:18px 0 8px;padding-bottom:5px;border-bottom:1px solid var(--border)">${_recapEsc(title)}</div>`;
+  return `<div style="font-family:var(--font-ui);font-size:11px;font-weight:600;color:var(--text-bright);text-transform:uppercase;letter-spacing:.12em;margin:20px 0 10px;padding-bottom:6px;border-bottom:1px solid rgba(147,177,200,0.2)">${_recapEsc(title)}</div>`;
 }
 
 function _recapList(items, mapFn) {
@@ -82,7 +88,7 @@ function _recapList(items, mapFn) {
 
 function _recapChips(items) {
   if (!items || !items.length) return '<span style="color:var(--text-dim);font-size:11px;font-style:italic">(none)</span>';
-  return items.map(v => `<span style="display:inline-block;background:rgba(47,129,247,0.10);border:1px solid var(--border-bright);color:var(--accent);padding:2px 8px;font-size:11px;font-family:var(--font-ui);border-radius:2px;margin:2px 4px 2px 0">${_recapEsc(v)}</span>`).join('');
+  return items.map(v => `<span style="display:inline-block;background:rgba(47,129,247,0.12);border:1px solid rgba(90,185,193,0.34);color:var(--accent);padding:3px 10px;font-size:11px;font-family:var(--font-ui);border-radius:6px;margin:2px 6px 2px 0">${_recapEsc(v)}</span>`).join('');
 }
 
 function _recapRenderEmpty(date, isLatest) {
@@ -133,10 +139,10 @@ function _recapRender(doc) {
   }
 
   html += `
-    <div style="display:flex;align-items:center;justify-content:space-between;gap:14px;flex-wrap:wrap;padding:14px 16px;border:1px solid var(--border);border-radius:3px;background:linear-gradient(135deg,rgba(47,129,247,0.05),rgba(88,166,255,0.04));margin-bottom:8px">
+    <div style="display:flex;align-items:center;justify-content:space-between;gap:14px;flex-wrap:wrap;padding:16px 18px;border:1px solid rgba(147,177,200,0.30);border-radius:12px;background:rgba(4,50,86,0.15);margin-bottom:12px">
       <div>
         <div style="font-family:var(--font-ui);font-size:10px;color:var(--text-dim);text-transform:uppercase;letter-spacing:.12em;margin-bottom:4px">Daily Recap · ${_recapEsc(doc.date)}</div>
-        <div style="font-size:14px;line-height:1.5">${_recapEsc(doc.headline || '(no headline)')}</div>
+        <div style="font-size:15px;font-weight:600;color:var(--text-bright);line-height:1.5">${_recapEsc(doc.headline || '(no headline)')}</div>
       </div>
       <div style="font-family:var(--font-ui);font-size:10px;color:var(--text-dim);text-align:right">
         <div>${counts.articles||0} articles${_d('articles')} · ${counts.tweets||0} tweets${_d('tweets')}</div>
@@ -160,7 +166,7 @@ function _recapRender(doc) {
   html += _recapSection(`Top Tweets (${(recap.top_tweets||[]).length})`);
   html += _recapList(recap.top_tweets, t => `
     <li style="margin-bottom:6px"><b>${_recapLinkTitle('@' + (t.author||'?'), t.url)}</b>
-      <span style="font-family:var(--font-ui);font-size:9px;background:rgba(88,166,255,0.12);color:#58A6FF;border:1px solid rgba(88,166,255,0.3);padding:1px 5px;border-radius:2px;margin-left:4px">${_recapEsc(t.signal||'other')}</span>
+      <span style="font-family:var(--font-ui);font-size:9px;background:rgba(88,166,255,0.12);color:#58A6FF;border:1px solid rgba(88,166,255,0.3);padding:1px 6px;border-radius:3px;margin-left:6px;text-transform:uppercase;letter-spacing:.08em;font-weight:600">${_recapEsc(t.signal||'other')}</span>
       <div style="font-size:12px;margin-top:2px">${_recapEsc(t.summary||'')}</div>
     </li>`);
 
@@ -172,10 +178,10 @@ function _recapRender(doc) {
     html += `<div>` + recap.notable_cves.map(id => {
       const d = cveDetails[id] || {};
       let badges = '';
-      if (d.cve_score != null) badges += _recapBadge(`CVSS ${d.cve_score}`, d.cve_score >= 9 ? 'critical' : (d.cve_score >= 7 ? 'high' : 'default'));
-      if (d.cisa_kev) badges += _recapBadge('KEV', 'critical');
-      if (d.poc_available) badges += _recapBadge('PoC', 'high');
-      if (d.epss_score != null) badges += _recapBadge(`EPSS ${d.epss_score}`, 'default');
+      if (d.cve_score != null) badges += _recapBadge(`CVSS ${d.cve_score}`, d.cve_score >= 9 ? 'critical' : (d.cve_score >= 7 ? 'high' : 'default'), true);
+      if (d.cisa_kev) badges += _recapBadge('KEV', 'critical', true);
+      if (d.poc_available) badges += _recapBadge('PoC', 'high', true);
+      if (d.epss_score != null) badges += _recapBadge(`EPSS ${d.epss_score}`, 'default', true);
       return `<span style="display:inline-block;margin:2px 8px 4px 0;font-family:var(--font-ui);font-size:11px">${_recapEsc(id)}${badges}</span>`;
     }).join('') + `</div>`;
   } else {
@@ -234,8 +240,8 @@ function _recapRender(doc) {
   }
 
   // ── Forecast ──
-  html += `<div style="margin-top:24px;padding:14px 16px;border:1px solid var(--border-bright);border-radius:3px;background:rgba(243,156,18,0.04)">
-    <div style="font-family:var(--font-ui);font-size:11px;color:var(--orange);text-transform:uppercase;letter-spacing:.12em;margin-bottom:8px">${ic("chevron-up", 11)} Forecast · Next 1-3 Days</div>
+  html += `<div style="margin-top:24px;padding:16px 18px;border:1px solid rgba(243,156,18,0.35);border-radius:12px;background:rgba(243,156,18,0.06)">
+    <div style="font-family:var(--font-ui);font-size:11px;font-weight:600;color:var(--orange);text-transform:uppercase;letter-spacing:.12em;margin-bottom:8px">${ic("chevron-up", 11)} Forecast · Next 1-3 Days</div>
     <div style="font-size:13px;line-height:1.6;margin-bottom:8px">${_recapEsc(fcast.summary || '(no forecast)')}</div>`;
 
   html += _recapSection(`Likely Events (${(fcast.likely_events||[]).length})`);
@@ -253,11 +259,13 @@ function _recapRender(doc) {
   const review = doc.forecast_review || [];
   html += _recapSection(`Forecast Review — Previous Day (${review.length})`);
   if (review.length) {
-    const vKind = { hit: 'high', miss: 'default', unclear: 'default' };
-    html += _recapList(review, r => `
-      <li style="margin-bottom:6px">${_recapBadge(r.verdict||'?', vKind[r.verdict] || 'default')} <b>${_recapEsc(r.event||'')}</b>
-        <div style="color:var(--text-dim);font-size:12px;margin-top:2px">${_recapEsc(r.justification||'')}</div>
-      </li>`);
+    html += _recapList(review, r => {
+      const v = (r.verdict || '?').toLowerCase();
+      return `
+        <li style="margin-bottom:8px">${_recapBadge(v, v)} <b>${_recapEsc(r.event||'')}</b>
+          <div style="color:var(--text-dim);font-size:12px;margin-top:3px">${_recapEsc(r.justification||'')}</div>
+        </li>`;
+    });
   } else {
     html += `<div style="color:var(--text-dim);font-size:11px;font-style:italic">(no prior-day forecast to score)</div>`;
   }
@@ -283,10 +291,9 @@ async function recapLoadHistory() {
     }
     list.innerHTML = items.map(it => {
       const c = it.counts || {};
-      return `<button onclick="recapLoad('${_recapEsc(it.date)}')"
-        style="text-align:left;background:transparent;border:1px solid var(--border);color:var(--text);padding:6px 8px;font-family:var(--font-ui);font-size:11px;border-radius:2px;cursor:pointer">
-        <div style="color:var(--accent)">${_recapEsc(it.date)}</div>
-        <div style="color:var(--text-dim);font-size:10px;margin-top:2px">${c.articles||0}a · ${c.tweets||0}t · ${c.cves||0}c</div>
+      return `<button onclick="recapLoad('${_recapEsc(it.date)}')" class="recap-history-item">
+        <div class="recap-history-date">${_recapEsc(it.date)}</div>
+        <div class="recap-history-counts">${c.articles||0}a · ${c.tweets||0}t · ${c.cves||0}c</div>
       </button>`;
     }).join('');
   } catch (e) {

@@ -87,7 +87,7 @@
           <button class="btn-reset" onclick="loadSpikes()"><i data-ic="refresh"></i> Refresh</button>
         </div>
       </div>
-      <div id="intel-spikes-body" style="min-height:200px">
+      <div id="intel-spikes-body" class="ta-table-wrap" style="min-height:200px">
         <div class="loading-state"><div class="loading-spinner"></div><div class="loading-text">Analyzing signals…</div></div>
       </div>
     </div>
@@ -127,7 +127,7 @@
       <div id="campaigns-body" class="ta-table-wrap" style="min-height:300px">
         <div class="intel-empty" style="padding:48px 0;text-align:center;opacity:0.5">Loading campaign clusters…</div>
       </div>
-      <div class="ta-table-footer" style="margin-top:10px">
+      <div class="ta-table-footer">
         <span class="ta-total" id="campaigns-footer">—</span>
       </div>
 
@@ -903,7 +903,7 @@
         </table>
       </div>
 
-      <div class="ta-table-footer" style="margin-top: 10px;">
+      <div class="ta-table-footer">
         <span id="iocmgmt-footer-total" class="ta-total"></span>
         <div id="iocmgmt-pager"></div>
       </div>

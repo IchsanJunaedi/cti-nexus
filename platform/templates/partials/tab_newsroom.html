@@ -16,7 +16,7 @@
 
       <div class="news-panel">
         <div class="panel-header">
-          <div class="panel-title"><span class="panel-icon apac"></span>APAC News</div>
+          <div class="panel-title"><i data-ic="compass" class="panel-hdr-ic apac"></i>APAC News</div>
           <div class="panel-meta">
             <span class="panel-count" id="apac-count">— items</span>
             <button class="panel-refresh" id="apac-refresh" title="Refresh" onclick="refreshPanel('apac')"><i data-ic="refresh"></i></button>
@@ -28,7 +28,7 @@
 
       <div class="news-panel">
         <div class="panel-header">
-          <div class="panel-title"><span class="panel-icon global"></span>Global News</div>
+          <div class="panel-title"><i data-ic="globe" class="panel-hdr-ic global"></i>Global News</div>
           <div class="panel-meta">
             <span class="panel-count" id="global-count">— items</span>
             <button class="panel-refresh" id="global-refresh" title="Refresh" onclick="refreshPanel('global')"><i data-ic="refresh"></i></button>
@@ -40,7 +40,7 @@
 
       <div class="news-panel">
         <div class="panel-header">
-          <div class="panel-title"><span class="panel-icon ransomware"></span>Ransomware Activity</div>
+          <div class="panel-title"><i data-ic="flame" class="panel-hdr-ic ransomware"></i>Ransomware Activity</div>
           <div class="panel-meta">
             <span class="panel-count" id="rw-count">— items</span>
             <button class="panel-refresh" id="rw-expand" title="Expand — view &amp; edit full victim list" onclick="openRwVictimsFullModal()"><i data-ic="maximize"></i></button>
@@ -49,14 +49,15 @@
         </div>
         <!-- Victim table from ransomware.live -->
         <div id="rw-victims-section" style="padding:0 4px 8px">
-          <div style="display:flex;gap:6px;padding:6px 4px;flex-wrap:wrap;align-items:center">
-            <input type="text" class="filter-input" id="rw-f-group"    placeholder="Group…"    style="width:100px;font-size:11px;padding:4px 8px">
-            <input type="text" class="filter-input" id="rw-f-country"  placeholder="Country…"  style="width:100px;font-size:11px;padding:4px 8px">
-            <input type="text" class="filter-input" id="rw-f-industry" placeholder="Industry…" style="width:110px;font-size:11px;padding:4px 8px">
-            <label style="display:flex;align-items:center;gap:4px;font-size:10px;color:var(--text-dim);cursor:pointer" title="Include unverified claims sourced from X/Twitter">
-              <input type="checkbox" id="rw-f-claimed" checked onchange="loadRwVictims(1)" style="cursor:pointer">Claimed (X)
+          <div class="rw-filter-bar" style="display:flex;gap:6px;padding:8px 6px;flex-wrap:wrap;align-items:center">
+            <input type="text" class="filter-input" id="rw-f-group"    placeholder="Group…"    style="width:95px;font-size:11px;padding:4px 8px">
+            <input type="text" class="filter-input" id="rw-f-country"  placeholder="Country…"  style="width:95px;font-size:11px;padding:4px 8px">
+            <input type="text" class="filter-input" id="rw-f-industry" placeholder="Industry…" style="width:105px;font-size:11px;padding:4px 8px">
+            <label class="cve-check-pill" style="font-size:10px;padding:3px 8px" title="Include unverified claims sourced from X/Twitter">
+              <input type="checkbox" id="rw-f-claimed" checked onchange="loadRwVictims(1)">
+              <span>Claimed (X)</span>
             </label>
-            <button class="btn-apply" style="font-size:10px;padding:4px 10px" onclick="loadRwVictims(1)">Filter</button>
+            <button class="btn-apply rw-filter-btn" onclick="loadRwVictims(1)">Filter</button>
           </div>
           <div id="rw-victim-list" style="max-height:300px;overflow-y:auto;font-size:11px"></div>
           <div id="rw-victim-pager" style="padding:4px;text-align:center;font-size:11px;color:var(--text-dim)"></div>
@@ -72,7 +73,7 @@
     <div class="news-grid-row-bottom">
       <div class="news-panel" style="min-height:280px">
         <div class="panel-header">
-          <div class="panel-title"><span class="panel-icon" id="local-panel-icon"></span><span id="local-panel-title">Local</span> News<span id="local-panel-countries-tip" style="display:none;margin-left:5px;font-size:10px;color:var(--text-dim);cursor:default;position:relative" title=""><i data-ic="info" data-size="11"></i></span></div>
+          <div class="panel-title"><i data-ic="map-pin" class="panel-hdr-ic local" id="local-panel-icon"></i><span id="local-panel-title">Local</span> News<span id="local-panel-countries-tip" style="display:none;margin-left:5px;font-size:10px;color:var(--text-dim);cursor:default;position:relative" title=""><i data-ic="info" data-size="11"></i></span></div>
           <div class="panel-meta">
             <div id="indo-type-filter" style="display:flex;gap:2px">
               <button id="indo-filter-all"      onclick="indoSetFilter('all')"     style="font-size:10px;padding:2px 8px;font-family:var(--font-ui);border-radius:2px;cursor:pointer;background:rgba(47,129,247,0.12);border:1px solid var(--border-bright);color:var(--accent)">All</button>
@@ -91,7 +92,7 @@
     <div class="news-grid-row-bottom">
       <div class="news-panel" style="min-height:280px">
         <div class="panel-header">
-          <div class="panel-title"><span class="panel-icon" style="background:var(--accent);box-shadow:0 0 6px var(--accent)"></span>TA Watchlist News</div>
+          <div class="panel-title"><i data-ic="target" class="panel-hdr-ic watchlist"></i>TA Watchlist News</div>
           <div class="panel-meta">
             <span class="panel-count" id="watchlist-count">— items</span>
             <button class="panel-refresh" id="watchlist-refresh" title="Refresh" onclick="refreshPanel('watchlist')"><i data-ic="refresh"></i></button>
@@ -105,7 +106,7 @@
     <div class="news-grid-row-bottom">
       <div class="news-panel" style="min-height:280px">
         <div class="panel-header">
-          <div class="panel-title"><span class="panel-icon" style="background:#E3B341;box-shadow:0 0 6px #E3B341"></span>Tech Stack News</div>
+          <div class="panel-title"><i data-ic="layers" class="panel-hdr-ic techstack"></i>Tech Stack News</div>
           <div class="panel-meta">
             <span class="panel-count" id="techstack-count">— items</span>
             <button class="panel-refresh" id="techstack-refresh" title="Refresh" onclick="refreshPanel('techstack')"><i data-ic="refresh"></i></button>
@@ -119,7 +120,7 @@
     <div class="news-grid-row-bottom">
       <div class="news-panel" style="min-height:280px">
         <div class="panel-header">
-          <div class="panel-title"><span class="panel-icon" style="background:#3FB950;box-shadow:0 0 6px #3FB950"></span>Relevant Industry News</div>
+          <div class="panel-title"><i data-ic="building" class="panel-hdr-ic industry"></i>Relevant Industry News</div>
           <div class="panel-meta">
             <span class="panel-count" id="industry-count">— items</span>
             <button class="panel-refresh" id="industry-refresh" title="Refresh" onclick="refreshPanel('industry')"><i data-ic="refresh"></i></button>
@@ -135,9 +136,8 @@
     <div id="newsroom-view-filtered" style="display:none">
       <div class="news-panel" style="max-width:900px;margin:0 auto">
         <div class="panel-header">
-          <div class="panel-title" style="gap:8px">
-            <span class="panel-icon" style="background:var(--red);box-shadow:0 0 6px var(--red)"></span>
-            Not Related Cyber
+          <div class="panel-title">
+            <i data-ic="filter" class="panel-hdr-ic filtered"></i>Not Related Cyber
           </div>
           <div class="panel-meta" style="gap:8px">
             <input type="text" class="filter-input" id="filtered-search" placeholder="Search title or source…" style="width:180px;font-size:11px;padding:4px 8px" onkeydown="if(event.key==='Enter')loadFilteredArticles(1)">

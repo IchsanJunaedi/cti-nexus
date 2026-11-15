@@ -5,27 +5,39 @@ let   _tsMap   = {};  // _id → item
 const _EXPOSURE_CYCLE  = ['internal', 'public', 'both'];
 const _EXPOSURE_LABEL  = { internal: 'Internal', public: 'Public', both: 'Both' };
 const _EXPOSURE_COLOR  = {
-  internal: 'rgba(47,129,247,0.15)',
-  public:   'rgba(218,54,51,0.15)',
-  both:     'rgba(227,179,65,0.15)',
+  internal: 'rgba(56, 189, 248, 0.12)',
+  public:   'rgba(248, 113, 113, 0.14)',
+  both:     'rgba(245, 158, 11, 0.14)',
 };
 const _EXPOSURE_BORDER = {
-  internal: 'rgba(47,129,247,0.5)',
-  public:   'rgba(218,54,51,0.5)',
-  both:     'rgba(227,179,65,0.5)',
+  internal: 'rgba(56, 189, 248, 0.45)',
+  public:   'rgba(248, 113, 113, 0.45)',
+  both:     'rgba(245, 158, 11, 0.45)',
 };
 const _EXPOSURE_TEXT   = {
-  internal: 'var(--accent)',
-  public:   'var(--red)',
-  both:     'var(--orange)',
+  internal: '#38BDF8',
+  public:   '#F87171',
+  both:     '#FBBF24',
 };
 const _EXPOSURE_MULT   = { internal: '1×', public: '1.5×', both: '1.25×' };
 
 const _HOSTING_CYCLE  = ['on_prem', 'cloud', 'saas'];
 const _HOSTING_LABEL  = { on_prem: 'On-Prem', cloud: 'Cloud', saas: 'SaaS' };
-const _HOSTING_COLOR  = { on_prem: 'rgba(110,124,255,0.12)', cloud: 'rgba(47,129,247,0.12)', saas: 'rgba(227,179,65,0.12)' };
-const _HOSTING_BORDER = { on_prem: 'rgba(110,124,255,0.5)',  cloud: 'rgba(47,129,247,0.5)',  saas: 'rgba(227,179,65,0.5)' };
-const _HOSTING_TEXT   = { on_prem: 'var(--accent2)',         cloud: 'var(--accent)',          saas: 'var(--orange)' };
+const _HOSTING_COLOR  = {
+  on_prem: 'rgba(167, 139, 250, 0.12)',
+  cloud:   'rgba(56, 189, 248, 0.12)',
+  saas:    'rgba(52, 211, 153, 0.12)',
+};
+const _HOSTING_BORDER = {
+  on_prem: 'rgba(167, 139, 250, 0.45)',
+  cloud:   'rgba(56, 189, 248, 0.45)',
+  saas:    'rgba(52, 211, 153, 0.45)',
+};
+const _HOSTING_TEXT   = {
+  on_prem: '#C4B5FD',
+  cloud:   '#38BDF8',
+  saas:    '#6EE7B7',
+};
 const _HOSTING_MULT   = { on_prem: '1×', cloud: '1×', saas: '0.8×' };
 
 function _tsExposureBadge(id, exposure) {
@@ -35,9 +47,10 @@ function _tsExposureBadge(id, exposure) {
   ).join('');
   return `<select
     data-id="${esc(id)}"
+    class="ts-badge-select"
     onchange="tsChangeExposure(this)"
     title="Internet exposure — affects CVE adjusted risk score"
-    style="font-size:10px;padding:3px 6px;background:${_EXPOSURE_COLOR[e]};border:1px solid ${_EXPOSURE_BORDER[e]};color:${_EXPOSURE_TEXT[e]};border-radius:4px;cursor:pointer;outline:none"
+    style="background:${_EXPOSURE_COLOR[e]};border:1px solid ${_EXPOSURE_BORDER[e]};color:${_EXPOSURE_TEXT[e]};"
   >${opts}</select>`;
 }
 
@@ -73,9 +86,9 @@ function _tsVendorCell(id, vendor) {
     data-id="${esc(id)}"
     value="${esc(vendor || '')}"
     placeholder="—"
+    class="ts-vendor-cell-input"
     title="Tech stacks tagged with the same vendor merge into one Draft Email"
-    onchange="tsChangeVendor(this)"
-    style="font-size:11px;padding:3px 6px;background:transparent;border:1px solid var(--border);color:var(--text);border-radius:4px;width:110px;outline:none">`;
+    onchange="tsChangeVendor(this)">`;
 }
 
 async function tsChangeVendor(input) {
@@ -112,9 +125,10 @@ function _tsHostingBadge(id, hosting) {
   ).join('');
   return `<select
     data-id="${esc(id)}"
+    class="ts-badge-select"
     onchange="tsChangeHosting(this)"
     title="Hosting model — affects CVE adjusted risk score"
-    style="font-size:10px;padding:3px 6px;background:${_HOSTING_COLOR[h]};border:1px solid ${_HOSTING_BORDER[h]};color:${_HOSTING_TEXT[h]};border-radius:4px;cursor:pointer;outline:none"
+    style="background:${_HOSTING_COLOR[h]};border:1px solid ${_HOSTING_BORDER[h]};color:${_HOSTING_TEXT[h]};"
   >${opts}</select>`;
 }
 
@@ -180,11 +194,10 @@ async function loadTechStack() {
           <td class="ta-td"><span class="ta-source-badge">${esc(t.source)}</span></td>
           <td class="ta-td">${_tsExposureBadge(t._id, t.exposure || 'internal')}</td>
           <td class="ta-td">${_tsHostingBadge(t._id, t.hosting_type || 'on_prem')}</td>
-          <td class="ta-td" style="display:flex;gap:6px;align-items:center">
+          <td class="ta-td ts-action-cell">
             <button class="ta-delete-btn" data-id="${esc(t._id)}"
                     onclick="tsDeleteTech(this.dataset.id)">${ic("x", 11)} REMOVE</button>
-            <button class="btn-reset" data-id="${esc(t._id)}" data-name="${esc(t.name)}"
-                    style="font-size:10px;padding:4px 8px;border-color:rgba(47,129,247,0.4);color:var(--accent)"
+            <button class="btn-reset ts-hist-btn" data-id="${esc(t._id)}" data-name="${esc(t.name)}"
                     onclick="tsBackfillHistorical(this.dataset.id, this.dataset.name, this)"
                     title="Fetch CVEs from NVD for the past 180 days">${ic("refresh", 11)} Historical</button>
           </td>
@@ -202,9 +215,9 @@ function _renderTSPager() {
   const totalPages = Math.max(1, Math.ceil(_tsState.total / _tsState.pageSize));
   const el = document.getElementById('ts-pager');
   if (totalPages <= 1) { el.innerHTML = ''; return; }
-  el.innerHTML = `<div class="pager">
+  el.innerHTML = `<div class="pager" style="display:flex;align-items:center;gap:6px">
     <button class="pager-btn" onclick="tsGoPage(-1)" ${_tsState.page <= 1 ? 'disabled' : ''}>${ic("chevron-left", 12)} Prev</button>
-    <span class="pager-info">PAGE <strong>${_tsState.page}</strong> / ${totalPages}</span>
+    <span class="pager-info" style="font-family:var(--font-ui);font-size:10.5px;color:var(--text-dim)">PAGE <strong>${_tsState.page}</strong> / ${totalPages}</span>
     <button class="pager-btn" onclick="tsGoPage(1)" ${_tsState.page >= totalPages ? 'disabled' : ''}>Next ${ic("chevron-right", 12)}</button>
   </div>`;
 }

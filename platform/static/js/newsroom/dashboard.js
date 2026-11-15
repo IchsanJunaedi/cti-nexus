@@ -6,7 +6,7 @@ if (window.Chart && Chart.defaults) {
   Chart.defaults.color       = '#8B949E';
 }
 
-const CHART_COLORS = ['#2F81F7','#58A6FF','#DA3633','#3DC9AF','#E3B341','#21262D','#fd79a8','#30363D','#55efc4','#21262D'];
+const CHART_COLORS = ['#2F81F7','#58A6FF','#DA3633','#3DC9AF','#E3B341','#8A2BE2','#FD79A8','#00BFFF','#55EFC4','#F97316'];
 
 function makeBarChart(id, labels, data, color) {
   if (!window.Chart) return;
@@ -50,9 +50,9 @@ function makeDoughnutChart(id, labels, data) {
       datasets: [{
         data,
         backgroundColor: CHART_COLORS,
-        borderColor:     '#161B22',
-        borderWidth: 2,
-        hoverOffset: 6,
+        borderColor:     'transparent',
+        borderWidth:     0,
+        hoverOffset:     6,
       }]
     },
     options: {

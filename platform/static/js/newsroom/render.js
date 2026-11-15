@@ -121,9 +121,9 @@ async function loadRwVictims(page) {
     el.innerHTML = renderRwVictimHeader() + data.activity.map(renderRwVictimRow).join('');
     const totalPages = Math.ceil(data.total / RW_VICTIM_PAGE_SIZE);
     pager.innerHTML = totalPages > 1
-      ? `<span style="color:var(--text-dim)">Page ${_rwVictimPage} / ${totalPages} &nbsp;</span>`
-        + (_rwVictimPage > 1 ? `<button class="btn-apply" style="font-size:10px;padding:2px 8px;margin:0 2px" onclick="loadRwVictims(${_rwVictimPage-1})">${ic("chevron-left", 11)} Prev</button>` : '')
-        + (_rwVictimPage < totalPages ? `<button class="btn-apply" style="font-size:10px;padding:2px 8px;margin:0 2px" onclick="loadRwVictims(${_rwVictimPage+1})">Next ${ic("chevron-right", 11)}</button>` : '')
+      ? `<span style="color:var(--text-dim);font-family:var(--font-ui);font-size:11px">Page ${_rwVictimPage} / ${totalPages} &nbsp;</span>`
+        + (_rwVictimPage > 1 ? `<button class="btn-apply rw-pager-btn" onclick="loadRwVictims(${_rwVictimPage-1})">${ic("chevron-left", 11)} Prev</button>` : '')
+        + (_rwVictimPage < totalPages ? `<button class="btn-apply rw-pager-btn" onclick="loadRwVictims(${_rwVictimPage+1})">Next ${ic("chevron-right", 11)}</button>` : '')
       : '';
   } catch(e) {
     el.innerHTML = `<div style="padding:12px;text-align:center;color:var(--red)">Error: ${e.message}</div>`;

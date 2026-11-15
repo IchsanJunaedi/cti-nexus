@@ -32,13 +32,25 @@
   ::-webkit-scrollbar-thumb { background: var(--border-bright); border-radius: 6px; border: 2px solid var(--surface); }
   ::-webkit-scrollbar-thumb:hover { background: var(--accent); }
 
+  html, body {
+    height: 100%;
+    max-height: 100%;
+    overflow: hidden;
+    overscroll-behavior: none;
+    -webkit-overscroll-behavior: none;
+  }
+
   body {
     background: var(--bg);
     color: var(--text);
     font-family: 'Inter', sans-serif;
     font-size: 14px;
-    min-height: 100vh;
-    overflow-x: hidden;
+    height: 100vh;
+    max-height: 100vh;
+    width: 100vw;
+    overflow: hidden;
+    overscroll-behavior: none;
+    -webkit-overscroll-behavior: none;
   }
 
   body::before {
@@ -63,9 +75,10 @@
   .app {
     position: relative;
     z-index: 1;
-    max-width: 1400px;
-    margin: 0 auto;
-    padding: 0 16px 40px;
+    max-width: none;
+    width: 100%;
+    margin: 0;
+    padding: 0;
   }
 
   /* ── HEADER ── */
@@ -148,8 +161,9 @@
   /* ── APP BODY (sidebar + main) ── */
   .app-body {
     display: flex;
-    align-items: flex-start;
+    align-items: stretch;
     gap: 0;
+    min-height: 100vh;
   }
 
   .main-content {
@@ -157,24 +171,12 @@
     min-width: 0;
   }
 
-  /* ── TABS (left sidebar) ── */
+  /* ── TABS (left sidebar — managed by theme.css) ── */
   .tabs {
     display: flex;
     flex-direction: column;
-    align-items: stretch;
-    width: 220px;
     flex-shrink: 0;
-    border-bottom: none;
-    border-right: 1px solid var(--border);
-    position: sticky;
-    top: 0;
-    max-height: 100vh;
-    overflow-y: auto;
-    overflow-x: hidden;
-    scrollbar-width: thin;
   }
-  .tabs::-webkit-scrollbar { width: 4px; }
-  .tabs::-webkit-scrollbar-thumb { background: var(--border); border-radius: 2px; }
 
   .tab {
     font-family: 'Inter', sans-serif;
@@ -292,22 +294,115 @@
   .filter-select:hover, .filter-select:focus { border-color: var(--accent); }
 
   /* ── Instant custom tooltip for password info button ── */
-  .pw-info-wrap { position: relative; display: inline-flex; align-items: center; margin-left: 5px; }
+  .pw-info-wrap {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    margin-left: 6px;
+    vertical-align: middle;
+  }
   .pw-info-btn {
-    display: inline-flex; align-items: center; justify-content: center;
-    width: 14px; height: 14px; border-radius: 50%;
-    background: rgba(47,129,247,0.15); border: 1px solid rgba(47,129,247,0.4);
-    color: var(--accent); font-size: 9px; font-family: var(--font-ui);
-    cursor: default; flex-shrink: 0;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 15px;
+    height: 15px;
+    border-radius: 50%;
+    background: rgba(45, 135, 161, 0.16);
+    border: 1px solid rgba(90, 185, 193, 0.35);
+    color: var(--mint-200);
+    font-size: 10px;
+    font-weight: 600;
+    font-family: var(--font-ui);
+    cursor: pointer;
+    flex-shrink: 0;
+    transition: all 0.15s ease;
+    line-height: 1;
+    padding: 0;
+  }
+  .pw-info-wrap:hover .pw-info-btn,
+  .pw-info-wrap:focus-within .pw-info-btn,
+  .pw-info-btn:hover {
+    background: rgba(45, 135, 161, 0.35);
+    border-color: var(--mint-200);
+    color: #FFFFFF;
+    box-shadow: 0 0 8px rgba(90, 185, 193, 0.4);
   }
   .pw-tooltip {
-    display: none; position: absolute; left: 20px; top: 50%; transform: translateY(-50%);
-    background: var(--surface2); border: 1px solid var(--border-bright);
-    color: var(--text-bright); font-family: var(--font-ui); font-size: 10px;
-    padding: 5px 9px; border-radius: 3px; white-space: nowrap; z-index: 9999;
-    pointer-events: none; box-shadow: 0 4px 12px rgba(0,0,0,0.4);
+    display: none;
+    position: absolute;
+    bottom: calc(100% + 8px);
+    left: -6px;
+    width: 215px;
+    background: rgba(9, 23, 44, 0.96) !important;
+    border: 1px solid rgba(90, 185, 193, 0.35) !important;
+    color: var(--text-bright);
+    font-family: var(--font-ui);
+    padding: 10px 12px;
+    border-radius: 8px;
+    white-space: normal;
+    z-index: 9999;
+    pointer-events: none;
+    box-shadow: 0 10px 28px rgba(0, 0, 0, 0.55), 0 0 14px rgba(22, 91, 153, 0.25);
+    backdrop-filter: blur(14px);
+    -webkit-backdrop-filter: blur(14px);
+    box-sizing: border-box;
   }
-  .pw-info-wrap:hover .pw-tooltip { display: block; }
+  .pw-tooltip::after {
+    content: "";
+    position: absolute;
+    top: 100%;
+    left: 9px;
+    border-width: 5px;
+    border-style: solid;
+    border-color: rgba(90, 185, 193, 0.45) transparent transparent transparent;
+  }
+  .pw-info-wrap:hover .pw-tooltip,
+  .pw-info-wrap:focus-within .pw-tooltip {
+    display: block;
+    animation: pwTooltipFadeIn 0.15s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+  @keyframes pwTooltipFadeIn {
+    from { opacity: 0; transform: translateY(3px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+  .pw-tooltip-head {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 10px;
+    font-weight: 700;
+    color: #FFFFFF;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    padding-bottom: 7px;
+    margin-bottom: 7px;
+    border-bottom: 1px solid rgba(90, 185, 193, 0.18);
+  }
+  .pw-tooltip-head svg,
+  .pw-tooltip-head .cti-ic {
+    color: var(--mint-200);
+  }
+  .pw-tooltip-list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+  }
+  .pw-tooltip-item {
+    display: flex;
+    align-items: center;
+    gap: 7px;
+    font-size: 11px;
+    color: #D1E2EE;
+    line-height: 1.3;
+  }
+  .pw-rule-check {
+    color: #3DC9AF;
+    flex-shrink: 0;
+  }
 
   .filter-input {
     background: var(--surface2);
@@ -324,7 +419,7 @@
 
   .filter-input:focus { border-color: var(--accent); }
   .filter-input::placeholder { color: var(--text-dim); }
-  input[type="date"].filter-input::-webkit-calendar-picker-indicator { filter: invert(0.4); cursor: pointer; }
+  input[type="date"].filter-input::-webkit-calendar-picker-indicator { filter: brightness(0) invert(1); cursor: pointer; opacity: 0.95; }
 
   .btn-apply {
     background: var(--accent);
@@ -594,21 +689,24 @@
   .cve-grid {
     display: grid;
     grid-template-columns: repeat(4, 1fr);
-    gap: 1px;
-    background: var(--border);
-    margin-top: 1px;
+    gap: 14px;
+    background: transparent;
+    margin-top: 0;
+  }
+  .cve-grid.cve-grid--5 {
+    grid-template-columns: repeat(5, 1fr);
   }
 
-  .cve-stat-box { background: var(--surface); padding: 20px 16px; display: flex; flex-direction: column; gap: 4px; }
-  .cve-stat-label { font-family: var(--font-ui); font-size: 9px; color: var(--text-dim); text-transform: uppercase; letter-spacing: 0.1em; }
-  .cve-stat-value { font-family: var(--font-ui); font-size: 28px; line-height: 1; }
+  .cve-stat-box { background: var(--surface); padding: 16px 18px; display: flex; flex-direction: column; gap: 5px; position: relative; overflow: hidden; }
+  .cve-stat-label { font-family: var(--font-ui); font-size: 10px; color: #DCE4EC; text-transform: uppercase; letter-spacing: 0.08em; }
+  .cve-stat-value { font-family: var(--font-ui); font-size: 28px; line-height: 1.15; font-weight: 700; }
   .cve-stat-value.crit { color: var(--red); }
   .cve-stat-value.high { color: var(--orange); }
   .cve-stat-value.med  { color: var(--accent3); }
   .cve-stat-value.info { color: var(--accent); }
-  .cve-stat-sub { font-family: var(--font-ui); font-size: 9px; color: var(--text-dim); }
+  .cve-stat-sub { font-family: var(--font-ui); font-size: 10px; color: #8CA2B8; }
 
-  .cve-table-wrapper { background: var(--surface); margin-top: 1px; overflow-x: auto; }
+  .cve-table-wrapper { background: var(--surface); margin-top: 0; overflow-x: auto; }
 
   .cve-table { width: 100%; border-collapse: collapse; font-size: 13px; }
 
@@ -645,7 +743,9 @@
   .modal-overlay {
     position: fixed;
     inset: 0;
-    background: rgba(4, 10, 20, 0.78);
+    background: rgba(4, 10, 24, 0.68);
+    backdrop-filter: blur(14px);
+    -webkit-backdrop-filter: blur(14px);
     z-index: 9800;
     display: flex;
     align-items: center;
@@ -654,7 +754,7 @@
     opacity: 0;
     visibility: hidden;
     pointer-events: none;
-    transition: opacity .16s ease, visibility .16s ease;
+    transition: opacity .16s ease, visibility .16s ease, backdrop-filter .16s ease, -webkit-backdrop-filter .16s ease;
   }
 
   .modal-overlay.open {
@@ -1114,16 +1214,17 @@
   .rfi-filter-btn.active { background:#1B2E45; border-color:var(--accent3); color:var(--accent3); }
 
   /* ── EXEC DASHBOARD ── */
-  .exec-kpis { display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap: 12px; margin-bottom: 20px; }
-  .exec-kpi { background: var(--surface); border: 1px solid var(--border); border-radius: 4px; padding: 14px 16px; }
-  .exec-kpi-val { font-family: var(--font-ui); font-size: 28px; font-weight: 700; color: var(--accent); line-height: 1; }
-  .exec-kpi-label { font-size: 11px; color: var(--text-dim); margin-top: 4px; text-transform: uppercase; letter-spacing: .05em; }
-  .exec-kpi-trend { font-family: var(--font-ui); font-size: 10px; margin-top: 5px; min-height: 14px; }
+  .exec-kpis { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 14px; margin-bottom: 14px; }
+  .exec-kpis.exec-kpis--3 { grid-template-columns: repeat(3, minmax(0, 1fr)); margin-bottom: 20px; }
+  .exec-kpi { background: var(--surface); border: 1px solid var(--border); border-radius: 12px; padding: 16px 20px; }
+  .exec-kpi-val { font-family: var(--font-ui); font-size: 28px; font-weight: 700; color: var(--text-bright); line-height: 1.15; }
+  .exec-kpi-label { font-size: 10px; color: #DCE4EC; margin-top: 4px; text-transform: uppercase; letter-spacing: .08em; font-weight: 600; }
+  .exec-kpi-trend { font-family: var(--font-ui); font-size: 10.5px; margin-top: 5px; min-height: 14px; color: #8CA2B8; }
   .exec-section { margin-top: 24px; }
-  .exec-section-title { font-family: var(--font-ui); font-size: 11px; color: var(--text-dim); text-transform: uppercase; letter-spacing: .08em; margin-bottom: 12px; border-bottom: 1px solid var(--border); padding-bottom: 6px; }
+  .exec-section-title { font-family: var(--font-ui); font-size: 11px; color: var(--text-bright); text-transform: uppercase; letter-spacing: .08em; margin-bottom: 12px; border-bottom: 1px solid var(--border); padding-bottom: 6px; }
   .exec-charts-row { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-top: 12px; }
   .exec-chart-card { background: var(--surface); border: 1px solid var(--border); border-radius: 4px; padding: 16px; min-width: 0; }
-  .exec-chart-title { font-family: var(--font-ui); font-size: 11px; color: var(--text-dim); margin-bottom: 10px; }
+  .exec-chart-title { font-family: var(--font-ui); font-size: 11px; color: var(--text-bright); margin-bottom: 10px; }
   .cve-exposure-table { width: 100%; border-collapse: collapse; font-size: 12px; }
   .cve-exposure-table th { text-align: left; padding: 6px 8px; color: var(--text-dim); font-family: var(--font-ui); font-size: 10px; border-bottom: 1px solid var(--border); }
   .cve-exposure-table td { padding: 6px 8px; border-bottom: 1px solid var(--border); }
@@ -1140,8 +1241,9 @@
 
   /* ── FOOTER ── */
   .footer {
-    display: flex; align-items: center; justify-content: space-between;
-    padding: 12px 0 0; margin-top: 2px; border-top: 1px solid var(--border);
+    display: flex; align-items: center; justify-content: center;
+    padding: 14px 0 8px; margin-top: auto; border-top: 1px solid rgba(90, 185, 193, 0.16);
+    width: 100%; box-sizing: border-box;
   }
 
   .footer-left { font-family: var(--font-ui); font-size: 10px; color: var(--text-dim); display: flex; align-items: center; gap: 16px; }
@@ -1202,46 +1304,62 @@
   .ta-submenu {
     display: flex;
     align-items: center;
-    gap: 0;
-    background: var(--surface2);
+    gap: 6px;
+    background: rgba(8, 19, 38, 0.70);
     border: 1px solid var(--border);
-    border-bottom: none;
+    border-radius: var(--radius-lg);
+    padding: 5px 6px;
+    margin-bottom: 20px;
+    box-sizing: border-box;
+    width: 100%;
+    flex-wrap: wrap;
   }
 
   .ta-submenu-btn {
     background: transparent;
-    border: none;
-    border-right: 1px solid var(--border);
-    color: var(--text-dim);
+    border: 1px solid transparent;
+    border-radius: 8px;
+    color: #A9C2D6;
     font-family: var(--font-ui);
-    font-size: 10px;
-    letter-spacing: 0.08em;
-    text-transform: uppercase;
-    padding: 9px 20px;
+    font-size: 11px;
+    font-weight: 500;
+    letter-spacing: 0.04em;
+    padding: 7px 16px;
     cursor: pointer;
-    transition: color .15s, background .15s;
+    transition: all .18s ease;
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
+    white-space: nowrap;
   }
 
-  .ta-submenu-btn:hover { color: var(--text); background: rgba(255,255,255,0.03); }
+  .ta-submenu-btn:hover { color: #FFFFFF; background: rgba(255,255,255,0.05); }
 
   .ta-submenu-btn.active {
-    color: var(--accent);
-    background: var(--surface);
-    border-bottom: 2px solid var(--accent);
+    color: #FFFFFF;
+    background: rgba(18, 44, 78, 0.95);
+    border: 1px solid rgba(90, 185, 193, 0.38);
+    box-shadow: 0 2px 10px rgba(0,0,0,0.28);
   }
 
   .ta-submenu-count {
-    display: inline-block;
-    margin-left: 6px;
-    font-size: 9px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 9.5px;
+    font-family: var(--font-ui);
+    font-weight: 600;
     color: var(--text-dim);
-    background: var(--surface);
-    border: 1px solid var(--border-bright);
-    padding: 1px 6px;
-    border-radius: 10px;
+    background: rgba(14, 31, 58, 0.7);
+    border: 1px solid rgba(90, 185, 193, 0.25);
+    padding: 1px 7px;
+    border-radius: 12px;
+    min-width: 18px;
+    height: 16px;
+    line-height: 1;
   }
 
-  .ta-submenu-btn.active .ta-submenu-count { color: var(--accent); border-color: rgba(47,129,247,0.3); }
+  .ta-submenu-btn.active .ta-submenu-count { color: var(--aqua-300); border-color: rgba(90, 185, 193, 0.5); background: rgba(12, 38, 70, 0.85); }
 
   .ta-restore-btn {
     background: transparent;
@@ -1565,6 +1683,8 @@
   }
 
   .dash-stat-box {
+    position: relative;
+    overflow: hidden;
     background: var(--surface);
     padding: 20px 20px 16px;
     display: flex;
@@ -1575,7 +1695,7 @@
   .dash-stat-label {
     font-family: var(--font-ui);
     font-size: 9px;
-    color: var(--text-dim);
+    color: #DCE4EC;
     text-transform: uppercase;
     letter-spacing: 0.12em;
   }
@@ -1594,7 +1714,7 @@
   .dash-stat-sub {
     font-family: var(--font-ui);
     font-size: 9px;
-    color: var(--text-dim);
+    color: #B8CEE0;
   }
 
   .dash-charts-row {
@@ -2260,11 +2380,128 @@
   </div>
 </div>
 
+<!-- ══════════ TWEET MODAL ══════════ -->
+<div class="modal-overlay" id="xi-modal-overlay" onclick="xiHandleOverlayClick(event)">
+  <div class="modal-card" id="xi-modal-card" style="max-width:680px">
+    <div class="modal-head">
+      <span class="modal-type-dot" style="background:#2F81F7;box-shadow:0 0 6px #2F81F7"></span>
+      <div class="modal-title" id="xi-modal-title" style="font-size:13px"></div>
+      <button class="modal-close" onclick="closeXiModal()" title="Close"><i data-ic="x"></i></button>
+    </div>
+    <div class="modal-body" id="xi-modal-body"></div>
+    <div class="modal-foot">
+      <button class="btn-close-modal" onclick="closeXiModal()">Close</button>
+      <button id="xi-modal-newsletter-btn" onclick="queueTweetForNewsletter()"
+        style="background:rgba(47,129,247,0.08);border:1px solid rgba(47,129,247,0.3);color:var(--accent);padding:6px 14px;font-size:11px;font-family:var(--font-ui);border-radius:3px;cursor:pointer;letter-spacing:.06em">
+        + Newsletter
+      </button>
+      <a class="btn-open-article" id="xi-modal-tweet-link" href="#" target="_blank" rel="noopener noreferrer">Open Tweet <i data-ic="external-link"></i></a>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════ BRAND WATCH RESULTS MODAL ══════════ -->
+<div id="bw-results-modal" class="modal-overlay" onclick="if(event.target===this)bwCloseResultsModal()">
+  <div class="modal-box" style="max-width:960px;max-height:85vh;overflow-y:auto">
+    <button class="modal-close" onclick="bwCloseResultsModal()"><i data-ic="x"></i></button>
+    <div style="padding:18px 18px 0;display:flex;gap:14px;justify-content:flex-end" id="bw-results-modal-toolbar">
+      <label style="display:flex;align-items:center;gap:5px;font-family:var(--font-ui);font-size:10px;color:var(--red);cursor:pointer;white-space:nowrap">
+        <input type="checkbox" id="bw-suspicious-filter" onchange="bwReloadResults()"> Suspicious Only
+      </label>
+      <label style="display:flex;align-items:center;gap:5px;font-family:var(--font-ui);font-size:10px;color:var(--orange);cursor:pointer;white-space:nowrap">
+        <input type="checkbox" id="bw-unacked-filter" onchange="bwReloadResults()"> Unacked Only
+      </label>
+    </div>
+    <div id="bw-results-modal-body" style="padding:0 18px 18px;font-size:12px"></div>
+  </div>
+</div>
+
+<!-- ══════════ DOMAIN WATCH RESULTS MODAL ══════════ -->
+<div id="dw-results-modal" class="modal-overlay" onclick="if(event.target===this)dwCloseResultsModal()">
+  <div class="modal-box" style="max-width:960px;max-height:85vh;overflow-y:auto">
+    <button class="modal-close" onclick="dwCloseResultsModal()"><i data-ic="x"></i></button>
+    <div style="padding:18px 18px 0;display:flex;gap:14px;justify-content:flex-end" id="dw-results-modal-toolbar">
+      <label style="display:flex;align-items:center;gap:5px;font-family:var(--font-ui);font-size:10px;color:var(--text-dim);cursor:pointer;white-space:nowrap">
+        <input type="checkbox" id="dw-hide-parked-filter" onchange="dwReloadResults()"> Hide Parked
+      </label>
+      <label style="display:flex;align-items:center;gap:5px;font-family:var(--font-ui);font-size:10px;color:var(--orange);cursor:pointer;white-space:nowrap">
+        <input type="checkbox" id="dw-unacked-filter" onchange="dwReloadResults()"> Unacked Only
+      </label>
+    </div>
+    <div id="dw-results-modal-body" style="padding:0 18px 18px;font-size:12px"></div>
+  </div>
+</div>
+
+<!-- ══════════ CISA KEV DETAIL MODAL ══════════ -->
+<div id="kev-modal" class="modal-overlay" onclick="if(event.target===this)kevCloseModal()">
+  <div class="modal-box" style="max-width:600px;max-height:78vh;overflow-y:auto;position:relative">
+    <button class="modal-close" onclick="kevCloseModal()"><i data-ic="x"></i></button>
+    <div id="kev-modal-body" style="padding:18px;font-size:12px"></div>
+  </div>
+</div>
+
+<!-- ══════════ RECAP GENERATE CONFIRM MODAL ══════════ -->
+<div class="modal-overlay" id="recap-confirm-overlay" onclick="if(event.target===this)recapConfirmClose()">
+  <div class="modal-card" style="max-width:420px">
+    <div class="modal-head">
+      <span class="modal-type-dot" style="background:var(--accent);box-shadow:0 0 6px var(--accent);margin-top:4px"></span>
+      <div class="modal-title" id="recap-confirm-title">Generate Daily Recap</div>
+      <button class="modal-close" onclick="recapConfirmClose()"><i data-ic="x"></i></button>
+    </div>
+    <div class="modal-body" style="padding:22px 20px;gap:0">
+      <p id="recap-confirm-msg"
+         style="font-size:12px;color:var(--text);font-family:var(--font-ui);margin:0 0 10px;line-height:1.6"></p>
+      <p style="font-size:11px;color:var(--text-dim);font-family:var(--font-ui);margin:0;line-height:1.6">
+        This calls the LLM and may take 10–30 seconds.
+      </p>
+      <div id="recap-confirm-warn"
+           style="display:none;margin-top:12px;padding:8px 10px;border:1px solid rgba(243,156,18,0.4);background:rgba(243,156,18,0.08);border-radius:2px;font-family:var(--font-ui);font-size:11px;color:var(--orange)">
+        <i data-ic="alert-triangle"></i> FORCE REGEN will overwrite the existing recap for this date.
+      </div>
+    </div>
+    <div class="modal-foot" style="display:flex;gap:8px;justify-content:flex-end">
+      <button onclick="recapConfirmClose()"
+        style="background:transparent;border:1px solid var(--border);color:var(--text-dim);padding:7px 18px;font-size:11px;font-family:var(--font-ui);border-radius:2px;cursor:pointer;letter-spacing:.08em">CANCEL</button>
+      <button id="recap-confirm-ok" class="btn-apply" style="font-size:11px;padding:7px 20px">GENERATE</button>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════ PKG VULN MODALS ══════════ -->
+<div id="pv-modal" class="modal-overlay" onclick="if(event.target===this)pvCloseModal()">
+  <div class="modal-box" style="max-width:600px;max-height:78vh;overflow-y:auto;position:relative">
+    <button class="modal-close" onclick="pvCloseModal()"><i data-ic="x"></i></button>
+    <div id="pv-modal-body" style="padding:18px;font-size:12px"></div>
+  </div>
+</div>
+
+<div id="pv-import-modal" class="modal-overlay" onclick="if(event.target===this)document.getElementById('pv-import-modal').classList.remove('open')">
+  <div class="modal-box" style="max-width:560px">
+    <button class="modal-close" onclick="document.getElementById('pv-import-modal').classList.remove('open')"><i data-ic="x"></i></button>
+    <div id="pv-import-modal-body"></div>
+  </div>
+</div>
+
+<div id="pv-edit-modal" class="modal-overlay" onclick="if(event.target===this)pvCloseEditModal()">
+  <div class="modal-box" style="max-width:460px">
+    <button class="modal-close" onclick="pvCloseEditModal()"><i data-ic="x"></i></button>
+    <div id="pv-edit-modal-body"></div>
+  </div>
+</div>
+
+<div id="pv-deps-modal" class="modal-overlay" onclick="if(event.target===this)pvCloseDepsModal()">
+  <div class="modal-box" style="max-width:760px;max-height:85vh;overflow-y:auto">
+    <button class="modal-close" onclick="pvCloseDepsModal()"><i data-ic="x"></i></button>
+    <div id="pv-deps-modal-body"></div>
+  </div>
+</div>
+
 <div class="app">
 
   <div class="app-body">
   <!-- LEFT SIDEBAR (Full-Height Corporate Navigation Shell) -->
-  <aside class="tabs">
+  <aside class="tabs sidebar-mode-expanded">
+    <script>(function(){try{var m=localStorage.getItem('cti_sidebar_mode')||'expanded';document.currentScript.parentElement.className='tabs sidebar-mode-'+m;if(document.body)document.body.classList.add('sidebar-mode-'+m);}catch(e){}})()</script>
     <div class="sidebar-brand" onclick="switchTab('dashboard', document.querySelector('.tab'))">
       <img src="/static/img/logo.png" alt="CTI Nexus" class="brand-logo">
       <div class="sidebar-brand-text">
@@ -2275,65 +2512,88 @@
 
     <div class="sidebar-nav">
       <div class="sidebar-group-label">Overview</div>
-      <button class="tab active" onclick="switchTab('dashboard',this)">
+      <button class="tab active" onclick="switchTab('dashboard',this)" title="Dashboard">
         <svg class="tab-icon" viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg>
         <span class="tab-label">Dashboard</span>
       </button>
-      <button class="tab" onclick="switchTab('exec',this)">
+      <button class="tab" onclick="switchTab('exec',this)" title="Executive Dashboard">
         <svg class="tab-icon" viewBox="0 0 24 24"><line x1="4" y1="20" x2="20" y2="20"/><rect x="6" y="12" width="3" height="8"/><rect x="11" y="7" width="3" height="13"/><rect x="16" y="3" width="3" height="17"/></svg>
         <span class="tab-label">Exec Dashboard</span>
       </button>
-      <button class="tab" onclick="switchTab('recap',this)">
+      <button class="tab" onclick="switchTab('recap',this)" title="Daily Recap">
         <svg class="tab-icon" viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="17" rx="1"/><line x1="3" y1="9" x2="21" y2="9"/><line x1="7" y1="2" x2="7" y2="6"/><line x1="17" y1="2" x2="17" y2="6"/></svg>
         <span class="tab-label">Daily Recap</span>
       </button>
 
       <div class="sidebar-group-label">Threat Feeds</div>
-      <button class="tab" onclick="switchTab('newsroom',this)">
+      <button class="tab" onclick="switchTab('newsroom',this)" title="News Room">
         <svg class="tab-icon" viewBox="0 0 24 24"><path d="M4 4h13a2 2 0 0 1 2 2v13a1 1 0 0 1-1 1H4z"/><path d="M19 6H4v14"/><line x1="8" y1="9" x2="15" y2="9"/><line x1="8" y1="13" x2="15" y2="13"/></svg>
         <span class="tab-label">News Room</span>
         <span class="tab-count" id="newsroom-count">—</span>
       </button>
-      <button class="tab" onclick="switchTab('cvetracker',this)">
+      <button class="tab" onclick="switchTab('cvetracker',this)" title="CVE Tracker">
         <svg class="tab-icon" viewBox="0 0 24 24"><path d="M12 3l8 3v6c0 5-3.4 8.7-8 9-4.6-.3-8-4-8-9V6z"/></svg>
         <span class="tab-label">CVE Tracker</span>
         <span class="tab-count" id="cve-count">—</span>
       </button>
-      <button class="tab" onclick="switchTab('xintel',this)">
+      <button class="tab" onclick="switchTab('xintel',this)" title="X Intel">
         <svg class="tab-icon" viewBox="0 0 24 24"><line x1="5" y1="5" x2="19" y2="19"/><line x1="19" y1="5" x2="5" y2="19"/></svg>
         <span class="tab-label">X Intel</span>
         <span class="tab-count" id="xintel-count">—</span>
       </button>
 
       <div class="sidebar-group-label">Analysis &amp; Monitoring</div>
-      <button class="tab" onclick="switchTab('intelligence',this)">
+      <button class="tab" onclick="switchTab('intelligence',this)" title="Intelligence">
         <svg class="tab-icon" viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><line x1="21" y1="21" x2="16" y2="16"/></svg>
         <span class="tab-label">Intelligence</span>
         <span class="tab-count" id="intel-count"></span>
       </button>
-      <button class="tab" onclick="switchTab('watch',this)">
+      <button class="tab" onclick="switchTab('watch',this)" title="Watch">
         <svg class="tab-icon" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><line x1="3" y1="12" x2="21" y2="12"/><path d="M12 3a15 15 0 0 1 0 18a15 15 0 0 1 0-18"/></svg>
         <span class="tab-label">Watch</span>
       </button>
-      <a class="tab" href="/intelgraph">
+      <a class="tab" href="/intelgraph" title="IntelGraph">
         <svg class="tab-icon" viewBox="0 0 24 24"><circle cx="6" cy="6" r="2.5"/><circle cx="18" cy="6" r="2.5"/><circle cx="12" cy="18" r="2.5"/><line x1="8" y1="7" x2="16" y2="7"/><line x1="7" y1="8.3" x2="11" y2="16"/><line x1="17" y1="8.3" x2="13" y2="16"/></svg>
         <span class="tab-label">IntelGraph</span>
         <span class="sidebar-ext-ic"><i data-ic="arrow-up-right" data-size="12"></i></span>
       </a>
 
       <div class="sidebar-group-label sidebar-group-admin">Administration</div>
-      <button class="tab" id="tab-btn-usermgmt" style="display:none" onclick="switchTab('usermgmt',this)">
+      <button class="tab" id="tab-btn-usermgmt" style="display:none" onclick="switchTab('usermgmt',this)" title="User Management">
         <svg class="tab-icon" viewBox="0 0 24 24"><circle cx="9" cy="8" r="3"/><path d="M3 20c0-3.3 2.7-6 6-6s6 2.7 6 6"/><circle cx="17" cy="9" r="2.3"/><path d="M15 14.2c2.4.4 4 2.4 4 5.8"/></svg>
         <span class="tab-label">User Management</span>
       </button>
     </div>
 
     <div class="sidebar-footer">
-      <div class="sidebar-status">
-        <span class="cti-status-dot cti-status-dot--online"></span>
-        <span>Platform Online</span>
+      <div class="sidebar-control-wrap" id="sidebar-control-wrap">
+        <button type="button" class="sidebar-control-btn" id="sidebar-control-btn" onclick="toggleSidebarMenu(event)" title="Sidebar control" aria-label="Sidebar control">
+          <svg class="sidebar-ctrl-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <rect width="18" height="18" x="3" y="3" rx="4" />
+            <path d="M9 3v18" />
+          </svg>
+        </button>
+
+        <!-- Sidebar Control Popover Menu (Image 3) -->
+        <div class="sidebar-control-menu" id="sidebar-control-menu">
+          <div class="sidebar-control-menu-header">Sidebar control</div>
+          <div class="sidebar-control-menu-divider"></div>
+          <div class="sidebar-control-menu-items">
+            <button type="button" class="sidebar-control-item active" data-mode="expanded" onclick="setSidebarMode('expanded')">
+              <span class="sidebar-control-radio"><span class="sidebar-control-dot"></span></span>
+              <span class="sidebar-control-text">Expanded</span>
+            </button>
+            <button type="button" class="sidebar-control-item" data-mode="collapsed" onclick="setSidebarMode('collapsed')">
+              <span class="sidebar-control-radio"><span class="sidebar-control-dot"></span></span>
+              <span class="sidebar-control-text">Collapsed</span>
+            </button>
+            <button type="button" class="sidebar-control-item" data-mode="expand-on-hover" onclick="setSidebarMode('expand-on-hover')">
+              <span class="sidebar-control-radio"><span class="sidebar-control-dot"></span></span>
+              <span class="sidebar-control-text">Expand on hover</span>
+            </button>
+          </div>
+        </div>
       </div>
-      <div class="version-badge" onclick="openChangelog()" title="View changelog">v{{ version }}</div>
     </div>
   </aside>
 
@@ -2342,8 +2602,8 @@
     <div class="header">
       <div class="header-left">
         <div class="workspace-heading">
-          <div class="workspace-title" id="workspace-page-title">Dashboard</div>
-          <div class="workspace-subtitle" id="workspace-page-subtitle">Global Threat &amp; Intelligence Overview</div>
+          <div class="workspace-title" id="workspace-page-title">Global Threat &amp; Intelligence Overview</div>
+          <div class="workspace-subtitle" id="workspace-page-subtitle" style="display:none;"></div>
         </div>
       </div>
       <div class="header-status">
@@ -2394,7 +2654,8 @@
             Sign In
           </button>
           <button id="header-logout-btn" class="header-btn-signout" onclick="doLogout()" style="display:none">
-            Sign Out
+            <i data-ic="log-out" data-size="13"></i>
+            <span>Sign Out</span>
           </button>
         </div>
       </div>
@@ -2432,9 +2693,17 @@
     {% include 'partials/tab_watch.html' %}
     {% include 'partials/tab_usermgmt.html' %}
     {% include 'partials/tab_apidocs.html' %}
+
+    <!-- FOOTER -->
+    <div class="footer">
+      <div style="font-family:var(--font-ui);font-size:11px;color:var(--text-dim)">
+        CTI Nexus &copy; <span id="footer-year"></span> &mdash; Internal Use Only
+      </div>
+    </div>
     </div>
   </div>
   </div>
+</div>
 
   <!-- ══ Force Change Password Modal ══ -->
   <div class="modal-overlay" id="force-pw-overlay" style="z-index:10000">
@@ -2449,7 +2718,10 @@
         </p>
         <div style="display:flex;align-items:center;font-family:var(--font-ui);font-size:9px;color:var(--text-dim);text-transform:uppercase;letter-spacing:.1em;margin-bottom:6px">
           New Password
-          <span class="pw-info-wrap" style="margin-left:5px"><span class="pw-info-btn">?</span><span class="pw-tooltip" id="pw-tooltip-force"></span></span>
+          <span class="pw-info-wrap" style="margin-left:5px">
+            <span class="pw-info-btn" tabindex="0">?</span>
+            <span class="pw-tooltip" id="pw-tooltip-force"></span>
+          </span>
         </div>
         <input type="password" class="filter-input" id="force-pw-input"
                placeholder="New password…"
@@ -2480,7 +2752,10 @@
         </div>
         <div style="display:flex;align-items:center;font-family:var(--font-ui);font-size:9px;color:var(--text-dim);text-transform:uppercase;letter-spacing:.1em;margin-bottom:6px">
           New Password
-          <span class="pw-info-wrap" style="margin-left:5px"><span class="pw-info-btn">?</span><span class="pw-tooltip" id="pw-tooltip-self"></span></span>
+          <span class="pw-info-wrap" style="margin-left:5px">
+            <span class="pw-info-btn" tabindex="0">?</span>
+            <span class="pw-tooltip" id="pw-tooltip-self"></span>
+          </span>
         </div>
         <input type="password" class="filter-input" id="self-pw-input"
                placeholder="New password…"
@@ -2512,7 +2787,10 @@
         </p>
         <div style="display:flex;align-items:center;font-family:var(--font-ui);font-size:9px;color:var(--text-dim);text-transform:uppercase;letter-spacing:.1em;margin-bottom:6px">
           New Password
-          <span class="pw-info-wrap"><span class="pw-info-btn">?</span><span class="pw-tooltip" id="pw-tooltip-dyn2"></span></span>
+          <span class="pw-info-wrap">
+            <span class="pw-info-btn" tabindex="0">?</span>
+            <span class="pw-tooltip" id="pw-tooltip-dyn2"></span>
+          </span>
         </div>
         <input type="password" class="filter-input" id="um-reset-pw-input"
                placeholder="New password…"
@@ -2690,16 +2968,6 @@
       </div>
     </div>
   </div>
-
-
-  <!-- FOOTER -->
-  <div class="footer" style="justify-content:center; margin-bottom: 10px;">
-    <div style="font-family:var(--font-ui);font-size:11px;color:var(--text-dim)">
-      CTI Nexus &copy; <span id="footer-year"></span> &mdash; Internal Use Only
-    </div>
-  </div>
-
-</div>
 
 <script src="/static/js/newsletter_queue.js"></script>
 <script src="/static/js/newsroom/core.js"></script>

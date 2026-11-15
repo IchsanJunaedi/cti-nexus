@@ -26,13 +26,15 @@
   .card {
     position: relative;
     z-index: 1;
-    background: linear-gradient(180deg, rgba(11, 25, 48, 0.94) 0%, rgba(8, 18, 35, 0.96) 100%);
-    border: 1px solid rgba(90, 185, 193, 0.34);
+    background: rgba(4, 50, 86, 0.03);
+    backdrop-filter: blur(14px);
+    -webkit-backdrop-filter: blur(14px);
+    border: 1px solid rgba(147, 177, 200, 0.39);
     border-radius: 16px;
     padding: 38px 34px 30px;
     width: 100%;
     max-width: 390px;
-    box-shadow: 0 24px 60px rgba(2, 6, 15, 0.65), inset 0 1px 0 rgba(255, 255, 255, 0.08);
+    box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
   }
   .logo-wrap {
     display: flex;
@@ -51,14 +53,14 @@
     font-family: var(--font-display);
     font-size: 22px;
     font-weight: 700;
-    color: var(--text-bright);
+    color: #FFFFFF;
     letter-spacing: -0.025em;
     text-align: center;
   }
   .subtitle {
     font-family: var(--font-ui);
     font-size: 13px;
-    color: var(--text-dim);
+    color: #93B1C8;
     text-align: center;
     margin-bottom: 28px;
   }
@@ -68,33 +70,41 @@
     font-family: var(--font-ui);
     font-size: 12px;
     font-weight: 500;
-    color: var(--text-dim);
+    color: #DCE4EC;
     margin-bottom: 6px;
   }
   .field input {
     width: 100%;
-    background: rgba(6, 14, 28, 0.65);
-    border: 1px solid rgba(90, 185, 193, 0.24);
+    background: rgba(255, 255, 255, 0.05);
+    border: none !important;
+    outline: none !important;
     border-radius: 10px;
     color: var(--text-bright);
     font-family: var(--font-ui);
     font-size: 14px;
-    padding: 10px 13px;
-    outline: none;
-    transition: border-color .15s, box-shadow .15s, background .15s;
+    padding: 11px 14px;
+    box-shadow: none !important;
+    transition: background .15s ease;
+  }
+  .field input::placeholder {
+    color: rgba(147, 177, 200, 0.45);
   }
   .field input:hover {
-    border-color: rgba(90, 185, 193, 0.42);
+    background: rgba(255, 255, 255, 0.08);
+    border: none !important;
+    outline: none !important;
+    box-shadow: none !important;
   }
   .field input:focus {
-    border-color: var(--aqua-300);
-    background: rgba(8, 19, 36, 0.85);
-    box-shadow: 0 0 0 3px rgba(90, 185, 193, 0.18);
+    background: rgba(255, 255, 255, 0.11);
+    border: none !important;
+    outline: none !important;
+    box-shadow: none !important;
   }
   .btn-primary {
     width: 100%;
     background: linear-gradient(135deg, #165B99, #2D87A1);
-    border: 1px solid rgba(124, 232, 216, 0.42);
+    border: 1px solid rgba(147, 177, 200, 0.39);
     border-radius: 10px;
     color: #FFFFFF;
     font-family: var(--font-ui);
@@ -103,21 +113,21 @@
     padding: 11px;
     cursor: pointer;
     margin-top: 8px;
-    box-shadow: 0 4px 16px rgba(17, 79, 136, 0.45);
+    box-shadow: 0 4px 16px rgba(17, 79, 136, 0.35);
     transition: transform .12s, box-shadow .15s, border-color .15s, filter .15s;
   }
   .btn-primary:hover:not(:disabled) {
     filter: brightness(1.08);
-    border-color: var(--mint-200);
+    border-color: rgba(147, 177, 200, 0.70);
     box-shadow: 0 6px 20px rgba(45, 135, 161, 0.50);
   }
   .btn-primary:disabled { opacity: 0.55; cursor: default; }
   .btn-sso {
     width: 100%;
-    background: rgba(15, 34, 64, 0.55);
-    border: 1px solid rgba(90, 185, 193, 0.24);
+    background: rgba(255, 255, 255, 0.04);
+    border: 1px solid rgba(147, 177, 200, 0.30);
     border-radius: 10px;
-    color: var(--text);
+    color: var(--text-bright);
     font-family: var(--font-ui);
     font-size: 13px;
     font-weight: 500;
@@ -130,9 +140,9 @@
     text-align: center;
   }
   .btn-sso:hover {
-    border-color: var(--aqua-300);
-    background: rgba(24, 52, 94, 0.72);
-    color: var(--text-bright);
+    border-color: rgba(147, 177, 200, 0.60);
+    background: rgba(255, 255, 255, 0.08);
+    color: #FFFFFF;
   }
   .error {
     display: none;

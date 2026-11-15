@@ -2,6 +2,9 @@
 async function loadAllPanels() {
   Object.values(state).forEach(s => s.page = 1);
 
+  // Background prefetch for badges so counters appear immediately
+  prefetchTabBadges();
+
   await loadTpCveSet();
 
   const [apacTotal, globalTotal, rwTotal, indoTotal] = await Promise.all([
@@ -27,6 +30,101 @@ async function loadAllPanels() {
   setTxt('last-update', new Date().toLocaleString('en-GB', {
     day:'2-digit', month:'short', year:'numeric', hour:'2-digit', minute:'2-digit',
   }) + ' WIB');
+}
+
+// ── PREFETCH TAB & SUBMENU BADGES (Non-blocking background sync) ──
+async function prefetchTabBadges() {
+  const token = (typeof _jwtToken !== 'undefined' && _jwtToken) || localStorage.getItem('cti_jwt');
+  const ah = token ? { 'Authorization': 'Bearer ' + token } : (typeof _authHeader === 'function' ? _authHeader() : {});
+  const cid = typeof getActiveClientId === 'function' ? getActiveClientId() : (localStorage.getItem('active_client_id') || 'default');
+  const ch = { ...ah, 'X-Client-ID': cid };
+
+  // 1. X Intel Badge
+  try {
+    fetch('/api/tweets?page=1&page_size=1', { headers: ah })
+      .then(r => r.ok ? r.json() : null)
+      .then(d => {
+        if (d && typeof d.total === 'number') {
+          const el = document.getElementById('xintel-count');
+          if (el) el.textContent = d.total;
+          if (typeof _xiState === 'object' && _xiState) _xiState.total = d.total;
+        }
+      })
+      .catch(() => {});
+  } catch(e) {}
+
+  // 2. Pkg Vuln Badge & Quick Stats
+  try {
+    if (typeof pvLoadStats === 'function') {
+      pvLoadStats().catch(() => {});
+    } else {
+      fetch('/api/pkgvuln/stats', { headers: ch })
+        .then(r => r.ok ? r.json() : null)
+        .then(d => {
+          if (d && d.total_vulns != null) {
+            const el = document.getElementById('pv-submenu-count');
+            if (el) el.textContent = d.total_vulns;
+            const b = document.getElementById('pv-vuln-count-badge');
+            if (b) b.textContent = d.total_vulns;
+          }
+        })
+        .catch(() => {});
+    }
+  } catch(e) {}
+
+  // 3. CISA KEV Badge & Quick Stats
+  try {
+    if (typeof kevLoadStats === 'function') {
+      kevLoadStats().catch(() => {});
+    } else {
+      fetch('/api/cisa-kev-catalog/stats', { headers: ch })
+        .then(r => r.ok ? r.json() : null)
+        .then(d => {
+          if (d && d.total != null) {
+            const el = document.getElementById('kev-submenu-count');
+            if (el) el.textContent = d.total;
+          }
+        })
+        .catch(() => {});
+    }
+  } catch(e) {}
+
+  // 4. Tech Stack Badge
+  try {
+    fetch('/api/techstack?page=1&page_size=1', { headers: ch })
+      .then(r => r.ok ? r.json() : null)
+      .then(d => {
+        if (d && typeof d.total === 'number') {
+          const el = document.getElementById('ts-submenu-count');
+          if (el) el.textContent = d.total;
+          const totEl = document.getElementById('ts-total');
+          if (totEl) totEl.textContent = `${d.total} tech stack${d.total !== 1 ? 's' : ''} tracked`;
+          if (typeof _tsState === 'object' && _tsState) _tsState.total = d.total;
+        }
+      })
+      .catch(() => {});
+  } catch(e) {}
+
+  // 5. Newsroom Filtered Articles Badge
+  try {
+    fetch('/api/filtered-articles?page=1&page_size=1', { headers: ah })
+      .then(r => r.ok ? r.json() : null)
+      .then(d => {
+        if (d && typeof d.total === 'number') {
+          const el = document.getElementById('newsroom-count-filtered');
+          if (el) el.textContent = d.total;
+          const fc = document.getElementById('filtered-count');
+          if (fc) fc.textContent = d.total + ' items';
+        }
+      })
+      .catch(() => {});
+  } catch(e) {}
+}
+
+if (document.readyState === 'loading') {
+  document.addEventListener('DOMContentLoaded', () => prefetchTabBadges());
+} else {
+  prefetchTabBadges();
 }
 
 function refreshPanel(panelId) {
@@ -205,8 +303,8 @@ function switchTab(tabId, el) {
   if (meta) {
     const tEl = document.getElementById('workspace-page-title');
     const sEl = document.getElementById('workspace-page-subtitle');
-    if (tEl) tEl.textContent = meta[0];
-    if (sEl) sEl.textContent = meta[1];
+    if (tEl) tEl.textContent = meta[1] || meta[0];
+    if (sEl) sEl.textContent = '';
   }
   const hideBar = tabId === 'cvetracker' || tabId === 'intelligence' || tabId === 'exec' || tabId === 'usermgmt' || tabId === 'xintel' || tabId === 'recap' || tabId === 'apidocs' || tabId === 'watch';
   document.querySelector('.filter-bar').style.display = hideBar ? 'none' : '';

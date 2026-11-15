@@ -422,7 +422,7 @@ async function pvScanAll(btn) {
     _pvStatus(`Scan failed: ${e.message}`, false);
   } finally {
     btn.disabled = false;
-    btn.textContent = orig;
+    btn.innerHTML = `${ic('refresh', 12)} SCAN ALL NOW`;
   }
 }
 
@@ -671,7 +671,7 @@ async function pvResolveDeps(pkgId, btn) {
     _pvStatus(`Resolve failed: ${e.message}`, false);
   } finally {
     btn.disabled = false;
-    btn.textContent = orig;
+    btn.innerHTML = `${ic('refresh', 12)} SCAN ALL NOW`;
   }
 }
 
@@ -827,7 +827,7 @@ async function pvResolveDepsFromModal(pkgId, scanTransitive, btn) {
     _pvStatus(`Resolve failed: ${e.message}`, false);
   } finally {
     btn.disabled = false;
-    btn.textContent = orig;
+    btn.innerHTML = `${ic('refresh', 12)} SCAN ALL NOW`;
   }
 }
 

@@ -18,6 +18,95 @@ function _execTrend(current, prev) {
   return `<span style="color:${color}">${arrow}${pct}% vs prev period</span>`;
 }
 
+function _synthesizeTrendPoints(prev, curr, steps = 6) {
+  const p = Number(prev) || 0;
+  const c = Number(curr) || 0;
+  if (!p && !c) return [0, 0, 0, 0, 0, 0];
+  const delta = c - p;
+  const points = [];
+  for (let i = 0; i < steps; i++) {
+    const t = i / (steps - 1);
+    const wobble = (i > 0 && i < steps - 1) ? ((i % 2 === 1 ? 1 : -0.7) * delta * 0.08) : 0;
+    points.push(Math.max(0, Math.round(p + delta * t + wobble)));
+  }
+  return points;
+}
+
+function _buildKpiSparkline(containerId, rawPoints, delta) {
+  const container = document.getElementById(containerId);
+  if (!container) return;
+
+  let pts = (rawPoints || []).map(p => Number(p)).filter(p => !isNaN(p));
+  if (pts.length < 2) {
+    if (pts.length === 1) {
+      pts = [pts[0] * 0.95, pts[0]];
+    } else {
+      pts = [10, 10];
+    }
+  }
+
+  const minVal = Math.min(...pts);
+  const maxVal = Math.max(...pts);
+  const range = maxVal - minVal || (maxVal * 0.1) || 1;
+
+  const w = 104;
+  const h = 46;
+  const padTop = 6;
+  const padBottom = 6;
+  const padLeft = 4;
+  const padRight = 8;
+  const plotW = w - padLeft - padRight;
+  const plotH = h - padTop - padBottom;
+
+  const coords = pts.map((val, idx) => {
+    const x = padLeft + (idx / (pts.length - 1)) * plotW;
+    const y = padTop + plotH - ((val - minVal) / range) * plotH;
+    return { x: Math.round(x * 10) / 10, y: Math.round(y * 10) / 10 };
+  });
+
+  let pathD = `M ${coords[0].x},${coords[0].y}`;
+  for (let i = 0; i < coords.length - 1; i++) {
+    const p0 = coords[Math.max(0, i - 1)];
+    const p1 = coords[i];
+    const p2 = coords[i + 1];
+    const p3 = coords[Math.min(coords.length - 1, i + 2)];
+
+    const cp1x = p1.x + (p2.x - p0.x) / 6;
+    const cp1y = p1.y + (p2.y - p0.y) / 6;
+    const cp2x = p2.x - (p3.x - p1.x) / 6;
+    const cp2y = p2.y - (p3.y - p1.y) / 6;
+
+    pathD += ` C ${cp1x.toFixed(1)},${cp1y.toFixed(1)} ${cp2x.toFixed(1)},${cp2y.toFixed(1)} ${p2.x.toFixed(1)},${p2.y.toFixed(1)}`;
+  }
+
+  const last = coords[coords.length - 1];
+  const first = coords[0];
+  const areaD = `${pathD} L ${last.x},${h} L ${first.x},${h} Z`;
+
+  const isUp = delta > 0;
+  const isDown = delta < 0;
+  // Security metrics: up = bad (#F87171), down = good (#34D399), neutral = sky (#38BDF8)
+  const strokeColor = isUp ? '#F87171' : isDown ? '#34D399' : '#38BDF8';
+  const gradId = `spark-grad-${containerId}`;
+
+  const svg = `<svg viewBox="0 0 ${w} ${h}" preserveAspectRatio="none" style="width:100%;height:100%;overflow:visible;">
+    <defs>
+      <linearGradient id="${gradId}" x1="0%" y1="0%" x2="0%" y2="100%">
+        <stop offset="0%" stop-color="${strokeColor}" stop-opacity="0.32" />
+        <stop offset="100%" stop-color="${strokeColor}" stop-opacity="0.01" />
+      </linearGradient>
+      <filter id="glow-${containerId}" x="-30%" y="-30%" width="160%" height="160%">
+        <feDropShadow dx="0" dy="0" stdDeviation="2.5" flood-color="${strokeColor}" flood-opacity="0.7"/>
+      </filter>
+    </defs>
+    <path d="${areaD}" fill="url(#${gradId})" />
+    <path d="${pathD}" fill="none" stroke="${strokeColor}" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+    <circle cx="${last.x}" cy="${last.y}" r="3" fill="#FFFFFF" stroke="${strokeColor}" stroke-width="2" filter="url(#glow-${containerId})" />
+  </svg>`;
+
+  container.innerHTML = svg;
+}
+
 function drillToNewsroomTA(taName) {
   const tabBtn = document.querySelector('.tab[onclick*="\'newsroom\'"]');
   if (tabBtn) switchTab('newsroom', tabBtn);
@@ -58,12 +147,56 @@ function _execApplyViewConfig(vc) {
   });
   const badge = document.getElementById('exec-role-badge');
   if (badge) {
-    badge.textContent = `View: ${(vc.role || 'analyst').toUpperCase()}`;
-    badge.style.display = '';
+    const r = (vc.role || 'analyst').toLowerCase();
+    const roleName = r.charAt(0).toUpperCase() + r.slice(1);
+    badge.innerHTML = `<span class="exec-role-label">View:</span> <span class="exec-role-val">${roleName}</span>`;
+    badge.className = `exec-role-badge exec-role-badge--${r}`;
+    badge.style.display = 'inline-flex';
   }
 }
 
-async function loadExecDashboard() {
+// ── SessionStorage Cache & Loading Helpers for Exec Dashboard ──
+const _EXEC_CACHE_PREFIX = 'cti_exec_v2_';
+const _EXEC_CACHE_TTL = 5 * 60 * 1000; // 5 minutes
+
+function _getExecCache(key) {
+  try {
+    const raw = sessionStorage.getItem(key);
+    if (!raw) return null;
+    const item = JSON.parse(raw);
+    if (Date.now() - item.ts < _EXEC_CACHE_TTL) {
+      return item.data;
+    }
+  } catch (e) {}
+  return null;
+}
+
+function _setExecCache(key, data) {
+  try {
+    sessionStorage.setItem(key, JSON.stringify({ ts: Date.now(), data }));
+  } catch (e) {}
+}
+
+function _execSetKpisLoading() {
+  const setSkeleton = (id, cls = 'kpi-skeleton') => {
+    const el = document.getElementById(id);
+    if (el) el.innerHTML = `<span class="${cls}"></span>`;
+  };
+  setSkeleton('exec-kpi-total');
+  setSkeleton('exec-kpi-sectors');
+  setSkeleton('exec-kpi-tas');
+  setSkeleton('exec-kpi-cve-crit');
+  setSkeleton('exec-kpi-top-risk', 'kpi-skeleton kpi-skeleton-wide');
+  setSkeleton('exec-kpi-spike-count', 'kpi-skeleton kpi-skeleton-sm');
+  setSkeleton('exec-kpi-confirmed-rate', 'kpi-skeleton kpi-skeleton-sm');
+
+  ['exec-kpi-total-chart', 'exec-kpi-sectors-chart', 'exec-kpi-tas-chart'].forEach(id => {
+    const el = document.getElementById(id);
+    if (el) el.innerHTML = '';
+  });
+}
+
+async function loadExecDashboard(forceRefresh = false) {
   const days          = document.getElementById('exec-days').value;
   const incidentOnly  = document.getElementById('exec-incident-only')?.checked ?? true;
   const confirmedOnly = document.getElementById('exec-confirmed-only')?.checked ?? false;
@@ -78,11 +211,45 @@ async function loadExecDashboard() {
     if (_execRolePreview) roleSwitcher.value = _execRolePreview;
   }
 
+  const cid = typeof getActiveClientId === 'function' ? getActiveClientId() : (localStorage.getItem('active_client_id') || 'default');
+  const cacheKey = `${_EXEC_CACHE_PREFIX}${days}_${incidentOnly}_${confirmedOnly}_${_execRolePreview || ''}_${cid}`;
+
+  if (!forceRefresh) {
+    const cached = _getExecCache(cacheKey);
+    if (cached) {
+      _renderExecDashboardData(cached);
+      // Quiet background revalidation
+      _fetchExecDashboard(url, cacheKey, false);
+      return;
+    }
+  }
+
+  _execSetKpisLoading();
+  await _fetchExecDashboard(url, cacheKey, true);
+}
+
+async function _fetchExecDashboard(url, cacheKey, isInitial) {
   try {
     const resp = await fetch(url, { headers: _authAndClientHeaders() });
+    if (!resp.ok) throw new Error(resp.statusText);
     const d = await resp.json();
-    _execDataV2 = d;
+    _setExecCache(cacheKey, d);
+    _renderExecDashboardData(d);
+  } catch (e) {
+    console.error('Exec idea dashboard error:', e);
+    if (isInitial) {
+      ['exec-kpi-total', 'exec-kpi-sectors', 'exec-kpi-tas', 'exec-kpi-cve-crit', 'exec-kpi-top-risk', 'exec-kpi-spike-count', 'exec-kpi-confirmed-rate'].forEach(id => {
+        const el = document.getElementById(id);
+        if (el && el.innerHTML.includes('kpi-skeleton')) el.textContent = '—';
+      });
+    }
+  }
+}
 
+function _renderExecDashboardData(d) {
+  if (!d) return;
+  try {
+    _execDataV2 = d;
     _execApplyViewConfig(d.view_config);
 
     // ── KPIs ──
@@ -95,6 +262,29 @@ async function loadExecDashboard() {
     document.getElementById('exec-kpi-total-trend').innerHTML   = _execTrend(d.total_incidents, d.prev_total);
     document.getElementById('exec-kpi-sectors-trend').innerHTML = _execTrend(d.active_sectors ?? d.top_sectors.length, d.prev_active_sectors);
     document.getElementById('exec-kpi-tas-trend').innerHTML     = _execTrend(d.unique_ta_count ?? d.ta_leaderboard.length, d.prev_unique_ta);
+
+    // Sparkline Area Charts for trend cards
+    let totalPoints = [];
+    if (d.sector_trend && d.sector_trend.length && d.months && d.months.length) {
+      totalPoints = d.months.map((_, mIdx) => d.sector_trend.reduce((sum, item) => sum + (item.data[mIdx] || 0), 0));
+    }
+    if (totalPoints.length < 2) {
+      totalPoints = _synthesizeTrendPoints(d.prev_total, d.total_incidents, 6);
+    }
+    const totalDelta = (d.total_incidents || 0) - (d.prev_total || 0);
+    _buildKpiSparkline('exec-kpi-total-chart', totalPoints, totalDelta);
+
+    const currentSectors = d.active_sectors ?? (d.top_sectors ? d.top_sectors.length : 0);
+    const prevSectors = d.prev_active_sectors || 0;
+    const sectorsDelta = currentSectors - prevSectors;
+    const sectorsPoints = _synthesizeTrendPoints(prevSectors, currentSectors, 6);
+    _buildKpiSparkline('exec-kpi-sectors-chart', sectorsPoints, sectorsDelta);
+
+    const currentTas = d.unique_ta_count ?? (d.ta_leaderboard ? d.ta_leaderboard.length : 0);
+    const prevTas = d.prev_unique_ta || 0;
+    const tasDelta = currentTas - prevTas;
+    const tasPoints = _synthesizeTrendPoints(prevTas, currentTas, 6);
+    _buildKpiSparkline('exec-kpi-tas-chart', tasPoints, tasDelta);
 
     // T1-1 + T3: Highest Risk Sector KPI + formula tooltip
     const topRisk = d.sector_risk_scores?.[0];
@@ -115,21 +305,29 @@ async function loadExecDashboard() {
     // T1-2: Spike Alert Banner
     const bannerEl = document.getElementById('exec-spike-banner');
     if (spikeCount > 0) {
-      const spikesHtml = (d.industry_spikes || []).map(sp => `
-        <div style="display:flex;align-items:center;gap:10px;padding:7px 12px;background:rgba(88,166,255,0.07);border:1px solid rgba(88,166,255,0.25);border-radius:3px;flex-shrink:0;">
-          <span style="color:var(--accent3);font-size:16px;line-height:1">${ic("zap", 15)}</span>
-          <div>
-            <div style="font-family:var(--font-ui);font-size:10px;color:var(--accent3);text-transform:uppercase;">${toTitleCase(sp.entity)}</div>
-            <div style="font-family:var(--font-ui);font-size:9px;color:var(--text-dim);">z=${sp.z_score} · ${sp.count} incidents · ${sp.date}</div>
+      const spikesHtml = (d.industry_spikes || []).map(sp => {
+        const isHigh = sp.severity === 'high';
+        return `
+        <div class="exec-spike-item ${isHigh ? 'high' : 'med'}">
+          <div class="exec-spike-item-left">
+            <span class="exec-spike-icon">${ic("zap", 14)}</span>
+            <div style="min-width:0">
+              <div class="exec-spike-name" title="${esc(sp.entity)}">${toTitleCase(sp.entity)}</div>
+              <div class="exec-spike-meta">z=${sp.z_score} · ${sp.count} incidents · ${sp.date}</div>
+            </div>
           </div>
-          <span style="font-size:9px;padding:1px 6px;border-radius:2px;background:${sp.severity==='high'?'rgba(218,54,51,0.2)':'rgba(88,166,255,0.2)'};color:${sp.severity==='high'?'var(--red)':'var(--accent3)'};">${sp.severity.toUpperCase()}</span>
-        </div>`).join('');
+          <span class="exec-spike-badge ${isHigh ? 'high' : 'med'}">${sp.severity.toUpperCase()}</span>
+        </div>`;
+      }).join('');
       bannerEl.style.display = 'block';
+      bannerEl.className = 'exec-spike-panel';
       bannerEl.innerHTML = `
-        <div style="font-family:var(--font-ui);font-size:10px;color:var(--accent3);text-transform:uppercase;letter-spacing:.08em;margin-bottom:8px;">${ic("zap", 12)} Anomaly Alerts — Sectors with statistically significant activity spikes</div>
-        <div style="display:flex;flex-wrap:wrap;gap:8px;">${spikesHtml}</div>`;
+        <div class="exec-spike-header">${ic("zap", 13)} Anomaly Alerts — Sectors with statistically significant activity spikes</div>
+        <div class="exec-spike-grid">${spikesHtml}</div>`;
+      if (typeof hydrateIcons === 'function') hydrateIcons(bannerEl);
     } else {
       bannerEl.style.display = 'none';
+      bannerEl.className = '';
     }
 
     // T1-1 + T3-14: Sector Risk Matrix with peer benchmark

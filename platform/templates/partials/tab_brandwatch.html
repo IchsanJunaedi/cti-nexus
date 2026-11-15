@@ -1,7 +1,7 @@
   <div id="watch-subtab-brand" style="display:none">
 
     <!-- Stats row -->
-    <div id="bw-stats-grid" class="cve-grid" style="margin-bottom:14px">
+    <div id="bw-stats-grid" class="cve-grid cve-grid--5" style="margin-bottom:16px">
       <div class="cve-stat-box">
         <div class="cve-stat-label">Brands Watched</div>
         <div class="cve-stat-value info" id="bw-stat-brands">—</div>
@@ -25,7 +25,7 @@
     </div>
 
     <!-- Add domain bar -->
-    <div style="display:flex;gap:8px;align-items:center;margin-bottom:12px;flex-wrap:wrap">
+    <div class="watch-control-panel">
       <input type="text" class="filter-input" id="bw-name-input" placeholder="Full domain (e.g. example.com)…" style="width:260px"
              onkeydown="if(event.key==='Enter')bwAddDomain()">
       <button class="btn-apply" onclick="bwAddDomain()">+ Watch</button>
@@ -52,23 +52,7 @@
         </thead>
         <tbody id="bw-tbody"></tbody>
       </table>
-    </div>
-    <div id="bw-pager"></div>
-
-    <!-- Results modal -->
-    <div id="bw-results-modal" class="modal-overlay" onclick="if(event.target===this)bwCloseResultsModal()">
-      <div class="modal-box" style="max-width:960px;max-height:85vh;overflow-y:auto">
-        <button class="modal-close" onclick="bwCloseResultsModal()"><i data-ic="x"></i></button>
-        <div style="padding:18px 18px 0;display:flex;gap:14px;justify-content:flex-end" id="bw-results-modal-toolbar">
-          <label style="display:flex;align-items:center;gap:5px;font-family:var(--font-ui);font-size:10px;color:var(--red);cursor:pointer;white-space:nowrap">
-            <input type="checkbox" id="bw-suspicious-filter" onchange="bwReloadResults()"> Suspicious Only
-          </label>
-          <label style="display:flex;align-items:center;gap:5px;font-family:var(--font-ui);font-size:10px;color:var(--orange);cursor:pointer;white-space:nowrap">
-            <input type="checkbox" id="bw-unacked-filter" onchange="bwReloadResults()"> Unacked Only
-          </label>
-        </div>
-        <div id="bw-results-modal-body" style="padding:0 18px 18px;font-size:12px"></div>
-      </div>
+      <div id="bw-pager"></div>
     </div>
 
   </div>

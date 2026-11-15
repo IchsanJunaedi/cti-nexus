@@ -2,7 +2,7 @@
   <div id="cveview-kev" style="display:none">
 
     <!-- Stats row -->
-    <div class="cve-grid" style="margin-bottom:14px">
+    <div class="cve-grid cve-grid--5" style="margin-bottom:16px">
       <div class="cve-stat-box"><div class="cve-stat-label">Total KEV Entries</div><div class="cve-stat-value info" id="kev-stat-total">—</div><div class="cve-stat-sub">Full CISA catalog</div></div>
       <div class="cve-stat-box"><div class="cve-stat-label">Matched to Tracker</div><div class="cve-stat-value" style="color:var(--green)" id="kev-stat-matched">—</div><div class="cve-stat-sub">Also in CVE Tracker</div></div>
       <div class="cve-stat-box"><div class="cve-stat-label">Unmatched</div><div class="cve-stat-value med" id="kev-stat-unmatched">—</div><div class="cve-stat-sub">Not tracked yet</div></div>
@@ -11,7 +11,7 @@
     </div>
 
     <!-- Filter bar -->
-    <div class="filter-bar" style="margin-bottom:14px">
+    <div class="filter-bar" style="margin-bottom:16px">
       <span class="filter-label">Filter</span>
       <div class="filter-group">
         <input type="text" class="filter-input" id="kev-search"
@@ -26,8 +26,10 @@
           <input type="checkbox" id="kev-ransomware-filter" onchange="kevLoadEntries()"> Ransomware Only
         </label>
       </div>
-      <button class="btn-reset" onclick="kevResetFilters()">Reset</button>
-      <button class="btn-apply" onclick="kevLoadEntries()">APPLY</button>
+      <div class="filter-actions">
+        <button class="btn-reset" onclick="kevResetFilters()">Reset</button>
+        <button class="btn-apply" onclick="kevLoadEntries()">APPLY</button>
+      </div>
     </div>
 
     <div class="cve-table-wrapper">
@@ -50,14 +52,6 @@
       <button class="pager-btn" id="kev-page-prev" onclick="kevChangePage(_kevPage-1)" disabled><i data-ic="chevron-left" data-size="12"></i> Prev</button>
       <span id="kev-page-info" style="font-family:var(--font-ui);font-size:10px;color:var(--text-dim)"></span>
       <button class="pager-btn" id="kev-page-next" onclick="kevChangePage(_kevPage+1)" disabled>Next <i data-ic="chevron-right" data-size="12"></i></button>
-    </div>
-
-    <!-- Detail modal -->
-    <div id="kev-modal" class="modal-overlay" onclick="if(event.target===this)kevCloseModal()">
-      <div class="modal-box" style="max-width:600px;max-height:78vh;overflow-y:auto;position:relative">
-        <button class="modal-close" onclick="kevCloseModal()"><i data-ic="x"></i></button>
-        <div id="kev-modal-body" style="padding:18px;font-size:12px"></div>
-      </div>
     </div>
 
   </div>

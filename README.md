@@ -1,5 +1,5 @@
-# CTI Nexus 🛡️
-### Autonomous Cyber Threat Intelligence & Defensive Operations Platform
+# CTI Nexus : Platform Intelijen Ancaman Siber Otonom dan Operasi Pertahanan Terpadu
+### Autonomous Cyber Threat Intelligence & Integrated Defensive Operations Platform
 **A Next-Generation Defensive Shield Ecosystem for Proactive Threat Detection and Neutralization**
 
 [![Python](https://img.shields.io/badge/Python-3.11+-3776AB?logo=python&logoColor=white)](https://python.org)
@@ -13,7 +13,7 @@
 
 ---
 
-## 📌 Ringkasan Eksekutif: Transformasi Paradigma Pertahanan Siber
+## Ringkasan Eksekutif: Transformasi Paradigma Pertahanan Siber
 
 Dalam lanskap ancaman modern, pertahanan siber yang tangguh (**Defensive Shield**) tidak dapat lagi mengandalkan respons pasif setelah insiden terjadi. Ancaman persisten seperti kampanye *Advanced Persistent Threat* (APT), ransomware terdistribusi, dan eksploitasi kerentanan *Zero-Day* memerlukan **arsitektur penangkalan proaktif** yang mampu mengantisipasi serangan sebelum menembus perimeter.
 
@@ -24,7 +24,7 @@ Dalam lanskap ancaman modern, pertahanan siber yang tangguh (**Defensive Shield*
 
 ---
 
-## 🏗️ Arsitektur Sistem (End-to-End Pipeline)
+## Arsitektur Sistem (End-to-End Pipeline)
 
 CTI Nexus dibangun menggunakan arsitektur **Monorepo terpadu** yang memisahkan subsistem pengumpulan intelijen (*Ingestion Engine*) dengan subsistem analisis dan visualisasi taktis (*Defense Platform*), terhubung melalui basis data MongoDB berkecepatan tinggi.
 
@@ -64,7 +64,7 @@ flowchart TD
 
 ---
 
-## 📁 Struktur Direktori Repositori (Monorepo)
+## Struktur Direktori Repositori (Monorepo)
 
 ```text
 cti-nexus/
@@ -103,13 +103,13 @@ cti-nexus/
 
 ---
 
-## 🚀 Fitur Unggulan (Defensive Shield Capabilities)
+## Fitur Unggulan (Defensive Shield Capabilities)
 
 ### 1. Executive Cyber Radar & Threat Treemap
 Memberikan visibilitas instan kepada pengambil keputusan dan analis mengenai lanskap ancaman yang sedang berlangsung: volume insiden, tren korban ransomware berdasarkan sektor industri, dan persebaran geografis target serangan.
 
 ### 2. IntelGraph: Visualisasi Topologi Ancaman (Force-Directed Graph)
-Menghubungkan entitas intelijen secara dinamis antara **Threat Actors $\rightarrow$ Vulnerabilities (CVE) $\rightarrow$ IOCs $\rightarrow$ Target Sektor**. Memungkinkan analis melacak alur kampanye siber dan infrastruktur lawan secara visual dan mendalam.
+Menghubungkan entitas intelijen secara dinamis antara **Threat Actors -> Vulnerabilities (CVE) -> IOCs -> Target Sektor**. Memungkinkan analis melacak alur kampanye siber dan infrastruktur lawan secara visual dan mendalam.
 
 ### 3. Matriks Penangkalan MITRE D3FEND
 Bukan sekadar mencatat bagaimana musuh menyerang (ATT&CK), CTI Nexus memetakan teknik serangan ke tindakan mitigasi dan penangkalan aktif berdasarkan standar **MITRE D3FEND** (misal: *File Hashing, Decoy Environment, Network Traffic Filtering, Inbound Traffic Authentication*).
@@ -122,7 +122,7 @@ Mendukung ekspor data intelijen ancaman ke format standar internasional OASIS ST
 
 ---
 
-## ⚡ Panduan Instalasi & Menjalankan
+## Panduan Instalasi dan Menjalankan
 
 ### Persyaratan Sistem
 - Python 3.11+
@@ -176,7 +176,7 @@ python3 cisaThreat.py
 
 ---
 
-## 🌐 Live Demo & Akses Pengujian
+## Live Demo dan Akses Pengujian
 
 Bagi evaluator dan peninjau yang ingin menguji prototipe secara langsung, instance demo aktif yang terhubung dengan data real-time dapat diakses pada:
 
@@ -188,13 +188,41 @@ Bagi evaluator dan peninjau yang ingin menguji prototipe secara langsung, instan
 
 ---
 
-## 👥 Profil Pengembang & Tim
+## Tim Pengembang & Kontributor
 
-- **Tim Pengembang**: **Aegis Nexus**
-- **Lead Developer**: **Ichsan Junaedi**
-- **Fokus Riset**: Cyber Threat Intelligence, Threat Actor Graph Modeling, and Proactive Cyber Defense Architecture
+- **Tim Pengembang**: **Aegis** (Kategori Penangkalan / Defensive Shield - Kartika Cyber Hackathon 2026)
+- **Kontributor**:
+  - **Muhammad Ichsan Junaedi** - Leader
+  - **Shifi Amalia Zein** - Member
+  - **Azmi Itaqqi Hamammi** - Member
 
 ---
 
-## 📄 Lisensi
-Dikembangkan oleh Tim Aegis Nexus untuk kategori Penangkalan (Defensive Shield) - Kartika Cyber Hackathon 2026.
+## Lisensi
+Dikembangkan oleh Tim Aegis untuk kategori Penangkalan (Defensive Shield) - Kartika Cyber Hackathon 2026.
+
+---
+
+## Preview Antarmuka Sistem
+
+Berikut adalah 5 tangkapan layar antarmuka operasional CTI Nexus dengan data riil dari lingkungan purwarupa:
+
+### 1. Executive Risk Dashboard
+![Executive Risk Dashboard](docs/screenshots/01_Executive_Dashboard.png)
+Visibilitas metrik risiko strategis, visualisasi sebaran korban ransomware per sektor industri (Treemap), dan ringkasan indikator ancaman aktif.
+
+### 2. Real-Time Threat Newsroom
+![Real-Time Threat Newsroom](docs/screenshots/02_Threat_Newsroom.png)
+Umpan intelijen ancaman teragregasi secara real-time dengan filter wilayah APAC, tag insiden terkonfirmasi, ekstraksi profil Threat Actor, dan ringkasan IOC.
+
+### 3. CVE Tracker & Prioritization Engine
+![CVE Tracker and Prioritization](docs/screenshots/03_CVE_Tracker_Prioritization.png)
+Triase kerentanan berbasis risiko gabungan CVSS v3.1 dan probabilitas eksploitasi nyata di lapangan (EPSS), pelacakan badge CISA KEV, dan otomasi tiket respon insiden.
+
+### 4. Intelligence & Defensive Operations
+![Intelligence and Defensive Operations](docs/screenshots/04_Intelligence_Defensive_Operations.png)
+Klaster kampanye serangan siber dengan pemetaan teknik MITRE ATT&CK, pelacakan kecepatan eskalasi ancaman (Velocity), serta tombol ekspor Hunt Pack berbasis MITRE D3FEND.
+
+### 5. X Intel / OSINT Stream
+![X Intel OSINT Stream](docs/screenshots/05_X_Intel_OSINT_Stream.png)
+Aliran pemantauan intelijen media sosial dan sumber terbuka (OSINT) dengan panel filter dua baris untuk mendeteksi sinyal dini kebocoran data dan aktivitas peretasan.

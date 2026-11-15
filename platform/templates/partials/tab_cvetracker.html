@@ -17,7 +17,7 @@
     <div id="cveview-cves">
 
       <!-- Inner sub-toggle: CVEs / Tech Stack -->
-      <div style="display:flex;gap:8px;margin-bottom:10px;align-items:center">
+      <div class="cve-inner-toggle">
         <button id="tsv-cves-btn" class="ta-submenu-btn active" onclick="cveSwitchTSVSubview('cves')"
                 style="font-size:11px;padding:5px 12px">
           CVEs <span id="tsv-cve-count-badge" class="ta-submenu-count">—</span>
@@ -32,80 +32,93 @@
       <div id="cveview-sub-cves">
 
       <!-- CVE-specific filter bar -->
-      <div class="filter-bar" style="margin-bottom:14px">
-        <span class="filter-label">Filter</span>
-        <div class="filter-group">
-          <input type="text" class="filter-input" id="cve-search"
-                 placeholder="Search CVE ID or summary…" style="width:220px"
-                 onkeydown="if(event.key==='Enter')loadCvePanel()">
-          <div>
-            <select class="filter-select" id="cve-severity" style="min-width:140px">
+      <div class="filter-bar cve-filter-panel" style="margin-bottom:16px">
+        <div class="cve-filter-main">
+          <!-- Row 1: Search, Dropdowns, Date Range -->
+          <div class="cve-filter-row cve-filter-row--primary">
+            <span class="filter-label cve-filter-title">
+              <i data-ic="filter" class="cve-filter-title-ic"></i>FILTER
+            </span>
+            <div class="cve-search-box">
+              <i data-ic="search" class="cve-search-ic"></i>
+              <input type="text" class="filter-input" id="cve-search"
+                     placeholder="Search CVE ID or summary…"
+                     onkeydown="if(event.key==='Enter')loadCvePanel()">
+            </div>
+            <select class="filter-select" id="cve-severity" style="min-width:130px">
               <option value="">All Severities</option>
               <option value="CRITICAL">Critical</option>
               <option value="HIGH">High</option>
               <option value="MEDIUM">Medium</option>
               <option value="LOW">Low</option>
             </select>
-            <select class="filter-select" id="cve-tech" style="min-width:160px">
+            <select class="filter-select" id="cve-tech" style="min-width:150px">
               <option value="">All Tech Stacks</option>
             </select>
-          </div>
-          <br>
-          <div>
-            <div style="display:flex;align-items:center;gap:6px;white-space:nowrap">
+            <div class="cve-date-range-wrap">
               <span class="filter-sep">From</span>
-              <input type="date" class="filter-input" id="cve-date-start" style="width:140px; margin-bottom: 10px;">
-            </div>
-            <div style="display:flex;align-items:center;gap:6px;white-space:nowrap">
+              <input type="date" class="filter-input cve-date-input" id="cve-date-start">
               <span class="filter-sep">To</span>
-              <input type="date" class="filter-input" id="cve-date-end" style="width:140px;margin-left: 12px;">
+              <input type="date" class="filter-input cve-date-input" id="cve-date-end">
+            </div>
+          </div>
+
+          <!-- Row 2: Checkboxes & Filter Action Buttons -->
+          <div class="cve-filter-row cve-filter-row--secondary">
+            <div class="cve-checkboxes-bar">
+              <label class="cve-check-pill cve-check-pill--unacked">
+                <input type="checkbox" id="cve-unacked-filter" onchange="loadCvePanel()">
+                <span>Unacked Only</span>
+              </label>
+              <label class="cve-check-pill cve-check-pill--drafted" title="CVEs that have gone through Draft Email at least once (carry a CTI tracking ID)">
+                <input type="checkbox" id="cve-drafted-filter" onchange="loadCvePanel()">
+                <span>Drafted Only</span>
+              </label>
+              <label class="cve-check-pill cve-check-pill--kev" title="CVEs listed in the CISA Known Exploited Vulnerabilities catalog">
+                <input type="checkbox" id="cve-kev-filter" onchange="loadCvePanel()">
+                <span>KEV Only</span>
+              </label>
+              <label class="cve-check-pill cve-check-pill--unscored" title="No CVSS score yet (fresh CVEs). Score is picked up later when the CNA/CISA-ADP adds it">
+                <input type="checkbox" id="cve-unscored-filter" onchange="loadCvePanel()">
+                <span>Unscored Only</span>
+              </label>
+              <label class="cve-check-pill cve-check-pill--updated" title="CVE record changed upstream (score, affected versions, references...) after it was first detected">
+                <input type="checkbox" id="cve-updated-filter" onchange="loadCvePanel()">
+                <span>Updated Only</span>
+              </label>
+              <label class="cve-check-pill cve-check-pill--fp">
+                <input type="checkbox" id="cve-show-fp" onchange="loadCvePanel()">
+                <span>Show False Positives</span>
+              </label>
+            </div>
+            <div class="cve-filter-actions">
+              <button class="btn-reset cve-btn-reset" onclick="cveResetFilters()">Reset</button>
+              <button class="btn-apply cve-btn-apply" onclick="loadCvePanel()">APPLY</button>
             </div>
           </div>
         </div>
-        <label style="display:flex;align-items:center;gap:5px;font-family:var(--font-ui);font-size:10px;color:var(--orange);cursor:pointer;white-space:nowrap">
-            <input type="checkbox" id="cve-unacked-filter" onchange="loadCvePanel()"> Unacked Only
-          </label>
-        <label style="display:flex;align-items:center;gap:5px;font-family:var(--font-ui);font-size:10px;color:var(--accent);cursor:pointer;white-space:nowrap" title="CVEs that have gone through Draft Email at least once (carry a CTI tracking ID)">
-            <input type="checkbox" id="cve-drafted-filter" onchange="loadCvePanel()"> Drafted Only
-          </label>
-        <label style="display:flex;align-items:center;gap:5px;font-family:var(--font-ui);font-size:10px;color:var(--red);cursor:pointer;white-space:nowrap" title="CVEs listed in the CISA Known Exploited Vulnerabilities catalog">
-            <input type="checkbox" id="cve-kev-filter" onchange="loadCvePanel()"> KEV Only
-          </label>
-        <label style="display:flex;align-items:center;gap:5px;font-family:var(--font-ui);font-size:10px;color:var(--accent3);cursor:pointer;white-space:nowrap" title="No CVSS score yet (fresh CVEs). Score is picked up later when the CNA/CISA-ADP adds it">
-            <input type="checkbox" id="cve-unscored-filter" onchange="loadCvePanel()"> Unscored Only
-          </label>
-        <label style="display:flex;align-items:center;gap:5px;font-family:var(--font-ui);font-size:10px;color:var(--green);cursor:pointer;white-space:nowrap" title="CVE record changed upstream (score, affected versions, references...) after it was first detected">
-            <input type="checkbox" id="cve-updated-filter" onchange="loadCvePanel()"> Updated Only
-          </label>
-        <label style="font-family:var(--font-ui);font-size:10px;color:var(--text-dim);cursor:pointer;display:flex;align-items:center;gap:5px;white-space:nowrap">
-          <input type="checkbox" id="cve-show-fp" onchange="loadCvePanel()"> Show False Positives
-        </label>
-        <button class="btn-reset" onclick="cveResetFilters()">Reset</button>
-        <button class="btn-apply" onclick="loadCvePanel()">APPLY</button>
-        <div style="display:flex;flex-direction:column;gap:4px;margin-left:auto">
-          <button class="btn-reset" id="cve-exploitdb-btn"
+
+        <!-- Right Side: Lookup & Export Tools Grid (2x2) -->
+        <div class="cve-tools-cluster">
+          <button class="btn-reset cve-tool-btn" id="cve-exploitdb-btn"
                   onclick="runExploitDbLookup(this)"
-                  style="border-color:rgba(227,179,65,.4);color:#E3B341;white-space:nowrap"
                   title="Query Exploit-DB for all True Positive CVEs and save found exploits">
-            <i data-ic="zap"></i> Exploit-DB Lookup
+            <i data-ic="zap"></i> EXPLOIT-DB LOOKUP
           </button>
-          <button class="btn-reset" id="cve-cisa-btn"
+          <button class="btn-reset cve-tool-btn" id="cve-cisa-btn"
                   onclick="runCisaLookup(this)"
-                  style="border-color:rgba(218,54,51,.4);color:var(--red);white-space:nowrap"
                   title="Cross-reference True Positive CVEs against CISA Known Exploited Vulnerabilities catalog">
-            <i data-ic="shield-alert"></i> CISA KEV Lookup
+            <i data-ic="shield-alert"></i> CISA KEV LOOKUP
           </button>
-          <button class="btn-reset" id="cve-epss-btn"
+          <button class="btn-reset cve-tool-btn" id="cve-epss-btn"
                   onclick="runEpssLookup(this)"
-                  style="border-color:rgba(110,124,255,.4);color:#6E7CFF;white-space:nowrap"
                   title="Fetch EPSS exploitation probability scores from FIRST.org for all True Positive CVEs">
-            <i data-ic="bar-chart"></i> EPSS Lookup
+            <i data-ic="bar-chart"></i> EPSS LOOKUP
           </button>
-          <button class="btn-reset" id="cve-export-btn"
+          <button class="btn-reset cve-tool-btn" id="cve-export-btn"
                   onclick="exportCveExcel(this)"
-                  style="border-color:rgba(61,201,175,.4);color:var(--green);white-space:nowrap"
                   title="Export true-positive CVEs in selected date range to Excel">
-            <i data-ic="download"></i> Export Excel
+            <i data-ic="download"></i> EXPORT EXCEL
           </button>
         </div>
       </div>
@@ -144,13 +157,13 @@
         </table>
       </div>
       <!-- CVE Pager -->
-      <div id="cve-pager" style="display:flex;align-items:center;gap:8px;padding:10px 20px;border-top:1px solid var(--border);flex-wrap:wrap">
+      <div id="cve-pager" class="cve-pager-bar">
         <button class="pager-btn" id="cve-page-prev" onclick="cveChangePage(_cvePage-1)" disabled><i data-ic="chevron-left" data-size="12"></i> Prev</button>
-        <span id="cve-page-info" style="font-family:var(--font-ui);font-size:10px;color:var(--text-dim)"></span>
+        <span id="cve-page-info" style="font-family:var(--font-ui);font-size:10.5px;color:var(--text-dim)"></span>
         <button class="pager-btn" id="cve-page-next" onclick="cveChangePage(_cvePage+1)" disabled>Next <i data-ic="chevron-right" data-size="12"></i></button>
-        <span style="margin-left:auto;display:flex;align-items:center;gap:6px; margin-top: 10px;">
-          <span style="font-family:var(--font-ui);font-size:9px;color:var(--text-dim)">PER PAGE</span>
-          <select id="cve-page-size" class="filter-select" style="font-size:11px;padding:3px 6px;width:70px" onchange="cveChangePageSize(this.value)">
+        <span class="cve-pager-size-wrap">
+          <span class="cve-pager-size-label">PER PAGE</span>
+          <select id="cve-page-size" class="filter-select" onchange="cveChangePageSize(this.value)">
             <option value="20">20</option>
             <option value="50">50</option>
             <option value="100">100</option>
@@ -163,13 +176,15 @@
       <div id="cveview-techstack" style="display:none">
 
       <!-- Controls: Add + Search -->
-      <div class="ta-bar">
+      <div class="ta-bar ts-control-panel">
         <div class="ta-bar-left">
-          <span class="filter-label">Add Tech Stack</span>
-          <input type="text" class="filter-input" id="ts-input"
-                 placeholder="e.g. palo alto networks…" style="width:220px"
+          <span class="filter-label ts-control-title">
+            <i data-ic="layers" class="ts-control-title-ic"></i>ADD TECH STACK
+          </span>
+          <input type="text" class="filter-input ts-input" id="ts-input"
+                 placeholder="e.g. palo alto networks…" style="width:200px"
                  onkeydown="if(event.key==='Enter')tsAddTech()">
-          <input type="text" class="filter-input" id="ts-vendor-input"
+          <input type="text" class="filter-input ts-input" id="ts-vendor-input"
                  placeholder="Vendor (optional, e.g. Fortinet)" style="width:170px"
                  title="Groups tech stacks from the same vendor into one Draft Email"
                  onkeydown="if(event.key==='Enter')tsAddTech()">
@@ -183,19 +198,21 @@
             <option value="cloud">Cloud</option>
             <option value="saas">SaaS</option>
           </select>
-          <button class="btn-apply" style="font-size:11px;padding:6px 16px;margin-left:0" onclick="tsAddTech()">+ ADD</button>
-          <button class="btn-reset" id="ts-backfill-btn"
-                  style="font-size:11px;padding:6px 12px;border-color:rgba(47,129,247,0.4);color:var(--accent)"
+          <button class="btn-apply ts-add-btn" onclick="tsAddTech()">+ ADD</button>
+          <button class="btn-reset ts-backfill-btn" id="ts-backfill-btn"
                   onclick="tsBackfillCves(this)"
                   title="Copy existing CVEs from other clients for all your current tech stacks">
-            <i data-ic="refresh"></i> Backfill CVEs
+            <i data-ic="refresh"></i> BACKFILL CVES
           </button>
           <span id="ts-status" class="ta-status"></span>
         </div>
         <div class="ta-bar-right">
-          <input type="text" class="filter-input" id="ts-search"
-                 placeholder="Search tech stack…" style="width:200px"
-                 oninput="tsSearchInput()">
+          <div class="cve-search-box" style="width:190px">
+            <i data-ic="search" class="cve-search-ic"></i>
+            <input type="text" class="filter-input" id="ts-search"
+                   placeholder="Search tech stack…"
+                   oninput="tsSearchInput()">
+          </div>
           <select class="filter-select" id="ts-page-size" onchange="tsSetPageSize()" style="min-width:110px">
             <option value="25">25 / page</option>
             <option value="50" selected>50 / page</option>
@@ -204,8 +221,8 @@
         </div>
       </div>
 
-      <!-- Table -->
-      <div class="ta-table-wrap">
+      <!-- Table & Footer Wrapper -->
+      <div class="cve-table-wrapper ts-table-card">
         <table class="ta-table" id="ts-table">
           <thead>
             <tr>
@@ -223,12 +240,11 @@
             <tr><td colspan="8" class="ta-td"><div class="loading-state"><div class="loading-spinner"></div><div class="loading-text">Loading...</div></div></td></tr>
           </tbody>
         </table>
-      </div>
-
-      <!-- Footer -->
-      <div class="ta-table-footer">
-        <span id="ts-total" class="ta-total">— tech stacks tracked</span>
-        <div id="ts-pager"></div>
+        <!-- Footer -->
+        <div class="ta-table-footer">
+          <span id="ts-total" class="ta-total">— tech stacks tracked</span>
+          <div id="ts-pager"></div>
+        </div>
       </div>
 
       </div><!-- end #cveview-techstack -->

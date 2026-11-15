@@ -254,22 +254,22 @@ async function loadUMUsers() {
           const un         = esc(u.username);
           const isAdmin    = ['admin','superadmin'].includes(_jwtRole());
           const roleBadge  = u.role==='superadmin'
-            ? 'background:rgba(227,179,65,0.12);color:var(--orange);border:1px solid rgba(227,179,65,0.3)'
+            ? 'background:rgba(245,158,11,0.15);color:#FBBF24;border:1px solid rgba(245,158,11,0.4);border-radius:4px;padding:2px 8px;font-weight:600;'
             : u.role==='admin'
-              ? 'background:rgba(88,166,255,0.12);color:#58A6FF;border:1px solid rgba(88,166,255,0.3)'
-              : 'background:rgba(47,129,247,0.08);color:var(--accent);border:1px solid rgba(47,129,247,0.25)';
+              ? 'background:rgba(56,189,248,0.15);color:#38BDF8;border:1px solid rgba(56,189,248,0.4);border-radius:4px;padding:2px 8px;font-weight:600;'
+              : 'background:rgba(167,139,250,0.15);color:#C4B5FD;border:1px solid rgba(167,139,250,0.4);border-radius:4px;padding:2px 8px;font-weight:600;';
           return `<tr>
-            <td style="padding:6px 8px;font-family:var(--font-ui);font-size:11px;color:var(--text-bright)">${un}</td>
-            <td style="padding:6px 8px;font-size:11px"><span style="font-family:var(--font-ui);font-size:9px;padding:2px 6px;border-radius:2px;${roleBadge}">${esc(u.role)}</span></td>
-            <td style="padding:6px 8px;font-family:var(--font-ui);font-size:10px;color:var(--text-dim)">
-              ${clientIds.map(c=>`<span style="font-family:var(--font-ui);font-size:9px;padding:1px 5px;border-radius:2px;background:rgba(47,129,247,0.08);border:1px solid rgba(47,129,247,0.2);color:var(--text-dim);margin-right:3px">${esc(c)}</span>`).join('')}
+            <td style="padding:10px 14px;font-family:var(--font-ui);font-size:11.5px;color:var(--text-bright);max-width:200px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap" title="${un}">${un}</td>
+            <td style="padding:10px 14px;font-size:11px;white-space:nowrap"><span style="font-family:var(--font-ui);font-size:9.5px;${roleBadge}">${esc(u.role)}</span></td>
+            <td style="padding:10px 14px;font-family:var(--font-ui);font-size:10.5px;color:var(--text-dim)">
+              ${clientIds.map(c=>`<span style="font-family:var(--font-ui);font-size:9.5px;padding:2px 7px;border-radius:4px;background:rgba(15,34,64,0.65);border:1px solid rgba(90,185,193,0.28);color:#93B1C8;margin-right:4px;display:inline-block">${esc(typeof formatClientCode === 'function' ? formatClientCode(c) : c)}</span>`).join('')}
             </td>
-            <td style="padding:6px 8px;font-family:var(--font-ui);font-size:10px;color:var(--text-dim)">${(u.created_at||'').split('T')[0]}</td>
-            <td style="padding:6px 8px;font-family:var(--font-ui);font-size:10px;color:var(--text-dim)">${u.last_sign_in ? u.last_sign_in.replace('T',' ').split('.')[0] : '—'}</td>
-            <td style="padding:6px 8px;font-family:var(--font-ui);font-size:10px;color:var(--text-dim)">${esc(u.created_by||'')}</td>
-            <td style="padding:6px 8px;white-space:nowrap;position:relative">
+            <td style="padding:10px 14px;font-family:var(--font-ui);font-size:10.5px;color:var(--text-dim);white-space:nowrap">${(u.created_at||'').split('T')[0]}</td>
+            <td style="padding:10px 14px;font-family:var(--font-ui);font-size:10.5px;color:var(--text-dim);white-space:nowrap">${u.last_sign_in ? u.last_sign_in.replace('T',' ').split('.')[0] : '—'}</td>
+            <td style="padding:10px 14px;font-family:var(--font-ui);font-size:10.5px;color:var(--text-dim);white-space:nowrap">${esc(u.created_by||'')}</td>
+            <td style="padding:10px 14px;white-space:nowrap;position:relative;text-align:right">
               <button class="pir-btn" onclick="umToggleActionMenu(event,'${un}','${esc(u.role)}','${clientsCsv}')"
-                      style="font-size:11px;padding:2px 8px;letter-spacing:.05em">${ic("more-vertical", 13)}</button>
+                      style="font-size:11px;padding:4px 8px;letter-spacing:.05em">${ic("more-vertical", 13)}</button>
             </td>
           </tr>`;
         }).join('')
@@ -336,7 +336,10 @@ async function umAddUser() {
   if (btn) { btn.textContent = 'Adding…'; btn.disabled = true; }
   try {
     const clientRaw = document.getElementById('um-new-client-id-user')?.value.trim() || 'default';
-    const clientIds = clientRaw.split(',').map(s => s.trim()).filter(Boolean);
+    const clientIds = clientRaw.split(',').map(s => {
+      const t = s.trim().toLowerCase();
+      return (window.CLIENT_CODE_TO_REAL && window.CLIENT_CODE_TO_REAL[t]) || t;
+    }).filter(Boolean);
     const res = await fetch('/api/auth/users', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + _jwtToken },
@@ -375,12 +378,41 @@ async function loadPolicy() {
   } catch(_) {}
 }
 
+function _renderPwTooltip(el, p) {
+  if (!el) return;
+  const policy = p || _pwPolicy || {};
+  const minLen = policy.min_length || 8;
+  const items = [
+    `Min ${minLen} characters`
+  ];
+  if (policy.require_upper !== false)  items.push('Uppercase letter (A–Z)');
+  if (policy.require_lower !== false)  items.push('Lowercase letter (a–z)');
+  if (policy.require_number !== false) items.push('Number (0–9)');
+  if (policy.require_symbol !== false) items.push('Special symbol (!@#$...)');
+
+  const checkSvg = (window.ic ? window.ic('check', 10, 'pw-rule-check') : '<i data-ic="check" data-size="10" class="pw-rule-check"></i>');
+  const shieldSvg = (window.ic ? window.ic('shield', 11) : '<i data-ic="shield" data-size="11"></i>');
+
+  el.innerHTML = `
+    <div class="pw-tooltip-head">
+      ${shieldSvg}
+      <span>Password Policy</span>
+    </div>
+    <ul class="pw-tooltip-list">
+      ${items.map(it => `
+        <li class="pw-tooltip-item">
+          ${checkSvg}
+          <span>${esc(it)}</span>
+        </li>
+      `).join('')}
+    </ul>
+  `;
+}
+
 function _applyPolicyToUI() {
-  const hint = _pwPolicy.hint || _buildHint(_pwPolicy);
-  // Update all tooltip spans
-  ['pw-tooltip-dyn','pw-tooltip-dyn2','pw-tooltip-force'].forEach(id => {
-    const el = document.getElementById(id);
-    if (el) el.textContent = hint;
+  // Update all tooltip spans with structured policy card
+  ['pw-tooltip-dyn','pw-tooltip-dyn2','pw-tooltip-force','pw-tooltip-self'].forEach(id => {
+    _renderPwTooltip(document.getElementById(id), _pwPolicy);
   });
   // Populate policy form if visible
   const ml = document.getElementById('pol-min-length');
@@ -476,9 +508,8 @@ function openSelfPwModal() {
   document.getElementById('self-pw-username').textContent = _jwtUsername() || '—';
   document.getElementById('self-pw-input').value = '';
   document.getElementById('self-pw-err').style.display = 'none';
-  const hint = _pwPolicy.hint || _buildHint(_pwPolicy);
   const tipEl = document.getElementById('pw-tooltip-self');
-  if (tipEl) tipEl.textContent = hint;
+  if (tipEl) _renderPwTooltip(tipEl, _pwPolicy);
   document.getElementById('self-pw-overlay').classList.add('open');
   document.body.style.overflow = 'hidden';
   setTimeout(() => document.getElementById('self-pw-input').focus(), 150);
@@ -600,25 +631,19 @@ function umToggleActionMenu(evt, username, role, clientsCsv) {
   umCloseActionMenu();
 
   const btn  = evt.currentTarget;
-  const td   = btn.closest('td');
   const rect = btn.getBoundingClientRect();
   const isAdmin = ['admin','superadmin'].includes(_jwtRole());
 
   const menu = document.createElement('div');
+  menu.className = 'um-action-popup';
   menu.style.cssText = `
     position:fixed;right:${document.documentElement.clientWidth - rect.right}px;
     top:${rect.bottom + 4}px;z-index:9999;
-    background:var(--surface2);border:1px solid var(--border-bright);
-    border-radius:3px;min-width:180px;box-shadow:0 4px 16px rgba(0,0,0,0.5);
-    overflow:hidden;font-family:var(--font-ui);font-size:11px;
   `;
 
   const item = (icon, label, fn) => {
     const b = document.createElement('button');
-    b.style.cssText = 'display:block;width:100%;text-align:left;padding:8px 12px;background:transparent;border:none;border-bottom:1px solid var(--border);color:var(--text);cursor:pointer;transition:background .1s;font-family:var(--font-ui);font-size:11px;';
-    b.innerHTML = `${icon} ${label}`;
-    b.onmouseover = () => b.style.background = 'rgba(255,255,255,0.04)';
-    b.onmouseout  = () => b.style.background = 'transparent';
+    b.innerHTML = `${icon} <span>${label}</span>`;
     b.onclick = (e) => { e.stopPropagation(); umCloseActionMenu(); fn(); };
     return b;
   };
@@ -703,8 +728,8 @@ async function openEditClientsModal(username, currentIdsCsv) {
       <label style="display:flex;align-items:center;gap:8px;cursor:pointer;padding:3px 0">
         <input type="checkbox" value="${esc(c.client_id)}" ${currentIds.has(c.client_id) ? 'checked' : ''}
                style="accent-color:var(--accent);width:13px;height:13px;cursor:pointer">
-        <span style="font-family:var(--font-ui);font-size:11px;color:var(--text-bright)">${esc(c.name)}</span>
-        <span style="font-family:var(--font-ui);font-size:9px;color:var(--text-dim)">${esc(c.client_id)}</span>
+        <span style="font-family:var(--font-ui);font-size:11px;color:var(--text-bright)">${esc(typeof formatClientName === 'function' ? formatClientName(c.client_id, c.name) : c.name)}</span>
+        <span style="font-family:var(--font-ui);font-size:9px;color:var(--text-dim)">(${esc(typeof formatClientCode === 'function' ? formatClientCode(c.client_id) : c.client_id)})</span>
       </label>`).join('') || '<span style="font-family:var(--font-ui);font-size:10px;color:var(--text-dim)">No clients found.</span>';
   } catch(e) {
     listEl.innerHTML = `<span style="font-family:var(--font-ui);font-size:10px;color:var(--red)">${e.message}</span>`;
@@ -789,8 +814,8 @@ async function loadUMClients() {
         ? `<button class="pir-btn" onclick="umDeleteClient('${esc(c.client_id)}')" style="font-size:9px;color:var(--red);border-color:rgba(218,54,51,0.4)">Delete</button>`
         : '';
       return `<tr>
-        <td style="padding:6px 8px;font-family:var(--font-ui);font-size:11px;color:var(--accent)">${esc(c.client_id)}</td>
-        <td style="padding:6px 8px;font-size:12px;color:var(--text)">${esc(c.name)}</td>
+        <td style="padding:10px 14px;font-family:var(--font-ui);font-size:11px;color:var(--accent)">${esc(typeof formatClientCode === 'function' ? formatClientCode(c.client_id) : c.client_id)}</td>
+        <td style="padding:10px 14px;font-size:12px;color:var(--text);font-weight:500">${esc(typeof formatClientName === 'function' ? formatClientName(c.client_id, c.name) : c.name)}</td>
         <td style="padding:6px 8px">${countriesDisplay}</td>
         <td style="padding:6px 8px">${sectorsDisplay}</td>
         <td style="padding:6px 8px">${recipientsDisplay}</td>
@@ -873,7 +898,7 @@ let _editClientTarget = null;
 function umOpenEditClient(clientId) {
   const c = (window._umClientsCache || []).find(x => x.client_id === clientId) || {};
   _editClientTarget = clientId;
-  document.getElementById('ect-client-id').textContent = clientId;
+  document.getElementById('ect-client-id').textContent = typeof formatClientCode === 'function' ? formatClientCode(clientId) : clientId;
   document.getElementById('ect-name').value = c.name || '';
   document.getElementById('ect-recipients').value = (c.recipients || []).join(', ');
   document.getElementById('ect-css').value = c.newsletter_css || '';

@@ -1,30 +1,32 @@
   <div id="tab-usermgmt" class="tab-panel">
-    <div style="padding:24px 20px;max-width:1100px;margin:0 auto">
+    <div class="um-wrapper">
 
       <!-- Users section -->
-      <div style="display:grid;grid-template-columns:1fr 1fr;gap:20px;margin-bottom:24px">
+      <div class="um-top-grid">
 
         <!-- User list -->
-        <div style="background:var(--surface);padding:18px">
-          <div style="font-family:var(--font-ui);font-size:9px;color:var(--text-dim);text-transform:uppercase;letter-spacing:.1em;margin-bottom:12px">Users</div>
-          <table style="width:100%;border-collapse:collapse;font-size:12px">
-            <thead><tr>
-              <th style="text-align:left;padding:6px 8px;color:var(--text-dim);font-family:var(--font-ui);font-size:9px;border-bottom:1px solid var(--border)">Username</th>
-              <th style="text-align:left;padding:6px 8px;color:var(--text-dim);font-family:var(--font-ui);font-size:9px;border-bottom:1px solid var(--border)">Role</th>
-              <th style="text-align:left;padding:6px 8px;color:var(--text-dim);font-family:var(--font-ui);font-size:9px;border-bottom:1px solid var(--border)">Client</th>
-              <th style="text-align:left;padding:6px 8px;color:var(--text-dim);font-family:var(--font-ui);font-size:9px;border-bottom:1px solid var(--border)">Created</th>
-              <th style="text-align:left;padding:6px 8px;color:var(--text-dim);font-family:var(--font-ui);font-size:9px;border-bottom:1px solid var(--border)">Last Sign In</th>
-              <th style="text-align:left;padding:6px 8px;color:var(--text-dim);font-family:var(--font-ui);font-size:9px;border-bottom:1px solid var(--border)">By</th>
-              <th style="padding:6px 8px;border-bottom:1px solid var(--border)"></th>
-            </tr></thead>
-            <tbody id="um-user-tbody"><tr><td colspan="7" style="padding:12px 8px;color:var(--text-dim);font-family:var(--font-ui);font-size:10px">Loading…</td></tr></tbody>
-          </table>
+        <div class="um-card">
+          <div class="um-card-title">Users</div>
+          <div class="um-table-wrap">
+            <table class="um-table">
+              <thead><tr>
+                <th style="text-align:left">Username</th>
+                <th style="text-align:left">Role</th>
+                <th style="text-align:left">Client</th>
+                <th style="text-align:left">Created</th>
+                <th style="text-align:left">Last Sign In</th>
+                <th style="text-align:left">By</th>
+                <th></th>
+              </tr></thead>
+              <tbody id="um-user-tbody"><tr><td colspan="7" style="padding:12px 8px;color:var(--text-dim);font-family:var(--font-ui);font-size:10px">Loading…</td></tr></tbody>
+            </table>
+          </div>
         </div>
 
         <!-- Add user form -->
-        <div style="background:var(--surface);padding:18px">
-          <div style="font-family:var(--font-ui);font-size:9px;color:var(--text-dim);text-transform:uppercase;letter-spacing:.1em;margin-bottom:12px">Add User</div>
-          <div style="display:flex;flex-direction:column;gap:10px">
+        <div class="um-card">
+          <div class="um-card-title">Add User</div>
+          <div style="display:flex;flex-direction:column;gap:10px;max-width:480px">
             <div>
               <div style="font-family:var(--font-ui);font-size:9px;color:var(--text-dim);margin-bottom:4px">USERNAME</div>
               <input type="text" class="filter-input" id="um-new-username" placeholder="username…" style="width:100%;box-sizing:border-box">
@@ -32,7 +34,22 @@
             <div>
               <div style="font-family:var(--font-ui);font-size:9px;color:var(--text-dim);margin-bottom:4px;display:flex;align-items:center">
                 PASSWORD
-                <span class="pw-info-wrap"><span class="pw-info-btn">?</span><span class="pw-tooltip" id="pw-tooltip-dyn"></span></span>
+                <span class="pw-info-wrap">
+                  <span class="pw-info-btn" tabindex="0" title="Password requirements">?</span>
+                  <span class="pw-tooltip" id="pw-tooltip-dyn">
+                    <div class="pw-tooltip-head">
+                      <i data-ic="shield" data-size="11"></i>
+                      <span>Password Policy</span>
+                    </div>
+                    <ul class="pw-tooltip-list">
+                      <li class="pw-tooltip-item"><i data-ic="check" data-size="10" class="pw-rule-check"></i><span>Min 8 characters</span></li>
+                      <li class="pw-tooltip-item"><i data-ic="check" data-size="10" class="pw-rule-check"></i><span>Uppercase letter (A–Z)</span></li>
+                      <li class="pw-tooltip-item"><i data-ic="check" data-size="10" class="pw-rule-check"></i><span>Lowercase letter (a–z)</span></li>
+                      <li class="pw-tooltip-item"><i data-ic="check" data-size="10" class="pw-rule-check"></i><span>Number (0–9)</span></li>
+                      <li class="pw-tooltip-item"><i data-ic="check" data-size="10" class="pw-rule-check"></i><span>Special symbol (!@#$...)</span></li>
+                    </ul>
+                  </span>
+                </span>
               </div>
               <input type="password" class="filter-input" id="um-new-password" placeholder="min 8 chars…" style="width:100%;box-sizing:border-box">
             </div>
@@ -53,25 +70,27 @@
       </div>
 
       <!-- Roles section -->
-      <div style="background:var(--surface);padding:18px;margin-bottom:20px">
+      <div class="um-card">
         <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:14px">
-          <div style="font-family:var(--font-ui);font-size:9px;color:var(--text-dim);text-transform:uppercase;letter-spacing:.1em">User Roles</div>
+          <div class="um-card-title" style="margin-bottom:0">User Roles</div>
           <button id="um-add-role-btn" class="btn-apply" style="font-size:11px;padding:4px 12px;display:none" onclick="umOpenAddRoleModal()">+ Add Role</button>
         </div>
-        <table style="width:100%;border-collapse:collapse;font-size:12px">
-          <thead><tr>
-            <th style="text-align:left;padding:6px 8px;color:var(--text-dim);font-family:var(--font-ui);font-size:9px;border-bottom:1px solid var(--border)">Role</th>
-            <th style="text-align:left;padding:6px 8px;color:var(--text-dim);font-family:var(--font-ui);font-size:9px;border-bottom:1px solid var(--border)">Display Name</th>
-            <th style="text-align:left;padding:6px 8px;color:var(--text-dim);font-family:var(--font-ui);font-size:9px;border-bottom:1px solid var(--border)">Permissions</th>
-            <th style="padding:6px 8px;border-bottom:1px solid var(--border)"></th>
-          </tr></thead>
-          <tbody id="um-roles-tbody"><tr><td colspan="4" style="padding:12px 8px;color:var(--text-dim);font-family:var(--font-ui);font-size:10px">Loading…</td></tr></tbody>
-        </table>
+        <div class="um-table-wrap">
+          <table class="um-table">
+            <thead><tr>
+              <th style="text-align:left">Role</th>
+              <th style="text-align:left">Display Name</th>
+              <th style="text-align:left">Permissions</th>
+              <th></th>
+            </tr></thead>
+            <tbody id="um-roles-tbody"><tr><td colspan="4" style="padding:12px 8px;color:var(--text-dim);font-family:var(--font-ui);font-size:10px">Loading…</td></tr></tbody>
+          </table>
+        </div>
       </div>
 
       <!-- Password Policy section -->
-      <div style="background:var(--surface);padding:18px;margin-bottom:20px">
-        <div style="font-family:var(--font-ui);font-size:9px;color:var(--text-dim);text-transform:uppercase;letter-spacing:.1em;margin-bottom:14px">Password Policy</div>
+      <div class="um-card">
+        <div class="um-card-title">Password Policy</div>
         <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:10px;margin-bottom:14px">
           <div>
             <div style="font-family:var(--font-ui);font-size:9px;color:var(--text-dim);margin-bottom:4px">MIN LENGTH</div>
@@ -101,9 +120,9 @@
       </div>
 
       <!-- Audit log section -->
-      <div style="background:var(--surface);padding:18px">
+      <div class="um-card">
         <div style="display:flex;align-items:center;gap:10px;margin-bottom:12px;flex-wrap:wrap">
-          <div style="font-family:var(--font-ui);font-size:9px;color:var(--text-dim);text-transform:uppercase;letter-spacing:.1em">Audit Log</div>
+          <div class="um-card-title" style="margin-bottom:0">Audit Log</div>
           <input type="text" class="filter-input" id="um-audit-user" placeholder="Filter user…" style="width:130px" oninput="_umAuditDebounce()">
           <input type="text" class="filter-input" id="um-audit-action" placeholder="Filter action…" style="width:160px" oninput="_umAuditDebounce()">
           <button class="btn-apply" style="font-size:11px;padding:4px 10px" onclick="loadAuditLog(1)">Apply</button>
@@ -114,15 +133,15 @@
           </select>
           <span id="um-audit-total" style="font-family:var(--font-ui);font-size:10px;color:var(--text-dim);margin-left:auto"></span>
         </div>
-        <div style="overflow-x:auto">
-          <table style="width:100%;border-collapse:collapse;font-size:12px">
+        <div class="um-table-wrap">
+          <table class="um-table">
             <thead><tr>
-              <th style="text-align:left;padding:6px 8px;color:var(--text-dim);font-family:var(--font-ui);font-size:9px;border-bottom:1px solid var(--border);white-space:nowrap">Timestamp</th>
-              <th style="text-align:left;padding:6px 8px;color:var(--text-dim);font-family:var(--font-ui);font-size:9px;border-bottom:1px solid var(--border)">User</th>
-              <th style="text-align:left;padding:6px 8px;color:var(--text-dim);font-family:var(--font-ui);font-size:9px;border-bottom:1px solid var(--border)">Action</th>
-              <th style="text-align:left;padding:6px 8px;color:var(--text-dim);font-family:var(--font-ui);font-size:9px;border-bottom:1px solid var(--border)">Target</th>
-              <th style="text-align:left;padding:6px 8px;color:var(--text-dim);font-family:var(--font-ui);font-size:9px;border-bottom:1px solid var(--border)">Detail</th>
-              <th style="text-align:left;padding:6px 8px;color:var(--text-dim);font-family:var(--font-ui);font-size:9px;border-bottom:1px solid var(--border)">IP</th>
+              <th style="text-align:left;white-space:nowrap">Timestamp</th>
+              <th style="text-align:left">User</th>
+              <th style="text-align:left">Action</th>
+              <th style="text-align:left">Target</th>
+              <th style="text-align:left">Detail</th>
+              <th style="text-align:left">IP</th>
             </tr></thead>
             <tbody id="um-audit-tbody"><tr><td colspan="6" style="padding:12px 8px;color:var(--text-dim);font-family:var(--font-ui);font-size:10px">Load audit log from the filter above.</td></tr></tbody>
           </table>
@@ -130,26 +149,26 @@
         <div id="um-audit-pager" style="display:flex;gap:6px;margin-top:10px;align-items:center;font-family:var(--font-ui);font-size:10px;color:var(--text-dim)"></div>
       </div>
 
-    </div>
-
       <!-- Client Management — superadmin only -->
-      <div id="um-clients-section" style="display:none;background:var(--surface);padding:18px;margin-bottom:20px">
+      <div id="um-clients-section" class="um-card" style="display:none">
         <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:14px">
-          <div style="font-family:var(--font-ui);font-size:9px;color:var(--text-dim);text-transform:uppercase;letter-spacing:.1em">Client Tenants</div>
+          <div class="um-card-title" style="margin-bottom:0">Client Tenants</div>
           <button class="btn-apply" style="font-size:11px;padding:4px 12px" onclick="umOpenAddClient()">+ Add Client</button>
         </div>
-        <table style="width:100%;border-collapse:collapse;font-size:12px">
-          <thead><tr>
-            <th style="text-align:left;padding:6px 8px;color:var(--text-dim);font-family:var(--font-ui);font-size:9px;border-bottom:1px solid var(--border)">Client ID</th>
-            <th style="text-align:left;padding:6px 8px;color:var(--text-dim);font-family:var(--font-ui);font-size:9px;border-bottom:1px solid var(--border)">Name</th>
-            <th style="text-align:left;padding:6px 8px;color:var(--text-dim);font-family:var(--font-ui);font-size:9px;border-bottom:1px solid var(--border)">Countries</th>
-            <th style="text-align:left;padding:6px 8px;color:var(--text-dim);font-family:var(--font-ui);font-size:9px;border-bottom:1px solid var(--border)">Sectors</th>
-            <th style="text-align:left;padding:6px 8px;color:var(--text-dim);font-family:var(--font-ui);font-size:9px;border-bottom:1px solid var(--border)">Newsletter Recipients</th>
-            <th style="text-align:left;padding:6px 8px;color:var(--text-dim);font-family:var(--font-ui);font-size:9px;border-bottom:1px solid var(--border)">Created</th>
-            <th style="padding:6px 8px;border-bottom:1px solid var(--border)"></th>
-          </tr></thead>
-          <tbody id="um-clients-tbody"><tr><td colspan="7" style="padding:12px 8px;color:var(--text-dim);font-family:var(--font-ui);font-size:10px">Loading…</td></tr></tbody>
-        </table>
+        <div class="um-table-wrap">
+          <table class="um-table">
+            <thead><tr>
+              <th style="text-align:left">Client ID</th>
+              <th style="text-align:left">Name</th>
+              <th style="text-align:left">Countries</th>
+              <th style="text-align:left">Sectors</th>
+              <th style="text-align:left">Newsletter Recipients</th>
+              <th style="text-align:left">Created</th>
+              <th></th>
+            </tr></thead>
+            <tbody id="um-clients-tbody"><tr><td colspan="7" style="padding:12px 8px;color:var(--text-dim);font-family:var(--font-ui);font-size:10px">Loading…</td></tr></tbody>
+          </table>
+        </div>
 
         <!-- Add client inline form -->
         <div id="um-add-client-form" style="display:none;margin-top:14px;padding-top:14px;border-top:1px solid var(--border);flex-direction:column;gap:12px">

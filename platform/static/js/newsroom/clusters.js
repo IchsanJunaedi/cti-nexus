@@ -157,15 +157,14 @@ function _renderCampaigns() {
     ? [..._campaignData].sort((a, b) => (b.size || 0) - (a.size || 0))
     : _campaignData;
 
-  const btnBase = 'font-family:var(--font-ui);font-size:10px;padding:2px 8px;border-radius:3px;cursor:pointer;border:1px solid';
   const sortBar = `
-    <div style="display:flex;align-items:center;gap:8px;padding:5px 8px;border-bottom:1px solid var(--border);font-family:var(--font-ui);font-size:10px;color:var(--text-dim)">
-      Sort:
-      <button onclick="_setCampaignSort('size')" style="${btnBase} ${_campaignSort==='size'?'background:rgba(47,129,247,0.15);border-color:rgba(47,129,247,0.5);color:var(--accent)':'background:transparent;border-color:var(--border);color:var(--text-dim)'}">Article Count</button>
-      <button onclick="_setCampaignSort('velocity')" style="${btnBase} ${_campaignSort==='velocity'?'background:rgba(47,129,247,0.15);border-color:rgba(47,129,247,0.5);color:var(--accent)':'background:transparent;border-color:var(--border);color:var(--text-dim)'}">Velocity</button>
-      <button onclick="_setCampaignSort('severity')" style="${btnBase} ${_campaignSort==='severity'?'background:rgba(47,129,247,0.15);border-color:rgba(47,129,247,0.5);color:var(--accent)':'background:transparent;border-color:var(--border);color:var(--text-dim)'}">Severity</button>
-      <button onclick="_setCampaignSort('first_seen')" style="${btnBase} ${_campaignSort==='first_seen'?'background:rgba(47,129,247,0.15);border-color:rgba(47,129,247,0.5);color:var(--accent)':'background:transparent;border-color:var(--border);color:var(--text-dim)'}">First Seen</button>
-      <button onclick="_setCampaignSort('last_seen')" style="${btnBase} ${_campaignSort==='last_seen'?'background:rgba(47,129,247,0.15);border-color:rgba(47,129,247,0.5);color:var(--accent)':'background:transparent;border-color:var(--border);color:var(--text-dim)'}">Last Seen</button>
+    <div class="intel-sort-bar">
+      <span class="intel-sort-label">Sort:</span>
+      <button class="intel-sort-btn ${_campaignSort==='size'?'active':''}" onclick="_setCampaignSort('size')">Article Count</button>
+      <button class="intel-sort-btn ${_campaignSort==='velocity'?'active':''}" onclick="_setCampaignSort('velocity')">Velocity</button>
+      <button class="intel-sort-btn ${_campaignSort==='severity'?'active':''}" onclick="_setCampaignSort('severity')">Severity</button>
+      <button class="intel-sort-btn ${_campaignSort==='first_seen'?'active':''}" onclick="_setCampaignSort('first_seen')">First Seen</button>
+      <button class="intel-sort-btn ${_campaignSort==='last_seen'?'active':''}" onclick="_setCampaignSort('last_seen')">Last Seen</button>
     </div>`;
 
   const rows = sorted.map((c) => {
